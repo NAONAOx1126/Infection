@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.List" />
+<!--{include file="common/header.html" subtitle=""}-->
+</head>
+<body>
+    <!--{include file="common/menu.html"}-->
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <ol class="breadcrumb">
+                  <li class="active">アカウント一覧</li>
+                </ol>
+                <!--{include file="common/errors.html"}-->
+                <a href="account/create.html?add_account=1" class="btn btn-default btn-lg active" role="button">新規Twitterアカウント登録</a>
+                <table class="table table-condensed table-bordered table-striped">
+                <thead>
+                <tr>
+                <td>アイコン</td>
+                <td>アカウント名</td>
+                <td>ステータス</td>
+                <td>実績</td>
+                <td>設定</td>
+                <td>グループ</td>
+                <td>ﾓ-ﾄﾞ</td>
+                <td>通知</td>
+                <td>メモ</td>
+                </tr>
+                </thead>
+                <tbody>
+                <!--{foreach from=$attr.accounts item="account"}-->
+                <!--{assign var="followSetting" value=$account->followSetting()}-->
+                <!--{assign var="status" value=$account->status()}-->
+                <tr id="acc<!--{$account->account_id}-->">
+                <td>
+                    <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
+                    <br />
+                    <a class="btn btn-default" href="tweet.html?account_id=<!--{$account->account_id}-->">BOT設定</a>
+                </td>
+                <td>
+                    <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
+                    <a id="follow_status_<!--{$account->account_id}-->" class="follow_status">
+                    <!--{if $status->follow_status == "1"}--><span class="label label-primary">待機中</span>
+                    <!--{elseif $status->follow_status == "2"}--><span class="label label-success">実行中</span>
+                    <!--{elseif $status->follow_status == "3"}--><span class="label label-default">終了</span>
+                    <!--{elseif $status->follow_status == "4"}--><span class="label label-danger">リスト無し</span>
+                    <!--{elseif $status->follow_status == "5"}--><span class="label label-info">リトライ</span>
+                    <!--{elseif $status->follow_status == "6"}--><span class="label label-warning">スキップ</span>
+                    <!--{else}--><span class="label label-default">停止中</span><!--{/if}-->
+                    </a>
+                    <a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status">
+                    <!--{if $status->tweet_status == "1"}--><span class="label label-primary">BOT待機中</span>
+                    <!--{elseif $status->tweet_status == "2"}--><span class="label label-primary">BOT実行中</span>
+                    <!--{else}--><span class="label label-default">BOT停止中</span><!--{/if}-->
+                    </a>
+                </td>
+                <td class="col-md-2">
+                    <div class="row">
+                    <div class="col-md-5">ツイート</div><div class="col-md-7"><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
+                    <div class="col-md-5">フォロー</div><div class="col-md-7"><span class="friend_count"><!--{$account->friend_count}--></span>人</div>
+                    <div class="col-md-5">フォロワー</div><div class="col-md-7"><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
+                    <div class="col-md-5">フォロー可</div><div class="col-md-7"><span class="friend_limit"><!--{$account->followLimit() - $account->friend_count}--></span>人</div>
+                    </div>
+                </td>
+                <td class="col-md-3">
+                    <div class="row">
+                    <div class="col-md-4"></div><div class="col-md-2">本日</div><div class="col-md-2">昨日</div><div class="col-md-3">一昨日</div>
+                    <!--{assign var="historys" value=$account->followHistorys(3)}-->
+                    <div class="col-md-4">検索</div>
+                    <!--{foreach from=$historys item="history"}-->
+                    <div class="col-md-2"><span class="target_count"><!--{$history->target_count}--></span></div>
+                    <!--{/foreach}-->
+                    <div class="col-md-1">&nbsp;</div>
+                    <div class="col-md-4">フォロー</div>
+                    <!--{foreach from=$historys item="history"}-->
+                    <div class="col-md-2"><span class="follow_count"><!--{$history->follow_count}--></span></div>
+                    <!--{/foreach}-->
+                    <div class="col-md-1">&nbsp;</div>
+                    <div class="col-md-4">被フォロー</div>
+                    <!--{foreach from=$historys item="history"}-->
+                    <div class="col-md-2"><span class="followed_count"><!--{$history->followed_count}--></span></div>
+                    <!--{/foreach}-->
+                    <div class="col-md-1">&nbsp;</div>
+                    <div class="col-md-4">アンフォロー</div>
+                    <!--{foreach from=$historys item="history"}-->
+                    <div class="col-md-2"><span class="unfollow_count"><!--{$history->unfollow_count}--></span></div>
+                    <!--{/foreach}-->
+                    <div class="col-md-1">&nbsp;</div>
+                    </div>
+                </td>
+                <td class="col-md-2">
+                    <div class="row">
+                    <div class="col-md-8">フォロー間隔</div><div class="col-md-4"><span class="min_follow_interval"><!--{$followSetting->follow_interval}--></span>秒</div>
+                    <div class="col-md-8">1日のフォロー</div><div class="col-md-4"><span class="daily_follows"><!--{$followSetting->daily_follows}--></span>人</div>
+                    <div class="col-md-12"><a class="btn btn-default" href="follow.html?account_id=<!--{$account->account_id}-->">フォロー設定</a></div>
+                    </div>
+                </td>
+                <td class="col-md-1"><div id="attribute_<!--{$account->account_id}-->" class="attribute"><!--{$followSetting->account_attribute}--></div></td>
+                <td>
+                    <!--{if $followSetting->follow_type == "1"}-->指定ユーザー
+                    <!--{elseif $followSetting->follow_type == "2"}-->フォロワー
+                    <!--{elseif $followSetting->follow_type == "3"}-->指定ユーザー<br />フォローワー
+                    <!--{else}-->対象無し<!--{/if}-->
+                </td>
+                <td><div class="notification"><!--{if $account->notification == "1"}-->○<!--{/if}--></div></td>
+                <td class="col-md-1">
+                <div id="description_<!--{$account->account_id}-->" class="description"><!--{$account->description}--></div>
+                </td>
+                </tr>
+                <!--{/foreach}-->
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="footer_space"></div>
+    <!--{include file="common/footer.html"}-->
+    <!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function() {
+    $('.description').editable('<!--{base}-->/account/description.html', {
+        type : "textarea",
+        rows : 4,
+        indicator : 'Saving...',
+        tooltip   : 'Click to edit...',
+        submit  : '登録する'
+    });
+    $(".tweet_status, .follow_status").click(function(){
+		$this = $(this);
+    	if(confirm("変更してもよろしいですか？")){
+            $.ajax({
+            	"type": "POST",
+            	"url": "<!--{base}-->/twitter/AccountStatus.json",
+            	"data": {
+            		"target": $this.attr("id"),
+            	},
+            	"dataType": "jsonp",
+            	"success": function(data){
+            		if(data.error !== void 0){
+            			alert(data.error);
+            		}else if(data.account_id > 0){
+       	        		var $status = $("<span />").addClass("label");
+       	        		if(data.follow_status == "1"){
+       	        			$status.addClass("label-primary").text("待機中");
+       	        		}else if(data.follow_status == "2"){
+       	        			$status.addClass("label-success").text("実行中");
+       	        		}else if(data.follow_status == "3"){
+       	        			$status.addClass("label-default").text("終了");
+       	        		}else if(data.follow_status == "4"){
+       	        			$status.addClass("label-danger").text("リスト無し");
+       	        		}else if(data.follow_status == "5"){
+       	        			$status.addClass("label-info").text("リトライ");
+       	        		}else if(data.follow_status == "6"){
+       	        			$status.addClass("label-warning").text("スキップ");
+       	        		}else{
+       	        			$status.addClass("label-default").text("停止中");
+       	        		}
+       	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
+                		$status = $("<span />").addClass("label");
+                		if(data.tweet_status == "1"){
+                			$status.addClass("label-primary").text("BOT待機中");
+       	        		}else if(data.tweet_status == "2"){
+       	        			$status.addClass("label-success").text("BOT実行中");
+       	        		}else{
+                			$status.addClass("label-default").text("BOT停止中");
+                		}
+                		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
+            		}
+            	}
+            });
+    	}
+    });
+
+   	reload = function(account_id){
+   		if(account_id > 0){
+   	        $.ajax({
+   	        	"type": "POST",
+   	        	"url": "<!--{base}-->/twitter/Account.json",
+   	        	"data": {
+   	        		"account_id": account_id
+   	        	},
+   	        	"dataType": "jsonp",
+   	        	"success": function(data){
+            		$("#acc" + data.account_id + " .tweet_count").text(data.status_count);
+   	        		$("#acc" + data.account_id + " .friend_count").text(data.friend_count);
+   	        		$("#acc" + data.account_id + " .follower_count").text(data.follower_count);
+   	        		$("#acc" + data.account_id + " .friend_limit").text(data.friend_limit);
+   	        		if(data.followSetting.follow_type == "1"){
+   	            		$("#acc" + data.account_id + " .follow_type").text("指定ユーザー");
+   	        		}else if(data.followSetting.follow_type == "2"){
+   	   	            	$("#acc" + data.account_id + " .follow_type").text("フォロワー");
+   	        		}else if(data.followSetting.follow_type == "3"){
+	   	            	$("#acc" + data.account_id + " .follow_type").html("指定ユーザー<br>フォロワー");
+	   	            }else{
+   	            		$("#acc" + data.account_id + " .follow_type").text("対象無し");
+   	        		}
+   	        		var $status = $("<span />").addClass("label");
+   	        		if(data.status.follow_status == "1"){
+   	        			$status.addClass("label-primary").text("待機中");
+   	        		}else if(data.status.follow_status == "2"){
+   	        			$status.addClass("label-success").text("実行中");
+   	        		}else if(data.status.follow_status == "3"){
+   	        			$status.addClass("label-default").text("終了");
+   	        		}else if(data.status.follow_status == "4"){
+   	        			$status.addClass("label-danger").text("リスト無し");
+   	        		}else if(data.status.follow_status == "5"){
+   	        			$status.addClass("label-info").text("リトライ");
+   	        		}else if(data.status.follow_status == "6"){
+   	        			$status.addClass("label-warning").text("スキップ");
+   	        		}else{
+   	        			$status.addClass("label-default").text("停止中");
+   	        		}
+   	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
+            		$status = $("<span />").addClass("label");
+            		if(data.status.tweet_status == "1"){
+            			$status.addClass("label-primary").text("BOT待機中");
+   	        		}else if(data.status.tweet_status == "2"){
+   	        			$status.addClass("label-success").text("BOT実行中");
+   	        		}else{
+            			$status.addClass("label-default").text("BOT停止中");
+            		}
+            		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
+            		if(data.notification == "1"){
+            			$("#acc" + data.account_id + " .notification").html("○");
+            		}else{
+            			$("#acc" + data.account_id + " .notification").html("");
+            		}
+   	        	}
+   	        });
+   		}
+    }
+    <!--{foreach from=$attr.accounts item="account"}-->
+	reloadLoop<!--{$account->account_id}--> = function(){
+		reload(<!--{$account->account_id}-->);
+		setTimeout(reloadLoop<!--{$account->account_id}-->, 60000);
+	}
+	setTimeout(reloadLoop<!--{$account->account_id}-->(), 60000);
+	<!--{/foreach}-->
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!--{assign var="account" value=$attr.account}-->
+<div class="col-md-6">
+    <!--{if $account->rakuten_application_id == ""}-->
+    <div class="alert alert-danger">この機能を利用するには、最初に共通設定＞楽天アフィリ設定を行ってください。</div>
+    <!--{/if}-->
+    <div class="alert alert-danger">楽天アフィリを使用するには、<a href="/RakutenUpdator.zip">こちら</a>からアプリをダウンロードして実行してください。（要Windows7以降）</div>
+    <div class="form-group form-inline">
+        <input type="text" size="30" id="search_product_keyword" class="search_product_keyword form-control" name="search_keyword" placeholder="検索するキーワードを入力してください">
+        <input type="button" id="search_product" class="search_product btn btn-default" value="検索"<!--{if $account->rakuten_application_id == ""}--> disabled<!--{/if}-->>
+    </div>
+    <div class="form-group form-inline">
+        <textarea cols=90" id="rakuten_text" class="rakuten_text form-control" name="rakuten_text" placeholder="登録するテキストを入力してください"></textarea>
+        <input type="button" id="add_rakuten" class="add_rakuten btn btn-default" value="BOTに登録" />
+    </div>
+    <table class="table table-condensed table-bordered">
+    <thead>
+    <tr>
+    <td class="col-md-1"></td>
+    <td class="col-md-11">商品名</td>
+    </tr>
+    </thead>
+    <tbody id="rakuten_products">
+    </tbody>
+    </table>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-inline">
+        <input type="button" id="delete_rakuten" class="delete_rakuten form-control btn btn-default" value="削除">
+    </div>
+    <table class="table table-condensed table-bordered">
+    <thead>
+    <tr>
+    <td class="col-md-1"></td>
+    <td class="col-md-7">ツイート</td>
+    <td class="col-md-4">商品</td>
+    </tr>
+    </thead>
+    <tbody id="rakuten_advertises">
+    </tbody>
+    </table>
+</div>

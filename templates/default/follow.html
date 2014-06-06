@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Detail" />
+<!--{include file="common/header.html" subtitle=""}-->
+</head>
+<body>
+    <!--{include file="common/menu.html"}-->
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <!--{assign var="account" value=$attr.account}-->
+                <!--{if $account->account_id > 0}-->
+                <ol class="breadcrumb breadcrumb_clear">
+                    <li><a href="<!--{base}-->/">アカウント一覧</a></li>
+                    <li class="active">フォロー設定</li>
+                </ol>
+                <!--{else}-->
+                <ol class="breadcrumb breadcrumb_clear">
+                    <li class="active">共通フォロー設定</li>
+                </ol>
+                <!--{/if}-->
+                <!--{include file="common/errors.html"}-->
+                <!--{if $account->account_id > 0}-->
+                <div class="col-md-12">
+                    <div class="checkbox">
+                        <label> <input type="checkbox" data-column="use_follow_setting_<!--{$account->account_id|default:0}-->" class="check_item use_follow_setting" value="1"> このアカウント固有のフォロー設定を利用する</label>
+                    </div>
+                </div>
+                <!--{/if}-->
+                <div class="col-md-12">
+                    <table class="table table-condensed table-bordered">
+                        <tr><td class="col-md-6">
+                            <ol class="breadcrumb">
+                                <li class="active">フォロー形式</li>
+                            </ol>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <div class="radio">
+                                        <label> <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="1"> 指定ユーザーをフォロー
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="radio">
+                                        <label> <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="2"> 指定ユーザーのフォロワーをフォロー
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="radio">
+                                        <label> <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="3"> 両方をフォロー
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </td><td class="col-md-6">
+                            <ol class="breadcrumb">
+                                <li class="active">フォロー対象キーワード</li>
+                            </ol>
+                            <div class="col-md-10">
+                                <input type="text" data-column="follow_keywords_<!--{$account->account_id|default:0}-->" class="follow_keywords form-control" placeholder="プロフィールに含むキーワードをスペース区切りで入力してください">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="add_keyword form-control" data-column="follow_keywords" value="追加">
+                            </div>
+                            <div class="follow_keywords col-md-12"></div>
+                        </td></tr><tr><td class="col-md-6">
+                            <ol class="breadcrumb">
+                                <li class="active">グループ設定</li>
+                            </ol>
+                            <div class="form-group form-inline">
+                                プルダウンに無い場合は、こちらに入力する。
+                                <input type="text" size="50" data-column="account_attribute_<!--{$account->account_id|default:0}-->" class="account_attribute form-control" placeholder="グループ名を変更" />
+                            </div>
+                            <div class="form-group form-inline">
+                                登録済みの場合はこちらから選択することもできます。
+                                <select data-column="account_attribute_<!--{$account->account_id|default:0}-->" class="account_attribute account_attribute_select form-control" name="attribute">
+                                <option value="">グループ指定なし</option>
+                                </select>
+                            </div>
+                        </td><td class="col-md-6">
+                            <ol class="breadcrumb">
+                                <li class="active">フォローワー対象キーワード</li>
+                            </ol>
+                            <div class="col-md-10">
+                                <input type="text" data-column="follower_keywords_<!--{$account->account_id|default:0}-->" class="follower_keywords form-control" placeholder="プロフィールに含むキーワードをスペース区切りで入力してください">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="add_keyword form-control" data-column="follower_keywords" value="追加">
+                            </div>
+                            <div class="follower_keywords col-md-12"></div>
+                        </td></tr><tr><td class="col-md-6">
+                            <ol class="breadcrumb">
+                                <li class="active">フォロー除外対象設定</li>
+                            </ol>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="checkbox">
+                                        <label> <input type="checkbox" data-column="japanese_flg_<!--{$account->account_id|default:0}-->" class="check_item japanese_flg"> 日本語アカウントのみ
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkbox">
+                                        <label> <input type="checkbox" data-column="unlock_user_flg_<!--{$account->account_id|default:0}-->" class="check_item unlock_user_flg"> 鍵付きアカウントを除く
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkbox">
+                                        <label> <input type="checkbox" data-column="unique_icon_flg_<!--{$account->account_id|default:0}-->" class="check_item unique_icon_flg"> デフォルトアイコンを除く
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkbox">
+                                        <label> <input type="checkbox" data-column="non_bot_flg_<!--{$account->account_id|default:0}-->" class="check_item non_bot_flg"> ボットアカウントを除く
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </td><td class="col-md-6">
+                            <ol class="breadcrumb">
+                                <li class="active">フォロー除外キーワード</li>
+                            </ol>
+                            <div class="col-md-10">
+                                <input type="text" data-column="ignore_keywords_<!--{$account->account_id|default:0}-->" class="ignore_keywords form-control" placeholder="プロフィールに含まないキーワードをスペース区切りで入力してください">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="add_keyword form-control" data-column="ignore_keywords" value="追加">
+                            </div>
+                            <div class="ignore_keywords col-md-12"></div>
+                        </td></tr>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <ol class="breadcrumb">
+                        <li class="active">フォロー詳細設定</li>
+                    </ol>
+                    <table class="table table-striped">
+                        <tbody>
+                            <!--{include file="follow/setting_detail.html" index=1}-->
+                            <!--{include file="follow/setting_detail.html" index=2}-->
+                            <!--{include file="follow/setting_detail.html" index=3}-->
+                            <!--{include file="follow/setting_detail.html" index=4}-->
+                            <!--{include file="follow/setting_detail.html" index=5}-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer_space"></div>
+    <!--{include file="common/footer.html"}-->
+    <!--{include file="common/script.html"}-->
+    <script type="text/javascript">
+    <!--{include file="follow/follow_js.phtml"}-->
+    </script>
+</body>
+</html>

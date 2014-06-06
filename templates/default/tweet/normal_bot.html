@@ -1,0 +1,36 @@
+<div class="col-md-6">
+    <div class="form-group form-inline">
+        <input type="text" size="30" id="search_keyword" class="search_keyword form-control" name="search_keyword" placeholder="検索するキーワードを入力してください">
+        <input type="button" id="search_tweet" class="search_tweet btn btn-default" value="検索">
+        <input type="button" id="commit_tweets" class="btn btn-default" value="BOTに登録" />
+    </div>
+    <table class="table table-condensed table-bordered">
+    <thead>
+    <tr>
+    <td class="col-md-1"><input type="checkbox" id="chk_pre_tweet_all" /></td>
+    <td class="col-md-3">投稿者</td>
+    <td class="col-md-7">ツイート</td>
+    <td class="col-md-1">RT</td>
+    </tr>
+    </thead>
+    <tbody id="pre_tweets">
+    </tbody>
+    </table>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-inline">
+        <input type="button" id="delete_tweet" class="delete_tweet form-control btn btn-default" value="削除">
+    </div>
+    <table class="table table-condensed table-bordered">
+    <thead>
+    <tr>
+    <td class="col-md-1"><input type="checkbox" id="chk_tweet_all" /></td>
+    <td class="col-md-3">投稿者</td>
+    <td class="col-md-7">ツイート</td>
+    <td class="col-md-1">RT</td>
+    </tr>
+    </thead>
+    <tbody id="tweets">
+    </tbody>
+    </table>
+</div>

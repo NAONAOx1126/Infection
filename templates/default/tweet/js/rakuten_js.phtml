@@ -1,0 +1,107 @@
+$("#search_product").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/affiliate/RakutenSearch.json",
+    	"data": {
+    		"app_id": "<!--{$attr.account->rakuten_application_id}-->",
+    		"aff_id": "<!--{$attr.account->rakuten_affiliate_id}-->",
+    		"keyword": $("#search_product_keyword").val()
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    	   for(var i in data){
+    	       var item = data[i];
+        	   var rb = $("<input />").attr("type", "radio").attr("name", "aff_url").addClass("aff_url").val(item.itemUrl);
+               $("<tr />").append($("<td />").append(rb)).append($("<td />").append($("<a />").attr("href", item.itemUrl).attr("target", "_blank").text(item.itemName))).appendTo("#rakuten_products");
+           }
+    	}
+    });
+});
+
+var refreshRakuten = function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/Rakuten.json",
+    	"data": {
+    		"account_id": "<!--{$attr.account->account_id}-->"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadRakuten(data);
+    	}
+    });
+};
+
+var reloadRakuten = function(data){
+	$("#rakuten_advertises").html("");
+	for(var i in data){
+		var chkBox = $("<input />").addClass("chk_rakuten_advertise").attr("type", "checkbox").attr("id", "delete_" + data[i].advertise_id).attr("value", data[i].advertise_id);
+		if(data[i].delete_target == 1){
+			chkBox.prop("checked", true);
+		}
+		chkBox.change(function(){
+			$this = $(this);
+	        $.ajax({
+	        	"type": "POST",
+	        	"url": "<!--{base}-->/twitter/Rakuten.json",
+	        	"data": {
+	        		"mode": $this.attr("id"),
+	        		"value": ($this.is(':checked')?"1":"0")
+	        	},
+	        	"dataType": "jsonp",
+	        	"success": function(data){
+	        		if(data == "1"){
+	            		$this.prop("checked", true);
+	        		}else{
+	            		$this.prop("checked", false);
+	        		}
+	        	}
+	        });
+		});
+		var text = $("<td />").attr("id", "advertise_text_" + data[i].advertise_id).addClass("col-md-7").text(data[i].advertise_text);
+		text.editable('<!--{base}-->/tweet/advertise_text.html', {
+	        type : "textarea",
+	        rows : 4,
+	        indicator : 'Saving...',
+	        tooltip   : 'Click to edit...',
+	        submit  : '登録する'
+	    });
+    	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
+        .append(text).append($("<td />").addClass("col-md-4").append($("<a />").attr("href", data[i].advertise_url).attr("target", "_blank").text(data[i].advertise_name)))
+        .appendTo("#rakuten_advertises");
+	}
+    $("#chk_rakuten_advertise_all").unbind("change").change(function(){
+        $(".chk_rakuten_advertise").prop("checked", $(this).is(":checked")).trigger("change");
+    });
+}
+
+$("#add_rakuten").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/Rakuten.json",
+    	"data": {
+    		"account_id": "<!--{$attr.account->account_id}-->",
+    		"text": $("#rakuten_text").val(),
+    		"name": $(".aff_url:checked").parent().next("td").text(),
+    		"url": $(".aff_url:checked").val()
+        },
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadRakuten(data);
+    	}
+    });
+});
+
+$("#delete_rakuten").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/Rakuten.json",
+    	"data": {
+    		"mode": "delete_all_target"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadRakuten(data);
+    	}
+    });
+});

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Detail" />
+<!--{include file="common/header.html" subtitle=""}-->
+</head>
+<body>
+    <!--{include file="common/menu.html"}-->
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <!--{assign var="account" value=$attr.account}-->
+                <ol class="breadcrumb">
+                    <li><a href="<!--{base}-->/">アカウント一覧</a></li>
+                    <li class="active">BOT設定</li>
+                </ol>
+                <!--{include file="common/errors.html"}-->
+                <div class="col-md-12">
+                    <!--{include file="tweet/setting.html"}-->
+                </div>
+                <div class="col-md-12">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justifie">
+                      <li class="active"><a href="#tweet" data-toggle="tab">ツイート取り込み</a></li>
+                      <li><a href="#original" data-toggle="tab">ツイート自由入力</a></li>
+                      <li><a href="#rakuten" data-toggle="tab">楽天アフィリエイト</a></li>
+                      <li><a href="#advertise" data-toggle="tab">アフィリ自由入力</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="tweet">
+                      <!--{include file="tweet/normal_bot.html"}-->
+                      </div>
+                      <div class="tab-pane" id="original">
+                      <!--{include file="tweet/original_bot.html"}-->
+                      </div>
+                      <div class="tab-pane" id="rakuten">
+                      <!--{include file="tweet/rakuten.html"}-->
+                      </div>
+                      <div class="tab-pane" id="advertise">
+                      <!--{include file="tweet/advertise.html"}-->
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer_space"></div>
+    <!--{include file="common/footer.html"}-->
+    <!--{include file="common/script.html"}-->
+    <script type="text/javascript"><!--{include file="tweet/setting_js.phtml"}--></script>
+</body>
+</html>

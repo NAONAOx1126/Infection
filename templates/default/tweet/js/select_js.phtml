@@ -1,0 +1,114 @@
+var refreshSetting = function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SettingText.json",
+    	"data": {
+    		"account_id": "<!--{$attr.account->account_id|default:0}-->"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+   			reloadSetting(data);
+    	}
+    });
+};
+
+$(".radio_item").change(function(){
+	$this = $(this);
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SettingText.json",
+    	"data": {
+    		"target": $this.attr("data-column"),
+    		"value": $this.val()
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+   			reloadSetting(data);
+    	}
+    });
+});
+
+$(".check_item").change(function(){
+	$this = $(this);
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SettingText.json",
+    	"data": {
+    		"target": $this.attr("data-column"),
+    		"value": ($this.is(':checked')?"1":"0")
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadSetting(data);
+    	}
+    });
+});
+
+$(".set_interval").click(function(){
+    $this = $(this);
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SettingText.json",
+    	"data": {
+    		"target": $("." + $this.attr("data-column")).attr("data-column"),
+    		"value": $("." + $this.attr("data-column")).val()
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		$("." + $this.attr("data-column")).text(data.advertise_interval);
+    	}
+    });
+});
+
+var reloadSetting = function(data){
+	// エラーが設定されている場合はエラー表示して終了
+    if(data.error !== void 0){
+        alert(data.error);
+		return false;
+	}
+
+	// 値をまとめて設定する。
+	for(var key in data){
+		var $target = $("." + key);
+		if(key == "follow_keywords" || key == "follower_keywords" || key == "ignore_keywords"){
+    		$target.html("");
+    		for(i = 0; i < data[key].length; i ++){
+            	$("<div />").append(
+                	$("<span />").addClass("glyphicon").addClass("glyphicon-remove")
+					.attr("data-column", key + "_<!--{$account->account_id|default:0}-->")
+                	.attr("title", data[key][i])
+                	.click(function(){
+                    	$this = $(this);
+                    	$.ajax({
+                        	"type": "POST",
+                        	"url": "<!--{base}-->/twitter/SettingText.json",
+                        	"data": {
+								"type": "delete",
+                            	"target": $this.attr("data-column"),
+                            	"value": $this.attr("title")
+                        	},
+                        	"dataType": "jsonp",
+                        	"success": function(data){
+                            	if(data.error !== void 0){
+                                	alert(data.error);
+                            	}else if(data.account_id > 0){
+                                	reload(data);
+                            	}
+                        	}
+                    	});
+                	})
+            	).append($("<label />").text(data[key][i])).appendTo("." + key);
+        	}
+		}else if($target.attr("type") == "checkbox"){
+			if(data[key] == "1"){
+				$target.prop("checked", true);
+			}else{
+				$target.prop("checked", false);
+			}
+		}else if($target.attr("type") == "radio"){
+			$target.val([data[key]]);
+		}else{
+			$target.val(data[key]);
+		}
+	}
+};

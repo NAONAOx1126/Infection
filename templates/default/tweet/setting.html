@@ -1,0 +1,77 @@
+<div class="col-md-6">
+    <ol class="breadcrumb">
+        <li class="active">規定回数ツイート後の待機時間</li>
+    </ol>
+    <div class="col-md-2">
+      <div class="radio">
+        <label>
+          <input type="radio" data-column="tweet_interval_<!--{$attr.account->account_id|default:0}-->" class="radio_item tweet_interval" name="tweet_interval" value="10"> 10分
+        </label>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="radio">
+        <label>
+          <input type="radio" data-column="tweet_interval_<!--{$attr.account->account_id|default:0}-->" class="radio_item tweet_interval" name="tweet_interval" value="30"> 30分
+        </label>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="radio">
+        <label>
+          <input type="radio" data-column="tweet_interval_<!--{$attr.account->account_id|default:0}-->" class="radio_item tweet_interval" name="tweet_interval" value="60"> 1時間
+        </label>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="radio">
+        <label>
+          <input type="radio" data-column="tweet_interval_<!--{$attr.account->account_id|default:0}-->" class="radio_item tweet_interval" name="tweet_interval" value="120"> 2時間
+        </label>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="radio">
+        <label>
+          <input type="radio" data-column="tweet_interval_<!--{$attr.account->account_id|default:0}-->" class="radio_item tweet_interval" name="tweet_interval" value="180"> 3時間
+        </label>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="radio">
+        <label>
+          <input type="radio" data-column="tweet_interval_<!--{$attr.account->account_id|default:0}-->" class="radio_item tweet_interval" name="tweet_interval" value="240"> 4時間
+        </label>
+      </div>
+    </div>
+</div>
+<div class="col-md-3">
+    <ol class="breadcrumb">
+        <li class="active">その他の設定</li>
+    </ol>
+    <div class="col-md-8">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" data-column="daytime_flg_<!--{$attr.account->account_id|default:0}-->" class="check_item daytime_flg" name="daytime_flg" value="1"> 0〜7時にはツイートしない
+        </label>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" data-column="wavy_flg_<!--{$attr.account->account_id|default:0}-->" class="check_item wavy_flg" name="wavy_flg" value="1"> ゆらぎ
+        </label>
+      </div>
+    </div>
+</div>
+<div class="col-md-3">
+    <ol class="breadcrumb">
+        <li class="active">広告ツイート設定</li>
+    </ol>
+    <div class="col-md-3">
+        <input type="text" data-column="advertise_interval_<!--{$attr.account->account_id|default:0}-->" class="advertise_interval form-control" name="advertise_interval" value="<!--{$attr.account->advertise_interval}-->" />
+    </div>
+    <div class="col-md-9">
+        <input type="button" data-column="advertise_interval" class="set_interval form-control btn btn-default" value="ツイート毎に広告を設定" />
+    </div>
+</div>

@@ -1,0 +1,22 @@
+$(function(){
+    <!--{include file="tweet/js/select_js.phtml"}-->
+    <!--{if $account->account_id > 0}-->
+    <!--{include file="tweet/js/tweet_js.phtml"}-->
+    <!--{include file="tweet/js/original_tweet_js.phtml"}-->
+    <!--{include file="tweet/js/advertise_js.phtml"}-->
+    <!--{include file="tweet/js/rakuten_js.phtml"}-->
+    <!--{/if}-->
+
+    var refresh = function(){
+	   refreshSetting();
+       <!--{if $account->account_id > 0}-->
+	   refreshPreTweet();
+	   refreshTweet();
+	   refreshOriginalTweet();
+	   refreshAdvertise();
+	   refreshRakuten();
+       <!--{/if}-->
+};
+
+    refresh();
+});

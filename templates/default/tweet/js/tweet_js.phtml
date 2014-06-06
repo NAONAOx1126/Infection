@@ -1,0 +1,178 @@
+var refreshPreTweet = function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SearchTweet.json",
+    	"data": {
+    		"account_id": "<!--{$attr.account->account_id}-->"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadPreTweet(data);
+    	}
+    });
+};
+
+var refreshTweet = function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/Tweet.json",
+    	"data": {
+    		"account_id": "<!--{$attr.account->account_id}-->"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadTweet(data);
+    	}
+    });
+};
+
+var reloadPreTweet = function(data){
+	$("#pre_tweets").html("");
+	for(var i in data){
+		var chkBox = $("<input />").addClass("chk_pre_tweet").attr("type", "checkbox").attr("id", "delete_" + data[i].id_str).attr("value", data[i].id_str);
+		if(data[i].delete_target == 1){
+			chkBox.prop("checked", true);
+		}
+		chkBox.change(function(){
+			$this = $(this);
+	        $.ajax({
+	        	"type": "POST",
+	        	"url": "<!--{base}-->/twitter/SearchTweet.json",
+	        	"data": {
+	        		"mode": $this.attr("id"),
+	        		"value": ($this.is(':checked')?"1":"0")
+	        	},
+	        	"dataType": "jsonp",
+	        	"success": function(data){
+	        		if(data == "1"){
+	            		$this.prop("checked", true);
+	        		}else{
+	            		$this.prop("checked", false);
+	        		}
+	        	}
+	        });
+		});
+		var text = $("<td />").attr("id", "text_" + data[i].id_str).addClass("col-md-7").text(data[i].text);
+		text.editable('<!--{base}-->/tweet/pre_tweet.html', {
+	        type : "textarea",
+	        rows : 4,
+	        indicator : 'Saving...',
+	        tooltip   : 'Click to edit...',
+	        submit  : '登録する'
+	    });
+    	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
+    	.append($("<td />").addClass("col-md-3").text(data[i].user.screen_name))
+        .append(text)
+        .append($("<td />").addClass("col-md-1").text(data[i].retweet_count))
+        .appendTo("#pre_tweets");
+	}
+    $("#chk_pre_tweet_all").unbind("change").change(function(){
+        $(".chk_pre_tweet").prop("checked", $(this).is(":checked")).trigger("change");
+    });
+};
+
+var reloadTweet = function(data){
+	$("#tweets").html("");
+	for(var i in data){
+		var chkBox = $("<input />").addClass("chk_tweet").attr("type", "checkbox").attr("id", "delete_" + data[i].tweet_id).attr("value", data[i].tweet_id);
+		if(data[i].delete_target == 1){
+			chkBox.prop("checked", true);
+		}
+		chkBox.change(function(){
+			$this = $(this);
+	        $.ajax({
+	        	"type": "POST",
+	        	"url": "<!--{base}-->/twitter/Tweet.json",
+	        	"data": {
+	        		"mode": $this.attr("id"),
+	        		"value": ($this.is(':checked')?"1":"0")
+	        	},
+	        	"dataType": "jsonp",
+	        	"success": function(data){
+	        		if(data == "1"){
+	            		$this.prop("checked", true);
+	        		}else{
+	            		$this.prop("checked", false);
+	        		}
+	        	}
+	        });
+		});
+		var text = $("<td />").attr("id", "tweet_text_" + data[i].tweet_id).addClass("col-md-7").text(data[i].tweet_text);
+		text.editable('<!--{base}-->/tweet/tweet.html', {
+	        type : "textarea",
+	        rows : 4,
+	        indicator : 'Saving...',
+	        tooltip   : 'Click to edit...',
+	        charcounter : {
+	           characters : 60
+            },
+	        submit  : '登録する'
+	    });
+    	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
+    	.append($("<td />").addClass("col-md-3").text(data[i].screen_name))
+        .append(text)
+        .append($("<td />").addClass("col-md-1").text(data[i].retweet_count))
+        .appendTo("#tweets");
+	}
+    $("#chk_tweet_all").unbind("change").change(function(){
+        $(".chk_tweet").prop("checked", $(this).is(":checked")).trigger("change");
+    });
+};
+
+$("#search_tweet").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SearchTweet.json",
+    	"data": {
+    		"account_id": "<!--{$attr.account->account_id}-->",
+    		"keyword": $("#search_keyword").val()
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadPreTweet(data);
+    	}
+    });
+});
+
+$("#commit_tweets").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/Tweet.json",
+    	"data": {
+    		"account_id": "<!--{$attr.account->account_id}-->",
+    		"commit": "1"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadTweet(data);
+    		refreshPreTweet();
+    	}
+    });
+});
+$("#delete_pre_tweet").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SearchTweet.json",
+    	"data": {
+    		"mode": "delete_all_target"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadPreTweet(data);
+    	}
+    });
+});
+
+$("#delete_tweet").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/Tweet.json",
+    	"data": {
+    		"mode": "delete_all_target"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadTweet(data);
+    	}
+    });
+});
