@@ -1,17 +1,34 @@
-<div class="form-group form-inline">
-    <textarea cols=120" rows="6" id="tweet_text" class="tweet_text form-control " name="tweet_text" placeholder="登録するテキストを入力してください"></textarea>
+<div id="upload_image" class="form-group col-md-3" style="border: 1px solid #000000; height: 140px;">
+<div class="dz-default dz-message"><span>ここに画像ファイルをドラッグ&ドロップしてください。</span></div>
 </div>
-
+<div class="form-group form-inline col-md-9">
+    <input type="hidden" id="media_filename" name="media_filename" value="" />
+    <textarea cols=120" rows="7" id="tweet_text" class="tweet_text form-control " name="tweet_text" placeholder="登録するテキストを入力してください"></textarea>
+</div>
 <div class="form-group form-inline">
     <input type="button" id="add_original_tweet" class="add_original_tweet btn btn-default" value="BOTに登録" />
     <input type="button" id="add_multi_original_tweet" class="add_original_tweet btn btn-default" value="BOTにまとめて登録(改行区切り)" />
     <input type="button" id="delete_original_tweet" class="delete_original_tweet form-control btn btn-default" value="削除">
+    登録済：<span class="original_count">--</span>件
+</div>
+<div class="form-group form-inline">
+    BOT：
+    <label><input type="radio" data-column="original_status_<!--{$account->account_id|default:0}-->" class="original_status" name="original_status" value="<!--{if $account->status()->original_status > 0}--><!--{$account->status()->original_status}--><!--{else}-->1<!--{/if}-->"<!--{if $account->status()->original_status > 0}--> checked<!--{/if}-->> 稼働中</label>
+    <label><input type="radio" data-column="original_status_<!--{$account->account_id|default:0}-->" class="original_status" name="original_status" value="0"<!--{if !($account->status()->original_status > 0)}--> checked<!--{/if}-->> 停止中</label>
+    ｜ツイート順：
+    <label><input type="radio" data-column="tweet_order_<!--{$account->account_id|default:0}-->" class="radio_item tweet_order" name="tweet_order_original" value="0"<!--{if $post.tweet_order != "1"}--> checked<!--{/if}-->> ランダム</label>
+    <label><input type="radio" data-column="tweet_order_<!--{$account->account_id|default:0}-->" class="radio_item tweet_order" name="tweet_order_original" value="1"<!--{if $post.tweet_order == "1"}--> checked<!--{/if}-->> RT数順</label>
+</div>
+<div class="form-group form-inline">
+    <input type="button" id="prev_original_page" value="前のページ" class="btn btn-default" />
+    <input type="button" id="next_original_page" value="次のページ" class="btn btn-default" />
 </div>
 <table class="table table-condensed table-bordered">
 <thead>
 <tr>
 <td class="col-md-1"><input type="checkbox" id="chk_org_tweet_all" /></td>
-<td class="col-md-11">ツイート</td>
+<td class="col-md-3">画像</td>
+<td class="col-md-8">ツイート</td>
 </tr>
 </thead>
 <tbody id="original_tweets">

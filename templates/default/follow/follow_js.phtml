@@ -36,7 +36,7 @@ $(function(){
                             	"success": function(data){
                                 	if(data.error !== void 0){
                                     	alert(data.error);
-                                	}else if(data.account_id > 0){
+                                	}else if(data.account_id >= 0){
                                     	reload(data);
                                 	}
                             	}
@@ -92,7 +92,7 @@ $(function(){
         });
     });
 
-    $(".follow_type, .account_attribute, .min_followers, .min_follow_interval, .refollow_timeoute, .daily_follows").change(function(){
+    $(".follow_type, .account_attribute, .follow_unit, .follow_unit_interval, .refollow_timeout, .follower_limit, .follow_ratio, .daily_follows, .daily_unfollows").change(function(){
         var $this = $(this);
         $.ajax({
             "type": "POST",
@@ -105,6 +105,27 @@ $(function(){
             "success": function(data){
 				reload(data);
             }
+        });
+    });
+
+    $(".follow_status").click(function(){
+		$this = $(".follow_status:checked");
+        $.ajax({
+        	"type": "POST",
+        	"url": "<!--{base}-->/twitter/AccountStatus.json",
+        	"data": {
+                "account_id": "<!--{$account->account_id|default:0}-->",
+        	    "target": $this.attr("data-column"),
+        		"value": $this.attr("value")
+        	},
+        	"dataType": "jsonp",
+        	"success": function(data){
+        		if(data.error !== void 0){
+        			alert(data.error);
+        		}else if(data.account_id > 0){
+        			$(".follow_status").val(data.follow_status);
+        		}
+        	}
         });
     });
 

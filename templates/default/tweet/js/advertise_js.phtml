@@ -1,9 +1,11 @@
+var advertisePage = 1;
 var refreshAdvertise = function(){
     $.ajax({
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/Advertise.json",
     	"data": {
-    		"account_id": "<!--{$attr.account->account_id}-->"
+    		"account_id": "<!--{$attr.account->account_id}-->",
+    		"page": advertisePage
     	},
     	"dataType": "jsonp",
     	"success": function(data){
@@ -14,24 +16,73 @@ var refreshAdvertise = function(){
 
 var reloadAdvertise = function(data){
 	$("#advertises").html("");
-	for(var i in data){
-		var icon = $("<span />").attr("id", "delete_" + data[i].tweet_advertise_id).addClass("glyphicon").addClass("glyphicon-remove");
-		icon.click(function(){
-   	        $.ajax({
-   	        	"type": "POST",
-   	        	"url": "<!--{base}-->/twitter/Advertise.json",
-   	        	"data": {
-   	        		"mode": $(this).attr("id")
-   	        	},
-   	        	"dataType": "jsonp",
-   	        	"success": function(data){
-   	        		reloadAdvertise(data);
-   	        	}
-   	        });
-		});
-		var text = $("<td />").addClass("col-md-10").text(data[i].advertise_text);
-    	$("<tr />").append($("<td />").addClass("col-md-2").append(icon)).append(text).appendTo("#advertises");
+	$(".advertise_count").text(data.count);
+	if(advertisePage > 1){
+	   $("#prev_advertise_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       advertisePage --;
+	       refreshAdvertise();
+	   });
+	}else{
+	   $("#prev_advertise_page").attr("disabled", "true");
     }
+	if(advertisePage < data.count / 100){
+	   $("#next_advertise_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       advertisePage ++;
+	       refreshAdvertise();
+	   });
+	}else{
+	   $("#next_advertise_page").attr("disabled", "true");
+    }
+	for(var i in data){
+	    if(i == "count") continue;
+	    var chkBox = $("<input />").addClass("chk_advertise").attr("type", "checkbox").attr("id", "delete_" + data[i].advertise_id).attr("value", data[i].advertise_id);
+		if(data[i].delete_target == 1){
+			chkBox.prop("checked", true);
+		}
+		chkBox.change(function(){
+			$this = $(this);
+	        $.ajax({
+	        	"type": "POST",
+	        	"url": "<!--{base}-->/twitter/Advertise.json",
+	        	"data": {
+	        		"mode": $this.attr("id"),
+	        		"value": ($this.is(':checked')?"1":"0")
+	        	},
+	        	"dataType": "jsonp",
+	        	"success": function(data){
+	        		if(data == "1"){
+	            		$this.prop("checked", true);
+	        		}else{
+	            		$this.prop("checked", false);
+	        		}
+	        	}
+	        });
+		});
+		var text = $("<td />").addClass("col-md-11").text(data[i].advertise_text);
+		if(data[i].advertise_text.length > 140){
+           text.css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+		}
+		text.editable('<!--{base}-->/tweet/advertise_text.html', {
+	        type : "textarea",
+	        rows : 4,
+	        indicator : 'Saving...',
+	        tooltip   : 'Click to edit...',
+	        submit  : '登録する',
+	        callback : function(value, setting){
+	           if(value.length > 140){
+                   $(this).css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+   	           }else{
+	               $(this).css("border", "1px solid rgb(221, 221, 221)").css("background-color", "transparent");
+	           }
+	        }
+        });
+    	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox)).append(text).appendTo("#advertises");
+    }
+    $("#chk_advertise_all").unbind("change").change(function(){
+        $(".chk_advertise").prop("checked", $(this).is(":checked")).trigger("change");
+    });
 }
 
 $("#add_advertise").click(function(){
@@ -41,6 +92,21 @@ $("#add_advertise").click(function(){
     	"data": {
     		"account_id": "<!--{$attr.account->account_id}-->",
     		"text": $("#advertise_text").val()
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		reloadAdvertise(data);
+    	}
+    });
+});
+
+$("#delete_advertise").click(function(){
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/Advertise.json",
+    	"data": {
+    	    "account_id": "<!--{$attr.account->account_id}-->",
+    		"mode": "delete_all_target"
     	},
     	"dataType": "jsonp",
     	"success": function(data){

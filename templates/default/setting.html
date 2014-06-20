@@ -5,43 +5,44 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
-<meta name="loadmodule" content="Twitter.Setting.Save" />
-<meta name="loadmodule" content="Twitter.Setting.Detail" />
+<meta name="loadmodule" content="Twitter.GlobalSetting.Save" />
+<meta name="loadmodule" content="Twitter.GlobalSetting.List" />
 <!--{include file="common/header.html" subtitle=""}-->
 </head>
 <body>
     <!--{include file="common/menu.html"}-->
     <div class="container">
         <div class="row">
+            <form action="setting.html" method="POST">
+            <!--{foreach from=$attr.globalSettings item="setting"}-->
             <div class="span12">
-                <h2>共通設定</h2>
-                <!--{include file="common/errors.html"}-->
-                <div class="bs-callout bs-callout-warning">
-                    <p>設定したキーワードは所定のフォロワー数まで強制的に適用されます。</p>
-                    <p>通常は設定を変更する必要はありません。</p>
-                </div>
-                <!--{assign var="setting" value=$attr.setting}-->
-                <form role="form" action="setting.html" method="POST" class=".form-horizontal">
-                <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
-                <input type="hidden" name="oprator_id" value="<!--{$setting->operator_id|default:$attr[VizualizerAdmin::KEY]->operator_id}-->" />
-                <div class="form-group">
-                <label>全体フォローキーワード</label>
-                <input type="text" class="form-control" id="follow_keywords" name="follow_keywords" value="<!--{$setting->follow_keywords|default:"相互フォロー フォロバ100% リフォロー100%"}-->" />
-                </div>
-                <div class="form-group">
-                <label>全体キーワード適用フォロワー数</label>
-                <input type="number" class="form-control" id="limit_followers" name="limit_followers" value="<!--{$setting->limit_followers|default:"2000"}-->" />人まで
-                </div>
                 <h2>楽天アフィリ設定</h2>
+                <div><a href="https://webservice.rakuten.co.jp/app/list" target="_blank">こちら</a>から確認できます。</div>
                 <div class="form-group">
-                <label>アプリID</label><input type="text" class="form-control" id="rakuten_app_id" name="rakuten_app_id" value="<!--{$setting->rakuten_app_id}-->" />
-                <label>アフィリID</label><input type="text" class="form-control" id="rakuten_aff_id" name="rakuten_aff_id" value="<!--{$setting->rakuten_aff_id}-->" />
+                <input type="hidden" name="global_setting_id" value="<!--{$setting->global_setting_id}-->" />
+                <label>アプリID/デベロッパーID(applicationId / developerId)</label><input type="text" class="form-control" id="rakuten_application_id" name="rakuten_application_id" value="<!--{$setting->rakuten_application_id}-->" />
+                <label>アフィリエイトID(affiliateId)</label><input type="text" class="form-control" id="rakuten_affiliate_id" name="rakuten_affiliate_id" value="<!--{$setting->rakuten_affiliate_id}-->" />
                 </div>
                 <div class="form-group">
                 <input type="submit" class="btn btn-default" id="save" name="save" value="保存する" />
                 </div>
                 </form>
             </div>
+            <!--{foreachelse}-->
+            <div class="span12">
+                <h2>楽天アフィリ設定</h2>
+                <div><a href="https://webservice.rakuten.co.jp/app/list" target="_blank">こちら</a>から確認できます。</div>
+                <div class="form-group">
+                <label>アプリID/デベロッパーID(applicationId / developerId)</label><input type="text" class="form-control" id="rakuten_application_id" name="rakuten_application_id" value="" />
+                <label>アフィリエイトID(affiliateId)</label><input type="text" class="form-control" id="rakuten_affiliate_id" name="rakuten_affiliate_id" value="" />
+                </div>
+                <div class="form-group">
+                <input type="submit" class="btn btn-default" id="save" name="save" value="保存する" />
+                </div>
+                </form>
+            </div>
+            <!--{/foreach}-->
+            </form>
         </div>
     </div>
     <div class="footer_space"></div>

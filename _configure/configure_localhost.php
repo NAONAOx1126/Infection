@@ -49,3 +49,7 @@ Vizualizer_Configure::set("s_index", "一覧画面");
 Vizualizer_Configure::set("s_edit", "詳細／入力画面");
 Vizualizer_Configure::set("s_confirm", "登録内容確認画面");
 Vizualizer_Configure::set("s_complete", "登録完了画面");
+
+// Twitterの画像保存先
+Vizualizer_Configure::set("twitter_image_savepath", "/upload");
+

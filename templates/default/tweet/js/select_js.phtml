@@ -60,6 +60,36 @@ $(".set_interval").click(function(){
     });
 });
 
+$(".tweet_status, .original_status, .advertise_status, .rakuten_status").change(function(){
+	$this = $(this);
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/AccountStatus.json",
+    	"data": {
+    		"target": $this.attr("data-column"),
+    		"value": $this.val()
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+    		if(data.error !== void 0){
+    			alert(data.error);
+    		}else if(data.account_id > 0){
+    		    $(".tweet_status").val(data.tweet_status);
+    		    $(".original_status").val(data.original_status);
+    		    $(".advertise_status").val(data.advertise_status);
+    		    $(".rakuten_status").val(data.rakuten_status);
+            }
+    	}
+    });
+});
+
+$(".display_sort").change(function(){
+    var target = $(this).attr("data-column");
+    if(target == "tweet"){
+        refreshTweet();
+    }
+});
+
 var reloadSetting = function(data){
 	// エラーが設定されている場合はエラー表示して終了
     if(data.error !== void 0){

@@ -2,28 +2,28 @@
 <!--{if $index > 1}-->
 <label>
 <label class="control-label">フォロワー</label>
-<input type="text" size="5" data-column="follower_limit_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="follower_limit_<!--{$index}--> form-control">
+<input type="text" size="5" data-column="follower_limit_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="follower_limit follower_limit_<!--{$index}--> form-control">
 <label class="control-label">人以上のとき</label>
 </label>
 <!--{else}-->
 <label>
-<p class="form-control-static">デフォルト</p>
+<p class="form-control-static">0人以上のとき</p>
 </label>
 <!--{/if}-->
 </td><td class="form-inline">
 <label>
-<label class="control-label">フォロー間隔<br />（１フォロー毎の待機時間）</label>
-<input type="text" size="6" data-column="follow_interval_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="follow_interval_<!--{$index}--> form-control">
-<label class="control-label">秒</label>
+<label class="control-label">フォロー数上限<br />（フォロワーに対するフォローの比率）</label>
+<input type="text" size="6" data-column="follow_ratio_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="follow_ratio follow_ratio_<!--{$index}--> form-control">
+<label class="control-label">%</label>
 </label>
 </td><td class="form-inline">
 <label>
-<label class="control-label">リフォロー待ち最低時間</label>
-<input type="text" size="6" data-column="refollow_timeout_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="refollow_timeout_<!--{$index}--> form-control">
-<label class="control-label">時間</label>
+<label class="control-label">1日あたりのフォロー数</label>
+<input type="text" size="6" data-column="daily_follows_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="daily_follows daily_follows_<!--{$index}--> form-control">
+<label class="control-label">人</label>
 </label>
 </td><td class="form-inline">
-<label class="control-label">1日あたりのフォロー数</label>
-<input type="text" size="6" data-column="daily_follows_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="daily_follows_<!--{$index}--> form-control">
+<label class="control-label">1日あたりのアンフォロー数</label>
+<input type="text" size="6" data-column="daily_unfollows_<!--{$index}-->_<!--{$account->account_id|default:0}-->" class="daily_unfollows daily_unfollows_<!--{$index}--> form-control">
 <label class="control-label">人</label>
 </td></tr>

@@ -12,12 +12,16 @@ var refreshPreTweet = function(){
     });
 };
 
+var tweetPage = 1;
 var refreshTweet = function(){
     $.ajax({
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/Tweet.json",
     	"data": {
-    		"account_id": "<!--{$attr.account->account_id}-->"
+    		"account_id": "<!--{$attr.account->account_id}-->",
+    		"page": tweetPage,
+    		"sort": $(".tweet_display_sort:checked").val()
+
     	},
     	"dataType": "jsonp",
     	"success": function(data){
@@ -28,7 +32,9 @@ var refreshTweet = function(){
 
 var reloadPreTweet = function(data){
 	$("#pre_tweets").html("");
+	$(".pre_tweet_count").text(data.count);
 	for(var i in data){
+	    if(i == "count") continue;
 		var chkBox = $("<input />").addClass("chk_pre_tweet").attr("type", "checkbox").attr("id", "delete_" + data[i].id_str).attr("value", data[i].id_str);
 		if(data[i].delete_target == 1){
 			chkBox.prop("checked", true);
@@ -53,16 +59,31 @@ var reloadPreTweet = function(data){
 	        });
 		});
 		var text = $("<td />").attr("id", "text_" + data[i].id_str).addClass("col-md-7").text(data[i].text);
+		if(data[i].text.length > 140){
+           text.css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+		}
 		text.editable('<!--{base}-->/tweet/pre_tweet.html', {
 	        type : "textarea",
 	        rows : 4,
 	        indicator : 'Saving...',
 	        tooltip   : 'Click to edit...',
-	        submit  : '登録する'
+	        submit  : '登録する',
+	        callback : function(value, setting){
+	           if(value.length > 140){
+                   $(this).css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+   	           }else{
+	               $(this).css("border", "1px solid rgb(221, 221, 221)").css("background-color", "transparent");
+	           }
+	        }
 	    });
+	    var images = data[i].entities.media;
+	    var screenName = $("<td />").addClass("col-md-3").text(data[i].user.screen_name);
+	    if(!!images){
+	       var image = images[0];
+	       screenName.append($("<img />").attr("src", image.media_url).attr("width", "100"))
+	    }
     	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
-    	.append($("<td />").addClass("col-md-3").text(data[i].user.screen_name))
-        .append(text)
+    	.append(screenName).append(text)
         .append($("<td />").addClass("col-md-1").text(data[i].retweet_count))
         .appendTo("#pre_tweets");
 	}
@@ -73,7 +94,27 @@ var reloadPreTweet = function(data){
 
 var reloadTweet = function(data){
 	$("#tweets").html("");
-	for(var i in data){
+	$(".tweet_count").text(data.count);
+	if(tweetPage > 1){
+	   $("#prev_tweet_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       tweetPage --;
+	       refreshTweet();
+	   });
+	}else{
+	   $("#prev_tweet_page").attr("disabled", "true");
+    }
+	if(tweetPage < data.count / 100){
+	   $("#next_tweet_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       tweetPage ++;
+	       refreshTweet();
+	   });
+	}else{
+	   $("#next_tweet_page").attr("disabled", "true");
+    }
+    for(var i in data){
+	    if(i == "count") continue;
 		var chkBox = $("<input />").addClass("chk_tweet").attr("type", "checkbox").attr("id", "delete_" + data[i].tweet_id).attr("value", data[i].tweet_id);
 		if(data[i].delete_target == 1){
 			chkBox.prop("checked", true);
@@ -98,19 +139,33 @@ var reloadTweet = function(data){
 	        });
 		});
 		var text = $("<td />").attr("id", "tweet_text_" + data[i].tweet_id).addClass("col-md-7").text(data[i].tweet_text);
+		if(data[i].tweet_text.length > 140){
+           text.css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+		}
 		text.editable('<!--{base}-->/tweet/tweet.html', {
 	        type : "textarea",
 	        rows : 4,
 	        indicator : 'Saving...',
 	        tooltip   : 'Click to edit...',
-	        charcounter : {
-	           characters : 60
+	        data: function(value, settings) {
+                var retval = value.replace(/<br[\s\/]?>/gi, '\n');
+                return retval;
             },
-	        submit  : '登録する'
+	        submit  : '登録する',
+	        callback : function(value, setting){
+	           if(value.length > 140){
+                   $(this).css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+   	           }else{
+	               $(this).css("border", "1px solid rgb(221, 221, 221)").css("background-color", "transparent");
+	           }
+	        }
 	    });
-    	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
-    	.append($("<td />").addClass("col-md-3").text(data[i].screen_name))
-        .append(text)
+	    var screenName = $("<td />").addClass("col-md-3").text(data[i].screen_name);
+	    if(!!data[i].media_filename){
+	       screenName.append($("<img />").attr("src", "<!--{base}-->/upload/" + data[i].media_filename).attr("width", "100"))
+	    }
+	    $("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
+    	.append(screenName).append(text)
         .append($("<td />").addClass("col-md-1").text(data[i].retweet_count))
         .appendTo("#tweets");
 	}
@@ -154,7 +209,8 @@ $("#delete_pre_tweet").click(function(){
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/SearchTweet.json",
     	"data": {
-    		"mode": "delete_all_target"
+    	   "account_id": "<!--{$account->account_id}-->",
+    	   "mode": "delete_all_target"
     	},
     	"dataType": "jsonp",
     	"success": function(data){
@@ -168,7 +224,8 @@ $("#delete_tweet").click(function(){
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/Tweet.json",
     	"data": {
-    		"mode": "delete_all_target"
+    	   "account_id": "<!--{$account->account_id}-->",
+    	   "mode": "delete_all_target"
     	},
     	"dataType": "jsonp",
     	"success": function(data){

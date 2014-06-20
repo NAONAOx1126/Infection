@@ -4,6 +4,19 @@
 <div class="form-group form-inline">
     <input type="button" id="add_advertise" class="add_advertise form-control btn btn-default" value="BOTに登録↓">
     <input type="button" id="delete_advertise" class="delete_advertise form-control btn btn-default" value="削除">
+    登録済：<span class="advertise_count">--</span>件
+</div>
+<div class="form-group form-inline">
+    BOT：
+    <label><input type="radio" data-column="advertise_status_<!--{$account->account_id|default:0}-->" class="advertise_status" name="advertise_status" value="1"<!--{if $account->status()->advertise_status > 0}--> checked<!--{/if}-->> 稼働中</label>
+    <label><input type="radio" data-column="advertise_status_<!--{$account->account_id|default:0}-->" class="advertise_status" name="advertise_status" value="0"<!--{if !($account->status()->advertise_status > 0)}--> checked<!--{/if}-->> 停止中</label>
+    ｜ツイート順：
+    <label><input type="radio" data-column="advertise_order_<!--{$account->account_id|default:0}-->" class="radio_item advertise_order" name="advertise_order" value="0"<!--{if $post.tweet_order != "1"}--> checked<!--{/if}-->> ランダム</label>
+    <label><input type="radio" data-column="advertise_order_<!--{$account->account_id|default:0}-->" class="radio_item advertise_order" name="advertise_order" value="1"<!--{if $post.tweet_order == "1"}--> checked<!--{/if}-->> RT数順</label>
+</div>
+<div class="form-group form-inline">
+    <input type="button" id="prev_advertise_page" value="前のページ" class="btn btn-default" />
+    <input type="button" id="next_advertise_page" value="次のページ" class="btn btn-default" />
 </div>
 <table class="table table-condensed table-bordered">
 <thead>

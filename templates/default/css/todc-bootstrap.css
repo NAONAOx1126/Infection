@@ -190,6 +190,9 @@ table {
 .table > tfoot > tr.warning > th {
   background-color: #f9edbe;
 }
+.table > tbody > tr.unfollow > td {
+    background-color: #f9cccc;
+}
 .table-hover > tbody > tr > td.warning:hover,
 .table-hover > tbody > tr > th.warning:hover,
 .table-hover > tbody > tr.warning:hover > td,

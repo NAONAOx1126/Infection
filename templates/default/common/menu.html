@@ -8,16 +8,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<!--{base}-->/index.html"><!--{$configure.site_name}--></a>
+      <a class="navbar-brand" href="<!--{base}-->/index.html?account_attribute="><!--{$configure.site_name}--></a>
     </div>
     <!--{if $attr[VizualizerAdmin::KEY] && $attr[VizualizerAdmin::KEY]->operator_id > 0}-->
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="<!--{base}-->/index.html">ALL</a></li>
+        <li><a href="<!--{base}-->/index.html?account_attribute=">ALL</a></li>
         <!--{foreach from=$attr.attributes item="attribute"}-->
         <li><a href="<!--{base}-->/index.html?account_attribute=<!--{$attribute}-->"><!--{$attribute}--></a></li>
         <!--{/foreach}-->
-        <li><a href="<!--{base}-->/follow.html">共通フォロー設定</a></li>
+        <li><a href="<!--{base}-->/follow.html?account_id=">共通フォロー設定</a></li>
+        <li><a href="<!--{base}-->/setting.html">共通設定</a></li>
         <li><a href="<!--{base}-->/login.html">ログアウト</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

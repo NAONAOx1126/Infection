@@ -1,7 +1,8 @@
+
 $("#search_product").click(function(){
     $.ajax({
     	"type": "POST",
-    	"url": "<!--{base}-->/affiliate/RakutenSearch.json",
+    	"url": "<!--{base}-->/advertise/RakutenSearch.json",
     	"data": {
     		"app_id": "<!--{$attr.account->rakuten_application_id}-->",
     		"aff_id": "<!--{$attr.account->rakuten_affiliate_id}-->",
@@ -18,12 +19,14 @@ $("#search_product").click(function(){
     });
 });
 
+var rakutenPage = 1;
 var refreshRakuten = function(){
     $.ajax({
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/Rakuten.json",
     	"data": {
-    		"account_id": "<!--{$attr.account->account_id}-->"
+    		"account_id": "<!--{$attr.account->account_id}-->",
+    		"page": rakutenPage
     	},
     	"dataType": "jsonp",
     	"success": function(data){
@@ -34,7 +37,27 @@ var refreshRakuten = function(){
 
 var reloadRakuten = function(data){
 	$("#rakuten_advertises").html("");
+	$(".rakuten_count").text(data.count);
+	if(rakutenPage > 1){
+	   $("#prev_rakuten_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       rakutenPage --;
+	       refreshRakuten();
+	   });
+	}else{
+	   $("#prev_rakuten_page").attr("disabled", "true");
+    }
+	if(rakutenPage < data.count / 100){
+	   $("#next_rakuten_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       rakutenPage ++;
+	       refreshRakuten();
+	   });
+	}else{
+	   $("#next_rakuten_page").attr("disabled", "true");
+    }
 	for(var i in data){
+	    if(i == "count") continue;
 		var chkBox = $("<input />").addClass("chk_rakuten_advertise").attr("type", "checkbox").attr("id", "delete_" + data[i].advertise_id).attr("value", data[i].advertise_id);
 		if(data[i].delete_target == 1){
 			chkBox.prop("checked", true);
@@ -59,13 +82,23 @@ var reloadRakuten = function(data){
 	        });
 		});
 		var text = $("<td />").attr("id", "advertise_text_" + data[i].advertise_id).addClass("col-md-7").text(data[i].advertise_text);
+		if(data[i].advertise_text.length > 140){
+           text.css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+		}
 		text.editable('<!--{base}-->/tweet/advertise_text.html', {
 	        type : "textarea",
 	        rows : 4,
 	        indicator : 'Saving...',
 	        tooltip   : 'Click to edit...',
-	        submit  : '登録する'
-	    });
+	        submit  : '登録する',
+	        callback : function(value, setting){
+	           if(value.length > 140){
+                   $(this).css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+   	           }else{
+	               $(this).css("border", "1px solid rgb(221, 221, 221)").css("background-color", "transparent");
+	           }
+	        }
+        });
     	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
         .append(text).append($("<td />").addClass("col-md-4").append($("<a />").attr("href", data[i].advertise_url).attr("target", "_blank").text(data[i].advertise_name)))
         .appendTo("#rakuten_advertises");
@@ -97,7 +130,8 @@ $("#delete_rakuten").click(function(){
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/Rakuten.json",
     	"data": {
-    		"mode": "delete_all_target"
+            "account_id": "<!--{$attr.account->account_id}-->",
+    	    "mode": "delete_all_target"
     	},
     	"dataType": "jsonp",
     	"success": function(data){

@@ -3,6 +3,7 @@
         <input type="text" size="30" id="search_keyword" class="search_keyword form-control" name="search_keyword" placeholder="検索するキーワードを入力してください">
         <input type="button" id="search_tweet" class="search_tweet btn btn-default" value="検索">
         <input type="button" id="commit_tweets" class="btn btn-default" value="BOTに登録" />
+        検索結果：<span class="pre_tweet_count">--</span>件
     </div>
     <table class="table table-condensed table-bordered">
     <thead>
@@ -18,9 +19,31 @@
     </table>
 </div>
 <div class="col-md-6">
-    <div class="form-group form-inline">
-        <input type="button" id="delete_tweet" class="delete_tweet form-control btn btn-default" value="削除">
-    </div>
+    <form action="tweet/upload.html" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="account_id" value="<!--{$account->account_id}-->" />
+        <div class="form-group form-inline">
+            <input type="button" id="delete_tweet" class="delete_tweet form-control btn btn-default" value="削除">
+            <a href="<!--{base}-->/tweet/download.html?account_id=<!--{$account->account_id}-->" class="form-control btn btn-default">ダウンロード</a>
+            <input type="file" name="upload" class="form-control" />
+            <input type="submit" value="アップロード" class="form-control btn btn-default" />
+            登録済：<span class="tweet_count">--</span>件
+        </div>
+        <div class="form-group form-inline">
+            BOT：
+            <label><input type="radio" data-column="tweet_status_<!--{$account->account_id|default:0}-->" class="tweet_status" name="tweet_status" value="<!--{if $account->status()->tweet_status > 0}--><!--{$account->status()->tweet_status}--><!--{else}-->1<!--{/if}-->"<!--{if $account->status()->tweet_status > 0}--> checked<!--{/if}-->> 稼働中</label>
+            <label><input type="radio" data-column="tweet_status_<!--{$account->account_id|default:0}-->" class="tweet_status" name="tweet_status" value="0"<!--{if !($account->status()->tweet_status > 0)}--> checked<!--{/if}-->> 停止中</label>
+            ｜表示順：
+            <label><input type="radio" data-column="tweet" class="display_sort tweet_display_sort" name="tweet_display_sort" value="time" checked> 登録順</label>
+            <label><input type="radio" data-column="tweet" class="display_sort tweet_display_sort" name="tweet_display_sort" value="retweet"> RT数順</label>
+            ｜ツイート順：
+            <label><input type="radio" data-column="tweet_order_<!--{$account->account_id|default:0}-->" class="radio_item tweet_order" name="tweet_order" value="0"<!--{if $post.tweet_order != "1"}--> checked<!--{/if}-->> ランダム</label>
+            <label><input type="radio" data-column="tweet_order_<!--{$account->account_id|default:0}-->" class="radio_item tweet_order" name="tweet_order" value="1"<!--{if $post.tweet_order == "1"}--> checked<!--{/if}-->> RT数順</label>
+        </div>
+        <div class="form-group form-inline">
+            <input type="button" id="prev_tweet_page" value="前のページ" class="btn btn-default" />
+            <input type="button" id="next_tweet_page" value="次のページ" class="btn btn-default" />
+            </div>
+        </form>
     <table class="table table-condensed table-bordered">
     <thead>
     <tr>

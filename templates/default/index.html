@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Delete" />
 <meta name="loadmodule" content="Twitter.Account.List" />
 <!--{include file="common/header.html" subtitle=""}-->
 </head>
@@ -17,7 +18,8 @@
                   <li class="active">アカウント一覧</li>
                 </ol>
                 <!--{include file="common/errors.html"}-->
-                <a href="account/create.html?add_account=1" class="btn btn-default btn-lg active" role="button">新規Twitterアカウント登録</a>
+                <a href="<!--{base}-->/account/create.html?add_account=1" class="btn btn-default btn-lg active" role="button">新規Twitterアカウント登録</a>
+                <a href="<!--{base}-->/tweet/download.html?account_id=" class="btn btn-default btn-lg active" role="button">全てのBOTのデータをダウンロード</a>
                 <table class="table table-condensed table-bordered table-striped">
                 <thead>
                 <tr>
@@ -40,24 +42,16 @@
                 <td>
                     <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                     <br />
-                    <a class="btn btn-default" href="tweet.html?account_id=<!--{$account->account_id}-->">BOT設定</a>
+                    <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-default" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
                 </td>
                 <td>
                     <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
-                    <a id="follow_status_<!--{$account->account_id}-->" class="follow_status">
-                    <!--{if $status->follow_status == "1"}--><span class="label label-primary">待機中</span>
-                    <!--{elseif $status->follow_status == "2"}--><span class="label label-success">実行中</span>
-                    <!--{elseif $status->follow_status == "3"}--><span class="label label-default">終了</span>
-                    <!--{elseif $status->follow_status == "4"}--><span class="label label-danger">リスト無し</span>
-                    <!--{elseif $status->follow_status == "5"}--><span class="label label-info">リトライ</span>
-                    <!--{elseif $status->follow_status == "6"}--><span class="label label-warning">スキップ</span>
-                    <!--{else}--><span class="label label-default">停止中</span><!--{/if}-->
-                    </a>
-                    <a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status">
-                    <!--{if $status->tweet_status == "1"}--><span class="label label-primary">BOT待機中</span>
-                    <!--{elseif $status->tweet_status == "2"}--><span class="label label-primary">BOT実行中</span>
-                    <!--{else}--><span class="label label-default">BOT停止中</span><!--{/if}-->
-                    </a>
+                    <a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status"></a>
+                    <a id="original_status_<!--{$account->account_id}-->" class="original_status"></a>
+                    <a id="advertise_status_<!--{$account->account_id}-->" class="advertise_status"></a>
+                    <a id="rakuten_status_<!--{$account->account_id}-->" class="rakuten_status"></a>
+                    <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
+                    <span class="unfollow_status"></span>
                 </td>
                 <td class="col-md-2">
                     <div class="row">
@@ -95,12 +89,18 @@
                 </td>
                 <td class="col-md-2">
                     <div class="row">
-                    <div class="col-md-8">フォロー間隔</div><div class="col-md-4"><span class="min_follow_interval"><!--{$followSetting->follow_interval}--></span>秒</div>
+                    <div class="col-md-8">リフォロー待ち</div><div class="col-md-4"><span class="daily_follows"><!--{$followSetting->refollow_timeout}--></span>時間</div>
                     <div class="col-md-8">1日のフォロー</div><div class="col-md-4"><span class="daily_follows"><!--{$followSetting->daily_follows}--></span>人</div>
-                    <div class="col-md-12"><a class="btn btn-default" href="follow.html?account_id=<!--{$account->account_id}-->">フォロー設定</a></div>
+                    <div class="col-md-8">1日のアンフォロー</div><div class="col-md-4"><span class="daily_follows"><!--{$followSetting->daily_unfollows}--></span>人</div>
+                    <div class="col-md-12 form-group form-inline">
+                        <a class="btn btn-default" href="follow.html?account_id=<!--{$account->account_id}-->">フォロー設定</a>
+                        <a class="btn btn-default" href="tweet.html?account_id=<!--{$account->account_id}-->">BOT設定</a>
+                    </div>
                     </div>
                 </td>
-                <td class="col-md-1"><div id="attribute_<!--{$account->account_id}-->" class="attribute"><!--{$followSetting->account_attribute}--></div></td>
+                <td class="col-md-1">
+                <div id="attribute_<!--{$account->account_id}-->" class="attribute"><!--{$followSetting->account_attribute}--></div>
+                </td>
                 <td>
                     <!--{if $followSetting->follow_type == "1"}-->指定ユーザー
                     <!--{elseif $followSetting->follow_type == "2"}-->フォロワー
@@ -130,7 +130,7 @@ $(function() {
         tooltip   : 'Click to edit...',
         submit  : '登録する'
     });
-    $(".tweet_status, .follow_status").click(function(){
+    $(".tweet_status, .original_status, .advertise_status, .rakuten_status, .follow_status").click(function(){
 		$this = $(this);
     	if(confirm("変更してもよろしいですか？")){
             $.ajax({
@@ -146,30 +146,55 @@ $(function() {
             		}else if(data.account_id > 0){
        	        		var $status = $("<span />").addClass("label");
        	        		if(data.follow_status == "1"){
-       	        			$status.addClass("label-primary").text("待機中");
+       	        			$status.addClass("label-primary").text("フォロー待機中");
        	        		}else if(data.follow_status == "2"){
-       	        			$status.addClass("label-success").text("実行中");
+       	        			$status.addClass("label-success").text("フォロー実行中");
        	        		}else if(data.follow_status == "3"){
-       	        			$status.addClass("label-default").text("終了");
+       	        			$status.addClass("label-default").text("フォロー終了");
        	        		}else if(data.follow_status == "4"){
-       	        			$status.addClass("label-danger").text("リスト無し");
+       	        			$status.addClass("label-danger").text("フォローリスト無し");
        	        		}else if(data.follow_status == "5"){
-       	        			$status.addClass("label-info").text("リトライ");
+       	        			$status.addClass("label-info").text("フォローリトライ");
        	        		}else if(data.follow_status == "6"){
-       	        			$status.addClass("label-warning").text("スキップ");
+       	        			$status.addClass("label-warning").text("フォロースキップ");
        	        		}else{
-       	        			$status.addClass("label-default").text("停止中");
+       	        			$status.addClass("label-default").text("フォロー停止中");
        	        		}
        	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
+   	        		    if(data.isUnfollowable){
+   		   	        		$("#acc" + data.account_id + " .unfollow_status").html("");
+   		   	        		if(data.follow_status == "1" || data.follow_status == "2"){
+   	   	        		       $("<span />").addClass("label").addClass("label-danger").text("アンフォロー中").appendTo("#acc" + data.account_id + " .unfollow_status");
+   	   	        		    }
+   	        		    }
                 		$status = $("<span />").addClass("label");
                 		if(data.tweet_status == "1"){
-                			$status.addClass("label-primary").text("BOT待機中");
-       	        		}else if(data.tweet_status == "2"){
-       	        			$status.addClass("label-success").text("BOT実行中");
+                			$status.addClass("label-primary").text("取込BOT稼働中");
        	        		}else{
-                			$status.addClass("label-default").text("BOT停止中");
+                			$status.addClass("label-default").text("取込BOT停止中");
                 		}
                 		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
+                		$status = $("<span />").addClass("label");
+                		if(data.original_status == "1"){
+                			$status.addClass("label-primary").text("独自BOT稼働中");
+       	        		}else{
+                			$status.addClass("label-default").text("独自BOT停止中");
+                		}
+                		$("#acc" + data.account_id + " .original_status").html($status[0]);
+                		$status = $("<span />").addClass("label");
+                		if(data.advertise_status == "1"){
+                			$status.addClass("label-primary").text("広告BOT稼働中");
+       	        		}else{
+                			$status.addClass("label-default").text("広告BOT停止中");
+                		}
+                		$("#acc" + data.account_id + " .advertise_status").html($status[0]);
+                		$status = $("<span />").addClass("label");
+                		if(data.rakuten_status == "1"){
+                			$status.addClass("label-primary").text("楽天BOT稼働中");
+       	        		}else{
+                			$status.addClass("label-default").text("楽天BOT停止中");
+                		}
+                		$("#acc" + data.account_id + " .rakuten_status").html($status[0]);
             		}
             	}
             });
@@ -201,36 +226,61 @@ $(function() {
    	        		}
    	        		var $status = $("<span />").addClass("label");
    	        		if(data.status.follow_status == "1"){
-   	        			$status.addClass("label-primary").text("待機中");
+   	        			$status.addClass("label-primary").text("フォロー待機中");
    	        		}else if(data.status.follow_status == "2"){
-   	        			$status.addClass("label-success").text("実行中");
+   	        			$status.addClass("label-success").text("フォロー実行中");
    	        		}else if(data.status.follow_status == "3"){
-   	        			$status.addClass("label-default").text("終了");
+   	        			$status.addClass("label-default").text("フォロー終了");
    	        		}else if(data.status.follow_status == "4"){
-   	        			$status.addClass("label-danger").text("リスト無し");
+   	        			$status.addClass("label-danger").text("フォローリスト無し");
    	        		}else if(data.status.follow_status == "5"){
-   	        			$status.addClass("label-info").text("リトライ");
+   	        			$status.addClass("label-info").text("フォローリトライ");
    	        		}else if(data.status.follow_status == "6"){
-   	        			$status.addClass("label-warning").text("スキップ");
+   	        			$status.addClass("label-warning").text("フォロースキップ");
    	        		}else{
-   	        			$status.addClass("label-default").text("停止中");
+   	        			$status.addClass("label-default").text("フォロー停止中");
    	        		}
    	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
-            		$status = $("<span />").addClass("label");
+        		    if(data.isUnfollowable){
+	   	        		$("#acc" + data.account_id + " .unfollow_status").html("");
+	   	        		if(data.status.follow_status == "1" || data.status.follow_status == "2"){
+   	        		       $("<span />").addClass("label").addClass("label-danger").text("アンフォロー中").appendTo("#acc" + data.account_id + " .unfollow_status");
+   	        		    }
+        		    }
+   	        		$status = $("<span />").addClass("label");
             		if(data.status.tweet_status == "1"){
-            			$status.addClass("label-primary").text("BOT待機中");
-   	        		}else if(data.status.tweet_status == "2"){
-   	        			$status.addClass("label-success").text("BOT実行中");
+            			$status.addClass("label-primary").text("取込BOT稼働中");
    	        		}else{
-            			$status.addClass("label-default").text("BOT停止中");
+            			$status.addClass("label-default").text("取込BOT停止中");
             		}
             		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
+            		$status = $("<span />").addClass("label");
+            		if(data.status.original_status == "1"){
+            			$status.addClass("label-primary").text("独自BOT稼働中");
+   	        		}else{
+            			$status.addClass("label-default").text("独自BOT停止中");
+            		}
+            		$("#acc" + data.account_id + " .original_status").html($status[0]);
+            		$status = $("<span />").addClass("label");
+            		if(data.status.advertise_status == "1"){
+            			$status.addClass("label-primary").text("広告BOT稼働中");
+   	        		}else{
+            			$status.addClass("label-default").text("広告BOT停止中");
+            		}
+            		$("#acc" + data.account_id + " .advertise_status").html($status[0]);
+            		$status = $("<span />").addClass("label");
+            		if(data.status.rakuten_status == "1"){
+            			$status.addClass("label-primary").text("楽天BOT稼働中");
+   	        		}else{
+            			$status.addClass("label-default").text("楽天BOT停止中");
+            		}
+            		$("#acc" + data.account_id + " .rakuten_status").html($status[0]);
             		if(data.notification == "1"){
             			$("#acc" + data.account_id + " .notification").html("○");
             		}else{
             			$("#acc" + data.account_id + " .notification").html("");
             		}
-   	        	}
+            	}
    	        });
    		}
     }

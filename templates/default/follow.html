@@ -36,31 +36,34 @@
                     <table class="table table-condensed table-bordered">
                         <tr><td class="col-md-6">
                             <ol class="breadcrumb">
-                                <li class="active">フォロー形式</li>
+                                <li class="active">フォロー状態</li>
                             </ol>
+                            <!--{if $account->account_id > 0}-->
                             <div class="form-group">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="radio">
-                                        <label> <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="1"> 指定ユーザーをフォロー
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="radio">
-                                        <label> <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="2"> 指定ユーザーのフォロワーをフォロー
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="radio">
-                                        <label> <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="3"> 両方をフォロー
+                                        <label> <input type="radio" data-column="follow_status_<!--{$account->account_id|default:0}-->" class="follow_status" name="follow_status" value="<!--{if $account->status()->follow_status > 0}--><!--{$account->status()->follow_status}--><!--{else}-->1<!--{/if}-->"<!--{if $account->status()->follow_status > 0}--> checked<!--{/if}-->> 自動フォロー有効
                                         </label>
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="radio">
+                                        <label> <input type="radio" data-column="follow_status_<!--{$account->account_id|default:0}-->" class="follow_status" name="follow_status" value="0"<!--{if !($account->status()->follow_status > 0)}--> checked<!--{/if}-->> 自動フォロー無効
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--{else}-->
+                            フォロー状態は各アカウントのフォロー設定で変更してください。
+                            <!--{/if}-->
                         </td><td class="col-md-6">
                             <ol class="breadcrumb">
-                                <li class="active">フォロー対象キーワード</li>
+                                <li class="active">
+                                <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="1">
+                                フォロー対象キーワード
+                                </li>
                             </ol>
                             <div class="col-md-10">
                                 <input type="text" data-column="follow_keywords_<!--{$account->account_id|default:0}-->" class="follow_keywords form-control" placeholder="プロフィールに含むキーワードをスペース区切りで入力してください">
@@ -85,7 +88,10 @@
                             </div>
                         </td><td class="col-md-6">
                             <ol class="breadcrumb">
-                                <li class="active">フォローワー対象キーワード</li>
+                                <li class="active">
+                                <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="2">
+                                フォローワー対象キーワード
+                                </li>
                             </ol>
                             <div class="col-md-10">
                                 <input type="text" data-column="follower_keywords_<!--{$account->account_id|default:0}-->" class="follower_keywords form-control" placeholder="プロフィールに含むキーワードをスペース区切りで入力してください">
@@ -138,6 +144,14 @@
                         </td></tr>
                     </table>
                 </div>
+                <div class="col-md-12 form-inline">
+                    <input type="text" size="6" data-column="follow_unit_<!--{$account->account_id|default:0}-->" class="follow_unit form-control">
+                    <label class="control-label">人フォロー／アンフォローする毎に</label>
+                    <input type="text" size="6" data-column="follow_unit_interval_<!--{$account->account_id|default:0}-->" class="follow_unit_interval form-control">
+                    <label class="control-label">分間休憩する。リフォローは最低</label>
+                    <input type="text" size="6" data-column="refollow_timeout_<!--{$account->account_id|default:0}-->" class="refollow_timeout form-control">
+                    <label class="control-label">時間待機し、アンフォロー対象とする</label>
+                </div>
                 <div class="col-md-12">
                     <ol class="breadcrumb">
                         <li class="active">フォロー詳細設定</li>
@@ -149,6 +163,10 @@
                             <!--{include file="follow/setting_detail.html" index=3}-->
                             <!--{include file="follow/setting_detail.html" index=4}-->
                             <!--{include file="follow/setting_detail.html" index=5}-->
+                            <!--{include file="follow/setting_detail.html" index=6}-->
+                            <!--{include file="follow/setting_detail.html" index=7}-->
+                            <!--{include file="follow/setting_detail.html" index=8}-->
+                            <!--{include file="follow/setting_detail.html" index=9}-->
                         </tbody>
                     </table>
                 </div>

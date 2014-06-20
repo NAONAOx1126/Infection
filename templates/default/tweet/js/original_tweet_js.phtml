@@ -1,9 +1,11 @@
+var originalPage = 1;
 var refreshOriginalTweet = function(){
     $.ajax({
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/OriginalTweet.json",
     	"data": {
-    		"account_id": "<!--{$attr.account->account_id}-->"
+    		"account_id": "<!--{$attr.account->account_id}-->",
+    		"page": originalPage
     	},
     	"dataType": "jsonp",
     	"success": function(data){
@@ -14,8 +16,28 @@ var refreshOriginalTweet = function(){
 
 reloadOriginalTweet = function(data){
 	$("#original_tweets").html("");
+	$(".original_count").text(data.count);
+	if(originalPage > 1){
+	   $("#prev_original_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       originalPage --;
+	       refreshOriginalTweet();
+	   });
+	}else{
+	   $("#prev_original_page").attr("disabled", "true");
+    }
+	if(originalPage < data.count / 100){
+	   $("#next_original_page").removeAttr("disabled").unbind("click").click(function(){
+	       $(this).unbind("click");
+	       originalPage ++;
+	       refreshOriginalTweet();
+	   });
+	}else{
+	   $("#next_original_page").attr("disabled", "true");
+    }
 	for(var i in data){
-		var chkBox = $("<input />").addClass("chk_org_tweet").attr("type", "checkbox").attr("id", "delete_" + data[i].tweet_id).attr("value", data[i].tweet_id);
+	    if(i == "count") continue;
+	    var chkBox = $("<input />").addClass("chk_org_tweet").attr("type", "checkbox").attr("id", "delete_" + data[i].tweet_id).attr("value", data[i].tweet_id);
 		if(data[i].delete_target == 1){
 			chkBox.prop("checked", true);
 		}
@@ -39,14 +61,29 @@ reloadOriginalTweet = function(data){
 	        });
 		});
 		var text = $("<td />").attr("id", "tweet_text_" + data[i].tweet_id).addClass("col-md-7").text(data[i].tweet_text);
+		if(data[i].tweet_text.length > 140){
+           text.css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+		}
 		text.editable('<!--{base}-->/tweet/tweet.html', {
 	        type : "textarea",
 	        rows : 4,
 	        indicator : 'Saving...',
 	        tooltip   : 'Click to edit...',
-	        submit  : '登録する'
-	    });
+	        submit  : '登録する',
+	        callback : function(value, setting){
+	           if(value.length > 140){
+                   $(this).css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
+   	           }else{
+	               $(this).css("border", "1px solid rgb(221, 221, 221)").css("background-color", "transparent");
+	           }
+	        }
+        });
+	    var image = $("<td />").addClass("col-md-3");
+	    if(data[i].media_filename != ""){
+    	    image.append($("<img />").attr("src", "<!--{base}-->/upload/" + data[i].media_filename).attr("width", "100"));
+    	}
     	$("<tr />").append($("<td />").addClass("col-md-1").append(chkBox))
+    	.append(image)
         .append(text)
         .appendTo("#original_tweets");
 	}
@@ -62,6 +99,7 @@ $("#add_original_tweet").click(function(){
     	"data": {
     		"account_id": "<!--{$attr.account->account_id}-->",
     		"text": $("#tweet_text").val(),
+    		"media_filename": $("#media_filename").val(),
     		"commit": "1"
     	},
     	"dataType": "jsonp",
@@ -77,7 +115,7 @@ $("#add_multi_original_tweet").click(function(){
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/OriginalTweet.json",
     	"data": {
-    		"account": "<!--{$attr.account->account_id}-->",
+    		"account_id": "<!--{$attr.account->account_id}-->",
     		"text": $("#tweet_text").val(),
     		"commit": "2"
     	},
@@ -94,6 +132,7 @@ $("#delete_original_tweet").click(function(){
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/OriginalTweet.json",
     	"data": {
+            "account_id": "<!--{$attr.account->account_id}-->",
     		"mode": "delete_all_target"
     	},
     	"dataType": "jsonp",
@@ -101,4 +140,15 @@ $("#delete_original_tweet").click(function(){
     		reloadOriginalTweet(data);
     	}
     });
+});
+
+$("div#upload_image").dropzone({
+    "url": "<!--{base}-->/tweet/upload_image.html",
+    "previewTemplate": '<div class="dz-preview dz-file-preview"><div class="dz-details"><img data-dz-thumbnail /></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div><div class="dz-error-message"><span data-dz-errormessage></span></div></div>',
+    "success": function(_file, _return, _xml){
+        $(".dz-preview").addClass("dz-preview-remove");
+        $(".dz-preview:last").removeClass("dz-preview-remove");
+        $(".dz-preview-remove").remove();
+        $("#media_filename").val(_return);
+    }
 });
