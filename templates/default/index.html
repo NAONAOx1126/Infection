@@ -228,7 +228,11 @@ $(function() {
    	        		if(data.status.follow_status == "1"){
    	        			$status.addClass("label-primary").text("フォロー待機中");
    	        		}else if(data.status.follow_status == "2"){
-   	        			$status.addClass("label-success").text("フォロー実行中");
+   	        		    if(data.isUnfollowable){
+   	        		        $status.addClass("label-danger").text("アンフォロー中");
+   	        		    }else{
+      	        		    $status.addClass("label-success").text("フォロー実行中");
+      	        		}
    	        		}else if(data.status.follow_status == "3"){
    	        			$status.addClass("label-default").text("フォロー終了");
    	        		}else if(data.status.follow_status == "4"){
@@ -241,12 +245,6 @@ $(function() {
    	        			$status.addClass("label-default").text("フォロー停止中");
    	        		}
    	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
-        		    if(data.isUnfollowable){
-	   	        		$("#acc" + data.account_id + " .unfollow_status").html("");
-	   	        		if(data.status.follow_status == "1" || data.status.follow_status == "2"){
-   	        		       $("<span />").addClass("label").addClass("label-danger").text("アンフォロー中").appendTo("#acc" + data.account_id + " .unfollow_status");
-   	        		    }
-        		    }
    	        		$status = $("<span />").addClass("label");
             		if(data.status.tweet_status == "1"){
             			$status.addClass("label-primary").text("取込BOT稼働中");

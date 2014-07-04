@@ -1,0 +1,198 @@
+<!--{include file="common/header.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Delete" />
+<meta name="loadmodule" content="Twitter.Account.List" />
+<meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" />
+<meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
+<!--{include file="common/subheader.html"}-->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> アカウント一覧
+                    </h2>
+                    <div class="box-icon">
+                        <a href="<!--{base}-->/account/create.html?add_account=1" class="btn btn-round" data-rel="popover" data-content="Twitterのサイトで認証を行い、アカウントを登録します。登録済みのアカウントの場合はアクセストークンを更新します。" title="Twitterアカウント登録／更新" data-placement="left"><i class="icon-plus"></i></a>
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                    <td>アカウント</td>
+                    <td>実績</td>
+                    <td>グループ</td>
+                    <td>外注</td>
+                    <td>自動フォロー</td>
+                    <td>強化アカウント</td>
+                    <td>メモ</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--{foreach from=$attr.accounts item="account"}-->
+                    <!--{assign var="followSetting" value=$account->followSetting()}-->
+                    <!--{assign var="status" value=$account->status()}-->
+                    <tr id="acc<!--{$account->account_id}-->">
+                    <td>
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
+                        <br />
+                        <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-default" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
+                    </td>
+                    <td>
+                        <div>ツイート数</div>
+                        <div><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
+                        <div>フォロー数</div>
+                        <div><span class="friend_count"><!--{$account->friend_count}--></span>人</div>
+                        <div>フォロワー数</div>
+                        <div><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
+                    </td>
+                    <td>
+                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups}-->
+                        </select>
+                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups}-->
+                        </select><br />
+                         <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups}-->
+                        </select>
+                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups}-->
+                        </select><br />
+                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups}-->
+                        </select>
+                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups}-->
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control input-medium operator_id_<!--{$account->account_id}-->" name="operator_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.operators}-->
+                        </select><br />
+                        <select class="form-control input-medium operator_id_<!--{$account->account_id}-->" name="operator_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.operators}-->
+                        </select><br />
+                        <select class="form-control input-medium operator_id_<!--{$account->account_id}-->" name="operator_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.operators}-->
+                        </select>
+                    </td>
+                    <td>
+                        <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
+                        <div>1日のフォロー</div>
+                        <div><span class="tweet_count"><!--{$account->tweet_count}--></span>人</div>
+                    </td>
+                    <td><div class="notification"><!--{if $account->notification == "1"}-->○<!--{/if}--></div></td>
+                    <td class="col-md-1">
+                    <div id="description_<!--{$account->account_id}-->" class="description"><!--{$account->description}--></div>
+                    </td>
+                    </tr>
+                    <!--{/foreach}-->
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function() {
+	<!--{*
+    $('.description').editable('<!--{base}-->/account/description.html', {
+        type : "textarea",
+        rows : 4,
+        indicator : 'Saving...',
+        tooltip   : 'Click to edit...',
+        submit  : '登録する'
+    });
+    *}-->
+    $(".follow_status").click(function(){
+		$this = $(this);
+    	if(confirm("変更してもよろしいですか？")){
+            $.ajax({
+            	"type": "POST",
+            	"url": "<!--{base}-->/twitter/AccountStatus.json",
+            	"data": {
+            		"target": $this.attr("id"),
+            	},
+            	"dataType": "jsonp",
+            	"success": function(data){
+            		if(data.error !== void 0){
+            			alert(data.error);
+            		}else if(data.account_id > 0){
+                		reload(data.account_id);
+            		}
+            	}
+            });
+    	}
+    });
+
+   	reload = function(account_id){
+   		if(account_id > 0){
+   	        $.ajax({
+   	        	"type": "POST",
+   	        	"url": "<!--{base}-->/twitter/Account.json",
+   	        	"data": {
+   	        		"account_id": account_id
+   	        	},
+   	        	"dataType": "jsonp",
+   	        	"success": function(data){
+            		$("#acc" + data.account_id + " .tweet_count").text(data.status_count);
+   	        		$("#acc" + data.account_id + " .friend_count").text(data.friend_count);
+   	        		$("#acc" + data.account_id + " .follower_count").text(data.follower_count);
+   	        		var $status = $("<span />").addClass("label");
+   	        		if(data.status.follow_status == "1"){
+   	        			$status.addClass("label-primary").text("フォロー待機中");
+   	        		}else if(data.status.follow_status == "2"){
+   	        		    if(data.isUnfollowable){
+   	        		        $status.addClass("label-danger").text("アンフォロー中");
+   	        		    }else{
+      	        		    $status.addClass("label-success").text("フォロー実行中");
+      	        		}
+   	        		}else if(data.status.follow_status == "3"){
+   	        			$status.addClass("label-default").text("フォロー終了");
+   	        		}else if(data.status.follow_status == "4"){
+   	        			$status.addClass("label-danger").text("フォローリスト無し");
+   	        		}else if(data.status.follow_status == "5"){
+   	        			$status.addClass("label-info").text("フォローリトライ");
+   	        		}else if(data.status.follow_status == "6"){
+   	        			$status.addClass("label-warning").text("フォロースキップ");
+   	        		}else{
+   	        			$status.addClass("label-default").text("フォロー停止中");
+   	        		}
+   	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
+            	}
+   	        });
+   		}
+    }
+    <!--{foreach from=$attr.accounts item="account"}-->
+	reloadLoop<!--{$account->account_id}--> = function(){
+		reload(<!--{$account->account_id}-->);
+		setTimeout(reloadLoop<!--{$account->account_id}-->, 60000);
+	}
+	setTimeout(reloadLoop<!--{$account->account_id}-->(), 60000);
+	<!--{/foreach}-->
+});
+</script>
+<!--{include file="common/footer.html"}-->

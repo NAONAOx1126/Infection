@@ -144,6 +144,7 @@
                         </td></tr>
                     </table>
                 </div>
+                <!--{if $account->account_id == 0}-->
                 <div class="col-md-12 form-inline">
                     <input type="text" size="6" data-column="follow_unit_<!--{$account->account_id|default:0}-->" class="follow_unit form-control">
                     <label class="control-label">人フォロー／アンフォローする毎に</label>
@@ -170,6 +171,7 @@
                         </tbody>
                     </table>
                 </div>
+                <!--{/if}-->
             </div>
         </div>
     </div>
