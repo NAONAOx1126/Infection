@@ -65,6 +65,7 @@
                                 フォロー対象キーワード
                                 </li>
                             </ol>
+                            <!--{if $account->account_id > 0}-->
                             <div class="col-md-10">
                                 <input type="text" data-column="follow_keywords_<!--{$account->account_id|default:0}-->" class="follow_keywords form-control" placeholder="プロフィールに含むキーワードをスペース区切りで入力してください">
                             </div>
@@ -72,6 +73,9 @@
                                 <input type="button" class="add_keyword form-control" data-column="follow_keywords" value="追加">
                             </div>
                             <div class="follow_keywords col-md-12"></div>
+                            <!--{else}-->
+                            フォロー対象キーワードは各アカウントのフォロー設定で変更してください。
+                            <!--{/if}-->
                         </td></tr><tr><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">グループ設定</li>
@@ -93,6 +97,7 @@
                                 フォローワー対象キーワード
                                 </li>
                             </ol>
+                            <!--{if $account->account_id > 0}-->
                             <div class="col-md-10">
                                 <input type="text" data-column="follower_keywords_<!--{$account->account_id|default:0}-->" class="follower_keywords form-control" placeholder="プロフィールに含むキーワードをスペース区切りで入力してください">
                             </div>
@@ -100,6 +105,9 @@
                                 <input type="button" class="add_keyword form-control" data-column="follower_keywords" value="追加">
                             </div>
                             <div class="follower_keywords col-md-12"></div>
+                            <!--{else}-->
+                            フォローワー対象キーワードは各アカウントのフォロー設定で変更してください。
+                            <!--{/if}-->
                         </td></tr><tr><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">フォロー除外対象設定</li>
@@ -134,6 +142,7 @@
                             <ol class="breadcrumb">
                                 <li class="active">フォロー除外キーワード</li>
                             </ol>
+                            <!--{if $account->account_id > 0}-->
                             <div class="col-md-10">
                                 <input type="text" data-column="ignore_keywords_<!--{$account->account_id|default:0}-->" class="ignore_keywords form-control" placeholder="プロフィールに含まないキーワードをスペース区切りで入力してください">
                             </div>
@@ -141,6 +150,9 @@
                                 <input type="button" class="add_keyword form-control" data-column="ignore_keywords" value="追加">
                             </div>
                             <div class="ignore_keywords col-md-12"></div>
+                            <!--{else}-->
+                            フォロー除外キーワードは各アカウントのフォロー設定で変更してください。
+                            <!--{/if}-->
                         </td></tr>
                     </table>
                 </div>

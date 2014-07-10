@@ -52,41 +52,41 @@
                         <div><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
                     </td>
                     <td>
-                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium group_id" name="group_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.groups}-->
                         </select>
-                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium group_id" name="group_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.groups}-->
                         </select><br />
-                         <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium group_id" name="group_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.groups}-->
                         </select>
-                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="4" class="form-control input-medium group_id" name="group_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.groups}-->
                         </select><br />
-                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="5" class="form-control input-medium group_id" name="group_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.groups}-->
                         </select>
-                        <select class="form-control input-medium group_id_<!--{$account->account_id}-->" name="group_id">
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="6" class="form-control input-medium group_id" name="group_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.groups}-->
                         </select>
                     </td>
                     <td>
-                        <select class="form-control input-medium operator_id_<!--{$account->account_id}-->" name="operator_id">
+                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium operator_id" name="operator_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.operators}-->
                         </select><br />
-                        <select class="form-control input-medium operator_id_<!--{$account->account_id}-->" name="operator_id">
+                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium operator_id" name="operator_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.operators}-->
                         </select><br />
-                        <select class="form-control input-medium operator_id_<!--{$account->account_id}-->" name="operator_id">
+                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium operator_id" name="operator_id">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.operators}-->
                         </select>
@@ -151,6 +151,53 @@ $(function() {
             }
         });
     });
+    $(".retweet_group_id, .retweet_delay, .refollow_timeout, .daily_follows, .daily_unfollows").change(function(){
+        var $this = $(this);
+        $.ajax({
+            "type": "POST",
+            "url": "<!--{base}-->/twitter/SettingText.json",
+            "data": {
+                "target": $this.attr("data-column"),
+                "value": $this.val()
+            },
+            "dataType": "jsonp",
+            "success": function(data){
+				reload(data.account_id);
+            }
+        });
+    });
+    $(".group_id").change(function(){
+        var $this = $(this);
+        $.ajax({
+            "type": "POST",
+            "url": "<!--{base}-->/twitter/AccountGroup.json",
+            "data": {
+                "target": $this.attr("data-column"),
+                "index": $this.attr("data-index"),
+                "value": $this.val()
+            },
+            "dataType": "jsonp",
+            "success": function(data){
+				reload(data.account_id);
+            }
+        });
+    });
+    $(".operator_id").change(function(){
+        var $this = $(this);
+        $.ajax({
+            "type": "POST",
+            "url": "<!--{base}-->/twitter/AccountOperator.json",
+            "data": {
+                "target": $this.attr("data-column"),
+                "index": $this.attr("data-index"),
+                "value": $this.val()
+            },
+            "dataType": "jsonp",
+            "success": function(data){
+				reload(data.account_id);
+            }
+        });
+    });
     $(".follow_status, .retweet_status").click(function(){
 		$this = $(this);
     	if(confirm("変更してもよろしいですか？")){
@@ -187,37 +234,43 @@ $(function() {
    	        		$("#acc" + data.account_id + " .follower_count").text(data.follower_count);
    	        		var $status = $("<span />").addClass("label");
    	        		if(data.status.follow_status == "1"){
-   	        			$status.addClass("label-primary").text("フォロー待機中");
+   	        			$status.addClass("label-inverse").text("フォロー待機中");
    	        		}else if(data.status.follow_status == "2"){
    	        		    if(data.isUnfollowable){
-   	        		        $status.addClass("label-danger").text("アンフォロー中");
+   	        		        $status.addClass("label-important").text("アンフォロー中");
    	        		    }else{
       	        		    $status.addClass("label-success").text("フォロー実行中");
       	        		}
    	        		}else if(data.status.follow_status == "3"){
-   	        			$status.addClass("label-default").text("フォロー終了");
+   	        			$status.addClass("label-info").text("フォロー終了");
    	        		}else if(data.status.follow_status == "4"){
-   	        			$status.addClass("label-danger").text("フォローリスト無し");
+   	        			$status.addClass("label-info").text("フォロー対象無し");
    	        		}else if(data.status.follow_status == "5"){
-   	        			$status.addClass("label-info").text("フォローリトライ");
+   	        			$status.addClass("label-warning").text("フォローリトライ");
    	        		}else if(data.status.follow_status == "6"){
-   	        			$status.addClass("label-warning").text("フォロースキップ");
+   	        			$status.addClass("label-important").text("フォロースキップ");
    	        		}else{
-   	        			$status.addClass("label-default").text("フォロー停止中");
+   	        			$status.text("フォロー停止中");
    	        		}
    	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
    	        		var $status = $("<span />").addClass("label");
    	        		if(data.status.retweet_status == "1"){
-   	        			$status.addClass("label-primary").text("強化アカウントON");
+   	        			$status.addClass("label-success").text("強化アカウントON");
    	        		}else{
-   	        			$status.addClass("label-default").text("強化アカウントOFF");
+   	        			$status.addClass("label-info").text("強化アカウントOFF");
    	        		}
    	        		$("#acc" + data.account_id + " .retweet_status").html($status[0]);
    	        		$("#acc" + data.account_id + " .daily_follows").val(data.setting.daily_follows_1);
    	        		$("#acc" + data.account_id + " .refollow_timeout").val(data.setting.refollow_timeout);
    	        		$("#acc" + data.account_id + " .retweet_group_id").val(data.setting.retweet_group_id);
    	        		$("#acc" + data.account_id + " .retweet_delay").val(data.setting.retweet_delay);
-   	   	        }
+   	        		for(var index in data.groups){
+   	   	        		$("#acc" + data.account_id + " .group_id[data-index='" + index + "']").val(data.groups[index]);
+   	        		}
+   	        		for(var index in data.operators){
+   	   	        		$("#acc" + data.account_id + " .operator_id[data-index='" + index + "']").val(data.operators[index]);
+   	        		}
+   	        	}
    	        });
    		}
     }
