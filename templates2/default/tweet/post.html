@@ -1,0 +1,103 @@
+<!--{include file="common/header.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Tweet.Delete" />
+<meta name="loadmodule" content="Twitter.Account.Detail" />
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> Tweet投稿編集
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div id="upload_image" class="form-group span2" style="border: 1px solid #000000; height: 140px;">
+                    <div class="dz-default dz-message"><span>ここに画像ファイルをドラッグ&ドロップしてください。</span></div>
+                    </div>
+                    <form action="post_complete.html" method="POST">
+                    <input type="hidden" name="account_id" value="<!--{$attr.account->account_id}-->" />
+                    <div class="form-group form-inline span10">
+                        <input type="hidden" id="media_filename" name="media_filename" value="" />
+                        <textarea cols=120" rows="7" id="tweet_text" class="tweet_text form-control span12" name="tweet_text" placeholder="登録するテキストを入力してください"></textarea>
+                    </div>
+                    <div class="form-group form-inline span12">
+                        <button type="submit" name="save" class="btn btn-default" value="1">ツイートを登録</button>
+                    </div>
+                    </form>
+                    <br /><br />
+                    <form action="setting_complete.html" method="POST">
+                    <!--{assign var="setting" value=$attr.account->tweetSetting()}-->
+                    <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
+                    <div class="form-group form-inline span12 well">
+                        ツイート条件
+                        <input type="text" data-column="tweet_interval_<!--{$account->account_id}-->" class="form-control input-mini tweet_interval" name="tweet_interval" value="<!--{$setting->tweet_interval}-->" />分〜
+                        <input type="text" data-column="max_tweet_interval_<!--{$account->account_id}-->" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="<!--{$setting->max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="daytime_start_<!--{$account->account_id}-->" class="form-control input-mini daytime_start" name="daytime_start" value="<!--{$setting->daytime_start}-->" />時〜
+                        <input type="text" data-column="daytime_end_<!--{$account->account_id}-->" class="form-control input-mini daytime_end" name="daytime_end" value="<!--{$setting->daytime_end}-->" />時までの間
+                        <input type="text" data-column="daily_tweets_<!--{$account->account_id}-->" class="form-control input-mini daily_tweets" name="daily_tweets" value="<!--{$setting->daily_tweets}-->" />回までツイートする。<br />
+                        <button type="submit" name="save" value="1">設定する。</button>
+                    </div>
+                    </form>
+                    <table class="table table-condensed table-bordered">
+                    <tbody id="original_tweets">
+                    <!--{foreach from=$attr.account->tweets("create_time", true) item="tweet"}-->
+                    <tr>
+                    <td><!--{$tweet->tweet_text|mb_truncate:30|nl2br}--></td>
+                    <td>
+                    <button data-id="edit<!--{$tweet->tweet_id}-->" type="button" onclick="$('#' + $(this).attr('data-id')).css('display', 'block');" class="btn btn-default"><!--{if $tweet->first_tweeted_flg != "1"}-->編集<!--{else}-->詳細<!--{/if}--></button>
+                    <a href="post.html?delete=1&tweet_id=<!--{$tweet->tweet_id}-->" class="btn btn-default">削除</a>
+                    </td>
+                    </tr>
+                    <tr id="edit<!--{$tweet->tweet_id}-->" style="display: none;">
+                    <td colspan="2">
+                    <div>
+                    <form action="post_complete.html" method="POST">
+                    <input type="hidden" name="tweet_id" value="<!--{$tweet->tweet_id}-->" />
+                    <input type="hidden" name="media_filename" value="<!--{$tweet->media_filename}-->" />
+                    <!--{if $tweet->first_tweeted_flg != "1"}-->
+                    <textarea name="tweet_text" class="span12" cols="110" rows="4"><!--{$tweet->tweet_text}--></textarea>
+                    <!--{if $tweet->media_filename != ""}--><div><img src="<!--{base}-->/upload/<!--{$tweet->media_filename}-->" style="max-width: 500px;" /></div><!--{/if}-->
+                    <button type="submit" name="save" value="1" class="btn btn-default">登録</button>
+                    <!--{else}-->
+                    <!--{$tweet->tweet_text|nl2br}-->
+                    <!--{if $tweet->media_filename != ""}--><div><img src="<!--{base}-->/upload/<!--{$tweet->media_filename}-->" style="max-width: 500px;" /></div><!--{/if}-->
+                    <!--{/if}-->
+                    </form>
+                    </div>
+                    </td>
+                    </tr>
+                    <!--{/foreach}-->
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function() {
+   	$("div#upload_image").dropzone({
+   	    "url": "<!--{base}-->/tweet/upload_image.html",
+   	    "previewTemplate": '<div class="dz-preview dz-file-preview"><div class="dz-details"><img data-dz-thumbnail /></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div><div class="dz-error-message"><span data-dz-errormessage></span></div></div>',
+   	    "success": function(_file, _return, _xml){
+   	        $(".dz-preview").addClass("dz-preview-remove");
+   	        $(".dz-preview:last").removeClass("dz-preview-remove");
+   	        $(".dz-preview-remove").remove();
+   	        $("#media_filename").val(_return);
+   	    }
+   	});
+});
+</script>
+<!--{include file="common/footer.html"}-->

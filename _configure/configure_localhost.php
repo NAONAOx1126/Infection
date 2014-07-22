@@ -6,7 +6,7 @@ Vizualizer_Configure::set("timezone", "Asia/Tokyo");
 Vizualizer_Configure::set("site_code", "infection");
 
 // サイト名
-Vizualizer_Configure::set("site_name", "ツイート拡散");
+Vizualizer_Configure::set("site_name", "ツイッターツール");
 
 // サイトメールアドレス
 Vizualizer_Configure::set("site_email", "info@sweetberry.jp");
