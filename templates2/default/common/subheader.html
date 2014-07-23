@@ -20,8 +20,10 @@
             </div>
             <div class="top-nav nav-collapse">
             <ul class="nav">
+            <!--{if $attr[VizualizerAdmin::KEY]->hasRole(array("administrator"))}-->
             <li><a href="<!--{base}-->/index.html">アカウント管理</a></li>
             <li><a href="<!--{base}-->/retweet/index.html">リツイート管理</a></li>
+            <!--{/if}-->
             <li><a href="<!--{base}-->/tweet/index.html">ツイート管理</a></li>
             <li><a href="<!--{base}-->/research/index.html">競合リサーチ管理</a></li>
             </ul>
