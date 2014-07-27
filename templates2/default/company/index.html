@@ -35,8 +35,10 @@
                     <tr id="grp<!--{$company->company_id}-->">
                     <td><!--{$company->company_name}--></td>
                     <td>
-                        <a href="edit.html?operator_id=<!--{$company->company_id}-->" class="btn btn-info">編集</a>
-                        <a href="index.html?delete=1&operator_id=<!--{$company->company_id}-->" class="btn btn-danger" onclick="return confirm('<!--{$company->company_name}-->を削除します。よろしいですか？')" <!--{if $company->operators()->count() > 0}--> disabled="disabled"<!--{/if}-->>削除</a>
+                        <a href="edit.html?company_id=<!--{$company->company_id}-->" class="btn btn-info">編集</a>
+                        <!--{if $company->operators()->count() == 0}-->
+                        <a href="index.html?delete=1&company_id=<!--{$company->company_id}-->" class="btn btn-danger" onclick="return confirm('<!--{$company->company_name}-->を削除します。よろしいですか？')">削除</a>
+                        <!--{/if}-->
                     </td>
                     <!--{/foreach}-->
                     </tbody>

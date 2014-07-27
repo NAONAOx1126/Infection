@@ -1,7 +1,7 @@
 <!--{include file="common/header.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
 <meta name="loadmodule" content="Admin.Company.Detail" />
-<!--{assign var="operator" value=$attr.operator}-->
+<!--{assign var="company" value=$attr.company}-->
 <!--{include file="common/subheader.html"}-->
 <div class="container-fluid">
     <div class="row-fluid">
@@ -35,7 +35,7 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="typeahead">外注グループグループ名 </label>
+                                        <label class="control-label" for="typeahead">外注グループ名 </label>
                                         <div class="controls">
                                             <input type="text" class="span6" id="company_name" name="company_name" value="<!--{$company->company_name|input:"company_name"}-->" placeholder="外注グループ名" />
                                         </div>
