@@ -1,8 +1,15 @@
-<!--{include file="common/header.html"}-->
+<!--{include file="common/header1.html"}-->
+<!--{if !$attr[VizualizerAdmin::KEY]->hasRole("administrator")}-->
+<meta http-equiv="Refresh" content="0; URL=<!--{base}-->/tweet/index.html">
+<script type="text/javascript">
+location.replace("<!--{base}-->/tweet/index.html");
+</script>
+<!--{/if}-->
+<!--{include file="common/header2.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
 <meta name="loadmodule" content="Twitter.Account.Initialize" />
 <meta name="loadmodule" content="Twitter.Account.InitializeGroup" />
-<meta name="loadmodule" content="Twitter.Account.List" operator="list" />
+<meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
 <meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
 <!--{include file="common/subheader.html"}-->
 <div class="container-fluid">
@@ -40,13 +47,13 @@
                 <div class="box-content">
                     <form action="complete.html" method="POST">
                     <div>
-                    URL：<input type="text" id="retweet_target" class="input-medium" name="retweet_target" value="" />のツイートを
+                    URL：<input type="text" id="retweet_target" class="input-medium" name="retweet_target" value="" style="ime-mode: disabled;" />のツイートを
                     <select name="target_group_id">
                     <!--{html_options options=$attr.groups}-->
                     </select>のうち、最大
-                    <input type="text" name="max_accounts" class="input-mini" value="" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" />個のアカウントで
-                    <input type="text" name="retweet_delay" class="input-mini" value="" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" />分後くらいに
-                    <input type="text" name="retweet_duration" class="input-mini" value="" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" />時間後に削除するように
+                    <input type="text" name="max_accounts" class="input-mini" value="" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
+                    <input type="text" name="retweet_delay" class="input-mini" value="" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
+                    <input type="text" name="retweet_duration" class="input-mini" value="" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
                     <button type="submit" name="save" value="1">RTを実行</button>
                     </div>
                     </form>
@@ -92,7 +99,7 @@
                     <!--{else}-->
                     <!--{assign var="tweets" value=$account->limitedTweetLogs(50, 0, "tweet_time", true)}-->
                     <!--{/if}-->
-                    <td data-account="<!--{$account->account_id}-->" class="tweets" colspan="2" width="150" style="white-space: normal">
+                    <td data-account="<!--{$account->account_id}-->" class="tweets" colspan="2" width="150" style="white-space: normal; vertical-align: top;">
                     </td>
                     <!--{/foreach}-->
                     </tr>

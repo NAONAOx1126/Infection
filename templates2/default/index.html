@@ -1,7 +1,14 @@
-<!--{include file="common/header.html"}-->
+<!--{include file="common/header1.html"}-->
+<!--{if !$attr[VizualizerAdmin::KEY]->hasRole("administrator")}-->
+<meta http-equiv="Refresh" content="0; URL=<!--{base}-->/tweet/index.html">
+<script type="text/javascript">
+location.replace("<!--{base}-->/tweet/index.html");
+</script>
+<!--{/if}-->
+<!--{include file="common/header2.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
 <meta name="loadmodule" content="Twitter.Account.Delete" />
-<meta name="loadmodule" content="Twitter.Account.List" />
+<meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
 <meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" />
 <meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
 <!--{include file="common/subheader.html"}-->
@@ -95,14 +102,14 @@
                         <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
                         <div>フォロー</div>
                         <div>
-                            1日<input type="text" data-column="daily_follows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_follows" name="daily_follows" value="" />人まで
-                            <input type="text" data-column="follow_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_interval" name="follow_interval" value="" />分毎
+                            1日<input type="text" data-column="daily_follows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_follows" name="daily_follows" value="" style="ime-mode: disabled;" />人まで
+                            <input type="text" data-column="follow_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_interval" name="follow_interval" value="" style="ime-mode: disabled;" />分毎
                         </div>
                         <div>アンフォロー</div>
                         <div>
-                            フォロー後<input type="text" data-column="refollow_timeout_<!--{$account->account_id}-->" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="" />時間経過したら<br />
-                            1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows" value="" />人まで
-                            <input type="text" data-column="unfollow_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_interval" name="unfollow_interval" value="" />分毎
+                            フォロー後<input type="text" data-column="refollow_timeout_<!--{$account->account_id}-->" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="" style="ime-mode: disabled;" />時間経過したら<br />
+                            1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows" value="" style="ime-mode: disabled;" />人まで
+                            <input type="text" data-column="unfollow_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_interval" name="unfollow_interval" value="" style="ime-mode: disabled;" />分毎
                         </div>
                     </td>
                     <td>
@@ -113,7 +120,8 @@
                         <!--{html_options options=$attr.groups}-->
                         </select>
                         <div>最新ツイートをRT</div>
-                        <div><input type="text" data-column="retweet_delay_<!--{$account->account_id}-->" class="form-control input-mini retweet_delay" name="retweet_delay" value="" />分毎</div>
+                        <div><input type="text" data-column="retweet_delay_<!--{$account->account_id}-->" class="form-control input-mini retweet_delay" name="retweet_delay" value="" style="ime-mode: disabled;" />分後に実行し</div>
+                        <div><input type="text" data-column="retweet_duration_<!--{$account->account_id}-->" class="form-control input-mini retweet_duration" name="retweet_duration" value="" style="ime-mode: disabled;" />時間後に削除</div>
                     </td>
                     <td class="col-md-1">
                     <div id="description_<!--{$account->account_id}-->" class="description"><!--{$account->description}--></div>
@@ -143,7 +151,7 @@ $(function() {
         tooltip   : 'Click to edit...',
         submit  : '登録する'
     });
-    $(".retweet_group_id, .retweet_delay, .follow_interval, .unfollow_interval, .refollow_timeout, .daily_follows, .daily_unfollows").change(function(){
+    $(".retweet_group_id, .retweet_delay, .retweet_duration, .follow_interval, .unfollow_interval, .refollow_timeout, .daily_follows, .daily_unfollows").change(function(){
         var $this = $(this);
         $.ajax({
             "type": "POST",
@@ -221,7 +229,106 @@ $(function() {
    	        	},
    	        	"dataType": "jsonp",
    	        	"success": function(data){
-            		$("#acc" + data.account_id + " .tweet_count").text(data.status_count);
+   	        	    if(data.setting.use_follow_setting == 0){
+         	   	          $.ajax({
+             	               "type": "POST",
+             	               "url": "<!--{base}-->/twitter/SettingText.json",
+             	               "data": {
+             	                   "target": "use_follow_setting_" + data.account_id,
+             	                   "value": 1
+             	               },
+             	               "dataType": "jsonp",
+             	           });
+     	        	    }
+   	        	    if(data.setting.follower_limit_2 > 0){
+       	   	          $.ajax({
+           	               "type": "POST",
+           	               "url": "<!--{base}-->/twitter/SettingText.json",
+           	               "data": {
+           	                   "target": "follower_limit_2_" + data.account_id,
+           	                   "value": 0
+           	               },
+           	               "dataType": "jsonp",
+           	           });
+   	        	    }
+   	        	    if(data.setting.follower_limit_3 > 0){
+     	   	          $.ajax({
+         	               "type": "POST",
+         	               "url": "<!--{base}-->/twitter/SettingText.json",
+         	               "data": {
+         	                   "target": "follower_limit_3_" + data.account_id,
+         	                   "value": 0
+         	               },
+         	               "dataType": "jsonp",
+         	           });
+ 	        	    }
+   	        	    if(data.setting.follower_limit_4 > 0){
+       	   	          $.ajax({
+           	               "type": "POST",
+           	               "url": "<!--{base}-->/twitter/SettingText.json",
+           	               "data": {
+           	                   "target": "follower_limit_4_" + data.account_id,
+           	                   "value": 0
+           	               },
+           	               "dataType": "jsonp",
+           	           });
+   	        	    }
+   	        	    if(data.setting.follower_limit_5 > 0){
+       	   	          $.ajax({
+           	               "type": "POST",
+           	               "url": "<!--{base}-->/twitter/SettingText.json",
+           	               "data": {
+           	                   "target": "follower_limit_5_" + data.account_id,
+           	                   "value": 0
+           	               },
+           	               "dataType": "jsonp",
+           	           });
+   	        	    }
+   	        	    if(data.setting.follower_limit_6 > 0){
+       	   	          $.ajax({
+           	               "type": "POST",
+           	               "url": "<!--{base}-->/twitter/SettingText.json",
+           	               "data": {
+           	                   "target": "follower_limit_6_" + data.account_id,
+           	                   "value": 0
+           	               },
+           	               "dataType": "jsonp",
+           	           });
+   	        	    }
+   	        	    if(data.setting.follower_limit_7 > 0){
+       	   	          $.ajax({
+           	               "type": "POST",
+           	               "url": "<!--{base}-->/twitter/SettingText.json",
+           	               "data": {
+           	                   "target": "follower_limit_7_" + data.account_id,
+           	                   "value": 0
+           	               },
+           	               "dataType": "jsonp",
+           	           });
+   	        	    }
+   	        	    if(data.setting.follower_limit_8 > 0){
+       	   	          $.ajax({
+           	               "type": "POST",
+           	               "url": "<!--{base}-->/twitter/SettingText.json",
+           	               "data": {
+           	                   "target": "follower_limit_8_" + data.account_id,
+           	                   "value": 0
+           	               },
+           	               "dataType": "jsonp",
+           	           });
+   	        	    }
+   	        	    if(data.setting.follower_limit_9 > 0){
+       	   	          $.ajax({
+           	               "type": "POST",
+           	               "url": "<!--{base}-->/twitter/SettingText.json",
+           	               "data": {
+           	                   "target": "follower_limit_9_" + data.account_id,
+           	                   "value": 0
+           	               },
+           	               "dataType": "jsonp",
+           	           });
+   	        	    }
+   	        	    $("#acc" + data.account_id + " .tweet_count").text(data.status_count);
    	        		$("#acc" + data.account_id + " .friend_count").text(data.friend_count);
    	        		$("#acc" + data.account_id + " .follower_count").text(data.follower_count);
    	        		var $status = $("<span />").addClass("label");
@@ -259,6 +366,7 @@ $(function() {
    	        		$("#acc" + data.account_id + " .refollow_timeout").val(data.setting.refollow_timeout);
    	        		$("#acc" + data.account_id + " .retweet_group_id").val(data.setting.retweet_group_id);
    	        		$("#acc" + data.account_id + " .retweet_delay").val(data.setting.retweet_delay);
+   	        		$("#acc" + data.account_id + " .retweet_duration").val(data.setting.retweet_duration);
    	        		for(var index in data.groups){
    	   	        		$("#acc" + data.account_id + " .group_id[data-index='" + index + "']").val(data.groups[index]);
    	        		}

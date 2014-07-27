@@ -1,7 +1,6 @@
 <!--{include file="common/header.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
-<meta name="loadmodule" content="Admin.Company.List" mode="select" select="company_id|company_name" />
-<meta name="loadmodule" content="Admin.Operator.Detail" />
+<meta name="loadmodule" content="Admin.Company.Detail" />
 <!--{assign var="operator" value=$attr.operator}-->
 <!--{include file="common/subheader.html"}-->
 <div class="container-fluid">
@@ -13,7 +12,7 @@
                     <div class="box span12">
                         <div class="box-header well" data-original-title>
                             <h2>
-                                <i class="icon-edit"></i> 外注登録／編集
+                                <i class="icon-edit"></i> 外注グループ登録／編集
                             </h2>
                         </div>
                         <!--{if is_array($ERRORS) && count($ERRORS) > 0}-->
@@ -28,37 +27,17 @@
                         <!--{/if}-->
                         <div class="box-content">
                             <form action="complete.html" method="POST" class="form-horizontal">
-                                <input type="hidden" name="operator_id" value="<!--{$operator->operator_id}-->" />
-                                <input type="hidden" name="role_id" value="2" />
+                                <input type="hidden" name="company_id" value="<!--{$company->company_id}-->" />
                                 <fieldset>
-                                    <legend>外注の情報を設定してください</legend>
+                                    <legend>外注グループの情報を設定してください</legend>
                                     <div class="control-group">
-                                        <label class="control-label" for="typeahead">グループ名 </label>
                                         <div class="controls">
-                                            <select id="company_id" class="form-control" name="company_id">
-                                            <option value="">新規登録</option>
-                                            <!--{assign var="company_id" value=$attr.operator->company_id|input:"company_id"}-->
-                                            <!--{html_options options=$attr.companys selected=$company_id}-->
-                                            </select>
-                                            <input type="text" class="span6" id="company_name" name="company_name" value="<!--{$operator->company()->company_name|input:"company_name"}-->" placeholder="会社名" />
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="typeahead">担当者名 </label>
+                                        <label class="control-label" for="typeahead">外注グループグループ名 </label>
                                         <div class="controls">
-                                            <input type="text" class="span6" id="operator_name" name="operator_name" value="<!--{$operator->operator_name|input:"operator_name"}-->" placeholder="担当者名" />
-                                        </div>
-,                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="typeahead">メールアドレス </label>
-                                        <div class="controls">
-                                            <input type="text" class="span6" id="email" name="email" value="<!--{$operator->email|input:"email"}-->" placeholder="メールアドレス" style="ime-mode: disabled;" />
-                                        </div>
-,                                    </div>
-                                     <div class="control-group">
-                                        <label class="control-label" for="typeahead">パスワード </label>
-                                        <div class="controls">
-                                            <input type="text" class="span6" id="password" name="password" value="<!--{$post.password}-->" placeholder="パスワード" />
+                                            <input type="text" class="span6" id="company_name" name="company_name" value="<!--{$company->company_name|input:"company_name"}-->" placeholder="外注グループ名" />
                                         </div>
 ,                                    </div>
                                      <div class="form-actions">
