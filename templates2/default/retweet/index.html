@@ -65,8 +65,9 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a><br />
                         <!--{if $account->description != ""}-->
-                        <a href="#" class="label label-info" data-rel="popover" data-content="<!--{$account->description}-->" title="メモ" data-placement="bottom">メモ有り</a>
+                        <a href="#" class="label label-info" data-rel="popover" data-content="<!--{$account->description}-->" title="メモ" data-placement="bottom">メモ有り</a><br />
                         <!--{/if}-->
+                        <a href="post.html?account_id=<!--{$account->account_id}-->" class="btn btn-default" target="retweetLog">RT履歴</a>
                     </td>
                     <td width="100">
                         <div style="white-space: nowrap;">ツイート数</div>

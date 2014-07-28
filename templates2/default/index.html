@@ -102,14 +102,14 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
                         <div>フォロー</div>
                         <div>
-                            1日<input type="text" data-column="daily_follows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_follows" name="daily_follows" value="" style="ime-mode: disabled;" />人まで
-                            <input type="text" data-column="follow_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_interval" name="follow_interval" value="" style="ime-mode: disabled;" />分毎
+                            1日<input type="text" data-column="daily_follows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_follows" name="daily_follows" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="follow_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_interval" name="follow_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
                         </div>
                         <div>アンフォロー</div>
                         <div>
-                            フォロー後<input type="text" data-column="refollow_timeout_<!--{$account->account_id}-->" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="" style="ime-mode: disabled;" />時間経過したら<br />
-                            1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows" value="" style="ime-mode: disabled;" />人まで
-                            <input type="text" data-column="unfollow_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_interval" name="unfollow_interval" value="" style="ime-mode: disabled;" />分毎
+                            フォロー後<input type="text" data-column="refollow_timeout_<!--{$account->account_id}-->" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間経過したら<br />
+                            1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="unfollow_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_interval" name="unfollow_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
                         </div>
                     </td>
                     <td>
@@ -120,8 +120,8 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups}-->
                         </select>
                         <div>最新ツイートをRT</div>
-                        <div><input type="text" data-column="retweet_delay_<!--{$account->account_id}-->" class="form-control input-mini retweet_delay" name="retweet_delay" value="" style="ime-mode: disabled;" />分後に実行し</div>
-                        <div><input type="text" data-column="retweet_duration_<!--{$account->account_id}-->" class="form-control input-mini retweet_duration" name="retweet_duration" value="" style="ime-mode: disabled;" />時間後に削除</div>
+                        <div><input type="text" data-column="retweet_delay_<!--{$account->account_id}-->" class="form-control input-mini retweet_delay" name="retweet_delay" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分後に実行し</div>
+                        <div><input type="text" data-column="retweet_duration_<!--{$account->account_id}-->" class="form-control input-mini retweet_duration" name="retweet_duration" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間後に削除</div>
                     </td>
                     <td class="col-md-1">
                     <div id="description_<!--{$account->account_id}-->" class="description"><!--{$account->description}--></div>

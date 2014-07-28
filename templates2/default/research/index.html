@@ -26,6 +26,8 @@
                     <form action="index.html" method="POST">
                     調査アカウントのURL：<input type="text" id="url" class="input-medium" name="url" value="<!--{$post.url}-->" /><br />
                     調査キーワード：<input type="text" id="keyword" class="input-medium" name="keyword" value="<!--{$post.keyword}-->" /><br />
+                    <label><input type="radio" name="sort" value="retweet"<!--{if $post.sort != "favorite"}--> checked<!--{/if}--> /> RT数順</label>
+                    <label><input type="radio" name="sort" value="favorite"<!--{if $post.sort == "favorite"}--> checked<!--{/if}--> /> お気に入り数順</label><br />
                     <!--{if $post.account_id > 0}-->
                     <button type="submit" name="search" value="1">検索</button>
                     <!--{/if}-->

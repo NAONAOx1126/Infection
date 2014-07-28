@@ -40,6 +40,12 @@
                         <input type="text" data-column="daytime_start_<!--{$account->account_id}-->" class="form-control input-mini daytime_start" name="daytime_start" value="<!--{$setting->daytime_start}-->" />時〜
                         <input type="text" data-column="daytime_end_<!--{$account->account_id}-->" class="form-control input-mini daytime_end" name="daytime_end" value="<!--{$setting->daytime_end}-->" />時までの間
                         <input type="text" data-column="daily_tweets_<!--{$account->account_id}-->" class="form-control input-mini daily_tweets" name="daily_tweets" value="<!--{$setting->daily_tweets}-->" />回までツイートする。<br />
+                        BOT条件
+                        <input type="text" data-column="bot_tweet_interval_<!--{$account->account_id}-->" class="form-control input-mini bot_tweet_interval" name="bot_tweet_interval" value="<!--{$setting->bot_tweet_interval}-->" />分〜
+                        <input type="text" data-column="bot_max_tweet_interval_<!--{$account->account_id}-->" class="form-control input-mini bot_max_tweet_interval" name="bot_max_tweet_interval" value="<!--{$setting->bot_max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="bot_daytime_start_<!--{$account->account_id}-->" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="<!--{$setting->bot_daytime_start}-->" />時〜
+                        <input type="text" data-column="bot_daytime_end_<!--{$account->account_id}-->" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="<!--{$setting->bot_daytime_end}-->" />時までの間
+                        <input type="text" data-column="bot_daily_tweets_<!--{$account->account_id}-->" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="<!--{$setting->bot_daily_tweets}-->" />回までツイートする。<br />
                         <button type="submit" name="save" value="1">設定する。</button>
                     </div>
                     </form>
