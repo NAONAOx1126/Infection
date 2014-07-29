@@ -25,15 +25,15 @@
                         <input type="hidden" id="media_filename" name="media_filename" value="" />
                         <textarea cols=120" rows="7" id="tweet_text" class="tweet_text form-control span12" name="tweet_text" placeholder="登録するテキストを入力してください"></textarea>
                     </div>
-                    <div class="form-group form-inline span12">
-                        <button type="submit" name="save" class="btn btn-default" value="1">ツイートを登録</button>
+                    <div class="form-group form-inline span10" style="margin: 10px 0;">
+                        <button type="submit" name="save" class="btn btn-success span5" value="1">ツイートを登録</button>
                     </div>
                     </form>
-                    <br /><br />
+                    <div></div>
                     <form action="setting_complete.html" method="POST">
                     <!--{assign var="setting" value=$attr.account->tweetSetting()}-->
                     <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
-                    <div class="form-group form-inline span12 well">
+                    <div class="form-group form-inline span10 well">
                         ツイート条件
                         <input type="text" data-column="tweet_interval_<!--{$account->account_id}-->" class="form-control input-mini tweet_interval" name="tweet_interval" value="<!--{$setting->tweet_interval}-->" />分〜
                         <input type="text" data-column="max_tweet_interval_<!--{$account->account_id}-->" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="<!--{$setting->max_tweet_interval}-->" />分間隔で
@@ -46,7 +46,7 @@
                         <input type="text" data-column="bot_daytime_start_<!--{$account->account_id}-->" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="<!--{$setting->bot_daytime_start}-->" />時〜
                         <input type="text" data-column="bot_daytime_end_<!--{$account->account_id}-->" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="<!--{$setting->bot_daytime_end}-->" />時までの間
                         <input type="text" data-column="bot_daily_tweets_<!--{$account->account_id}-->" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="<!--{$setting->bot_daily_tweets}-->" />回までツイートする。<br />
-                        <button type="submit" name="save" value="1">設定する。</button>
+                        <div style="text-align: right; margin: 5px 0;"><button type="submit" name="save" value="1" class="btn btn-default span4">設定する。</button></div>
                     </div>
                     </form>
                     <table class="table table-condensed table-bordered">
@@ -55,8 +55,8 @@
                     <tr>
                     <td><!--{$tweet->tweet_text|mb_truncate:30|nl2br}--></td>
                     <td>
-                    <button data-id="edit<!--{$tweet->tweet_id}-->" type="button" onclick="$('#' + $(this).attr('data-id')).css('display', 'block');" class="btn btn-default"><!--{if $tweet->first_tweeted_flg != "1"}-->編集<!--{else}-->詳細<!--{/if}--></button>
-                    <a href="post.html?delete=1&tweet_id=<!--{$tweet->tweet_id}-->" class="btn btn-default">削除</a>
+                    <button data-id="edit<!--{$tweet->tweet_id}-->" type="button" onclick="$('#' + $(this).attr('data-id')).css('display', 'block');" class="btn btn-success span5"><!--{if $tweet->first_tweeted_flg != "1"}-->編集<!--{else}-->詳細<!--{/if}--></button>
+                    <a href="post.html?delete=1&tweet_id=<!--{$tweet->tweet_id}-->" class="btn btn-danger span5">削除</a>
                     </td>
                     </tr>
                     <tr id="edit<!--{$tweet->tweet_id}-->" style="display: none;">
@@ -68,7 +68,7 @@
                     <!--{if $tweet->first_tweeted_flg != "1"}-->
                     <textarea name="tweet_text" class="span12" cols="110" rows="4"><!--{$tweet->tweet_text}--></textarea>
                     <!--{if $tweet->media_filename != ""}--><div><img src="<!--{base}-->/upload/<!--{$tweet->media_filename}-->" style="max-width: 500px;" /></div><!--{/if}-->
-                    <button type="submit" name="save" value="1" class="btn btn-default">登録</button>
+                    <button type="submit" name="save" value="1" class="btn btn-success span8">登録</button>
                     <!--{else}-->
                     <!--{$tweet->tweet_text|nl2br}-->
                     <!--{if $tweet->media_filename != ""}--><div><img src="<!--{base}-->/upload/<!--{$tweet->media_filename}-->" style="max-width: 500px;" /></div><!--{/if}-->

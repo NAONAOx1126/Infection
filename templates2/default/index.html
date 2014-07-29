@@ -48,7 +48,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                         <br />
-                        <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-default" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
+                        <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-danger span10" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
                     </td>
                     <td>
                         <div>ツイート数</div>
