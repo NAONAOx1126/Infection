@@ -29,7 +29,7 @@
                     <label><input type="radio" name="sort" value="retweet"<!--{if $post.sort != "favorite"}--> checked<!--{/if}--> /> RT数順</label>
                     <label><input type="radio" name="sort" value="favorite"<!--{if $post.sort == "favorite"}--> checked<!--{/if}--> /> お気に入り数順</label><br />
                     <!--{if $post.account_id > 0}-->
-                    <button type="submit" name="search" value="1">検索</button>
+                    <button type="submit" name="search" value="1" class="btn btn-success span10">検索</button>
                     <!--{/if}-->
                     </form>
                     </td><td style="width: 50%;">
@@ -37,7 +37,7 @@
                     <select name="account_id">
                     <!--{html_options options=$attr.accounts selected=$post.account_id}-->
                     </select>
-                    <button type="submit" name="select" value="1">選択</button>
+                    <button type="submit" name="select" value="1" class="btn btn-default">選択</button>
                     </form>
                     <!--{if $post.account_id > 0}-->
                     <table class="table-condensed table-bordered">
@@ -105,7 +105,7 @@
                         <!--{/if}-->
                         </div>
                         <textarea name="tweet_text" cols="80" rows="5" style="width: 50%;"><!--{$tweet_text}--></textarea><br />
-                        <button type="submit" name="save" value="1">登録する</button>
+                        <button type="submit" name="save" value="1" class="btn btn-success span6">登録する</button>
                         </form>
                     </td></tr>
                     <!--{/foreach}-->

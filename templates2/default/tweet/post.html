@@ -46,6 +46,8 @@
                         <input type="text" data-column="bot_daytime_start_<!--{$account->account_id}-->" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="<!--{$setting->bot_daytime_start}-->" />時〜
                         <input type="text" data-column="bot_daytime_end_<!--{$account->account_id}-->" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="<!--{$setting->bot_daytime_end}-->" />時までの間
                         <input type="text" data-column="bot_daily_tweets_<!--{$account->account_id}-->" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="<!--{$setting->bot_daily_tweets}-->" />回までツイートする。<br />
+                        <label><input type="radio" data-column="tweet_order_<!--{$account->account_id}-->" class="form-control tweet_order" name="tweet_order" value="0"<!--{if $setting->tweet_order != "1"}--> checked<!--{/if}--> />登録順</label>
+                        <label><input type="radio" data-column="tweet_order_<!--{$account->account_id}-->" class="form-control tweet_order" name="tweet_order" value="1"<!--{if $setting->tweet_order == "1"}--> checked<!--{/if}--> />ランダム</label>
                         <div style="text-align: right; margin: 5px 0;"><button type="submit" name="save" value="1" class="btn btn-default span4">設定する。</button></div>
                     </div>
                     </form>
