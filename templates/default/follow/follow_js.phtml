@@ -92,7 +92,7 @@ $(function(){
         });
     });
 
-    $(".follow_type, .account_attribute, .follow_unit, .follow_unit_interval, .refollow_timeout, .follower_limit, .follow_ratio, .daily_follows, .daily_unfollows").change(function(){
+    $(".follow_type, .account_attribute, .follow_unit, .follow_unit_interval, .unfollow_unit, .unfollow_unit_interval, .refollow_timeout, .follower_limit, .follow_ratio, .daily_follows, .daily_unfollows").change(function(){
         var $this = $(this);
         $.ajax({
             "type": "POST",

@@ -167,7 +167,7 @@ $(function() {
             		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
             		$status = $("<span />").addClass("label");
             		if(data.status.tweet_status == "1"){
-            			$status.addClass("label-primary").text("ツイート実行中");
+            			$status.addClass("label-success").text("ツイート実行中");
    	        		}else{
             			$status.addClass("label-default").text("ツイート停止中");
             		}

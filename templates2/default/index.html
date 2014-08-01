@@ -103,13 +103,13 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <div>フォロー</div>
                         <div>
                             1日<input type="text" data-column="daily_follows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_follows" name="daily_follows" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
-                            <input type="text" data-column="follow_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_interval" name="follow_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                            <input type="text" data-column="follow_unit_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_unit_interval" name="follow_unit_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
                         </div>
                         <div>アンフォロー</div>
                         <div>
                             フォロー後<input type="text" data-column="refollow_timeout_<!--{$account->account_id}-->" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間経過したら<br />
                             1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
-                            <input type="text" data-column="unfollow_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_interval" name="unfollow_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                            <input type="text" data-column="unfollow_unit_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_unit_interval" name="unfollow_unit_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
                         </div>
                     </td>
                     <td>
@@ -151,7 +151,7 @@ $(function() {
         tooltip   : 'Click to edit...',
         submit  : '登録する'
     });
-    $(".retweet_group_id, .retweet_delay, .retweet_duration, .follow_interval, .unfollow_interval, .refollow_timeout, .daily_follows, .daily_unfollows").change(function(){
+    $(".retweet_group_id, .retweet_delay, .retweet_duration, .follow_unit_interval, .unfollow_unit_interval, .refollow_timeout, .daily_follows, .daily_unfollows").change(function(){
         var $this = $(this);
         $.ajax({
             "type": "POST",
@@ -359,8 +359,8 @@ $(function() {
    	        			$status.addClass("label-info").text("強化アカウントOFF");
    	        		}
    	        		$("#acc" + data.account_id + " .retweet_status").html($status[0]);
-   	        		$("#acc" + data.account_id + " .follow_interval").val(data.setting.follow_interval);
-   	        		$("#acc" + data.account_id + " .unfollow_interval").val(data.setting.unfollow_interval);
+   	        		$("#acc" + data.account_id + " .follow_unit_interval").val(data.setting.follow_unit_interval);
+   	        		$("#acc" + data.account_id + " .unfollow_unit_interval").val(data.setting.unfollow_unit_interval);
    	        		$("#acc" + data.account_id + " .daily_follows").val(data.setting.daily_follows_1);
    	        		$("#acc" + data.account_id + " .daily_unfollows").val(data.setting.daily_unfollows_1);
    	        		$("#acc" + data.account_id + " .refollow_timeout").val(data.setting.refollow_timeout);
