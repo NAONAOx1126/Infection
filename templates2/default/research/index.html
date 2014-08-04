@@ -104,7 +104,8 @@
                         <!--{/foreach}-->
                         <!--{/if}-->
                         </div>
-                        <textarea name="tweet_text" cols="80" rows="5" style="width: 50%;"><!--{$tweet_text}--></textarea><br />
+                        <textarea name="tweet_text" class="tweet_text" cols="80" rows="5" style="width: 50%;"><!--{$tweet_text}--></textarea>
+                        <div class="text_count" align="right"><span></span>文字</div>
                         <button type="submit" name="save" value="1" class="btn btn-success span6">登録する</button>
                         </form>
                     </td></tr>
@@ -125,60 +126,13 @@
 <!--{include file="common/script.html"}-->
 <script type="text/javascript">
 $(function(){
-	$(".retweet_select").click(function(){
-		$("#retweet_target").val($(this).val());
-	});
 
-	var pageSize = 50;
-
-	var readedTweets = {
-    <!--{foreach from=$attr.accounts item="account"}-->
-	"<!--{$account->account_id}-->":0,
-	<!--{/foreach}-->
-	};
-
-	function readTweets(account_id){
-		$.ajax({
-        	"type": "POST",
-        	"url": "<!--{base}-->/twitter/LimitedTweets.json",
-        	"data": {
-        		"account_id": account_id,
-        		"offset": readedTweets[account_id],
-        		"limit": pageSize,
-        		"sort": "<!--{if $post.sort != ""}--><!--{$post.sort}--><!--{else}-->tweet_time<!--{/if}-->",
-        		"reverse": 1
-        	},
-        	"dataType": "jsonp",
-        	"success": function(data){
-            	for(var index in data){
-                	var item = data[index];
-                	var $tweets = $(".tweets[data-account='" + item.account_id + "']").append($("<hr />")).append(item.tweet_text);
-                	if(item.media_link != ""){
-                    	$("<div />").append($("<img />").attr("src", item.media_link).attr("width", "150")).appendTo($tweets);
-                	}
-                	$("<div />").append($("<i />").addClass("icon-retweet")).append(item.retweet_count).append($("<i />").addClass("icon-star")).append(item.favorite_count).appendTo($tweets);
-                    var $button = $("<button />").addClass("btn").addClass("btn-default").click(function(){
-                    	$("#retweet_target").val($(this).val());
-                    }).attr("value", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
-                    $button.text("このツイートを選択");
-                    $("<div />").append($button).appendTo($tweets);
-                }
-            	readedTweets[account_id] += pageSize;
-            	if(data.length >= pageSize){
-                    var $button = $("<button />").addClass("btn").addClass("btn-default");
-                    $button.click(function(){
-                        $(this).remove();
-                        readTweets(account_id);
-                    });
-                    $button.text("次のツイートを取得").appendTo($tweets);
-            	}
-        	}
-   	    });
-	}
-
-    <!--{foreach from=$attr.accounts item="account"}-->
-    readTweets(<!--{$account->account_id}-->);
-	<!--{/foreach}-->
+   	$(".tweet_text").each(function(){
+   		$(this).next(".text_count").children("span").text($(this).val().length);
+   	});
+   	$(".tweet_text").keyup(function(){
+   		$(this).next(".text_count").children("span").text($(this).val().length);
+   	});
 
 });
 </script>

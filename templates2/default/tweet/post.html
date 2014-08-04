@@ -34,6 +34,7 @@
                     <div class="form-group form-inline span10">
                         <input type="hidden" id="media_filename" name="media_filename" value="" />
                         <textarea cols=120" rows="7" id="tweet_text" class="tweet_text form-control span12" name="tweet_text" placeholder="登録するテキストを入力してください"></textarea>
+                        <div class="text_count" align="right"><span></span>文字</div>
                     </div>
                     <div class="form-group form-inline span10" style="margin: 10px 0;">
                         <button type="submit" name="save" class="btn btn-success span5" value="1">ツイートを登録</button>
@@ -89,7 +90,8 @@
                     <input type="hidden" name="tweet_id" value="<!--{$tweet->tweet_id}-->" />
                     <input type="hidden" name="media_filename" value="<!--{$tweet->media_filename}-->" />
                     <!--{if $tweet->first_tweeted_flg != "1"}-->
-                    <textarea name="tweet_text" class="span12" cols="110" rows="4"><!--{$tweet->tweet_text}--></textarea>
+                    <textarea name="tweet_text" class="tweet_text span12" cols="110" rows="4"><!--{$tweet->tweet_text}--></textarea>
+                    <div class="text_count" align="right"><span></span>文字</div>
                     <!--{if $tweet->media_filename != ""}--><div><img src="<!--{base}-->/upload/<!--{$tweet->media_filename}-->" style="max-width: 500px;" /></div><!--{/if}-->
                     <button type="submit" name="save" value="1" class="btn btn-success span8">登録</button>
                     <!--{else}-->
@@ -126,6 +128,13 @@ $(function() {
    	        $(".dz-preview-remove").remove();
    	        $("#media_filename").val(_return);
    	    }
+   	});
+
+   	$(".tweet_text").each(function(){
+   		$(this).next(".text_count").children("span").text($(this).val().length);
+   	});
+   	$(".tweet_text").keyup(function(){
+   		$(this).next(".text_count").children("span").text($(this).val().length);
    	});
 });
 </script>
