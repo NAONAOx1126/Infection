@@ -40,6 +40,7 @@
                     </div>
                     </form>
                     <div></div>
+                    <!--{if $attr[VizualizerAdmin::KEY]->hasRole(array("administrator"))}-->
                     <form action="setting_complete.html" method="POST">
                     <!--{assign var="setting" value=$attr.account->tweetSetting()}-->
                     <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
@@ -70,6 +71,7 @@
                     登録済：<span class="tweet_count">--</span>件
                     </div>
                     </form>
+                    <!--{/if}-->
                     <table class="table table-condensed table-bordered">
                     <tbody id="original_tweets">
                     <!--{foreach from=$attr.account->tweets("create_time", true) item="tweet"}-->
