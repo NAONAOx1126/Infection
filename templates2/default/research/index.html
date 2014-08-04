@@ -74,6 +74,7 @@
                         <!--{foreach from=$tweet->entities->media item="media"}-->
                         <!--{if $media->type == "photo"}-->
                         <img src="<!--{$media->media_url}-->" width="150" />
+                        <input type="hidden" name="original_image_url" value="<!--{$media->media_url}-->" />
                         <!--{assign var="tweet_text" value=$media->url|str_replace:"":$tweet_text}-->
                         <!--{/if}-->
                         <!--{/foreach}-->
@@ -92,7 +93,6 @@
                         <input type="hidden" name="screen_name" value="<!--{$tweet->user->screen_name}-->" />
                         <input type="hidden" name="retweet_count" value="<!--{$tweet->retweet_count}-->" />
                         <input type="hidden" name="favorite_count" value="<!--{$tweet->favorite_count}-->" />
-                        <input type="hidden" name="original_image_url" value="<!--{$media->media_url}-->" />
                         <div>
                         <!--{assign var="tweet_text" value=$tweet->text}-->
                         <!--{if isset($tweet->entities) && isset($tweet->entities->media)}-->
