@@ -38,23 +38,29 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
+                                        <label class="control-label" for="typeahead">ログインID </label>
+                                        <div class="controls">
+                                            <input type="text" class="span6" id="login_id" name="login_id" value="<!--{$operator->login_id|input:"login_id"}-->" placeholder="ログインID" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
                                         <label class="control-label" for="typeahead">ユーザー名 </label>
                                         <div class="controls">
                                             <input type="text" class="span6" id="operator_name" name="operator_name" value="<!--{$operator->operator_name|input:"operator_name"}-->" placeholder="担当者名" />
                                         </div>
-,                                    </div>
+                                    </div>
                                     <div class="control-group">
                                         <label class="control-label" for="typeahead">メールアドレス </label>
                                         <div class="controls">
                                             <input type="text" class="span6" id="email" name="email" value="<!--{$operator->email|input:"email"}-->" placeholder="メールアドレス" style="ime-mode: disabled;" />
                                         </div>
-,                                    </div>
+                                    </div>
                                      <div class="control-group">
                                         <label class="control-label" for="typeahead">パスワード </label>
                                         <div class="controls">
                                             <input type="text" class="span6" id="password" name="password" value="<!--{$post.password}-->" placeholder="パスワード" />
                                         </div>
-,                                    </div>
+                                    </div>
                                      <div class="form-actions">
                                         <button type="submit" name="save" value="true" class="btn btn-primary">登録する</button>
                                         <a href="index.html" class="btn">一覧に戻る</a>
