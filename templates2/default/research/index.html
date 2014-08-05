@@ -99,6 +99,7 @@
                         <!--{foreach from=$tweet->entities->media item="media"}-->
                         <!--{if $media->type == "photo"}-->
                         <img src="<!--{$media->media_url}-->" width="150" />
+                        <input type="hidden" name="original_image_url" value="<!--{$media->media_url}-->" />
                         <!--{assign var="tweet_text" value=$media->url|str_replace:"":$tweet_text}-->
                         <!--{/if}-->
                         <!--{/foreach}-->
