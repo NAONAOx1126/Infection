@@ -17,7 +17,7 @@
                 <div class="box-content">
                     <table class="table table-condensed table-bordered">
                     <tbody id="original_tweets">
-                    <!--{foreach from=$attr.account->retweets() item="retweet"}-->
+                    <!--{foreach from=$attr.account->retweets("create_time") item="retweet"}-->
                     <!--{assign var="tweet" value=$retweet->tweet()}-->
                     <!--{assign var="account" value=$tweet->account()}-->
                     <tr>
