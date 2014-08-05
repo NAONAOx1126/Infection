@@ -57,6 +57,19 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <button type="submit" name="save" value="1" class="btn btn-success">RTを実行</button>
                     </div>
                     </form>
+                    <form action="complete.html" method="POST">
+                    <div>
+                    <span id="retweet_targets"></span>
+                    TLの最上位のツイートを
+                    <select name="target_group_id">
+                    <!--{html_options options=$attr.groups}-->
+                    </select>のうち、最大
+                    <input type="text" name="max_accounts" class="input-mini" value="" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
+                    <input type="text" name="retweet_delay" class="input-mini" value="" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
+                    <input type="text" name="retweet_duration" class="input-mini" value="" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
+                    <button type="submit" name="save" value="1" class="btn btn-success">RTを実行</button>
+                    </div>
+                    </form>
                     <table class="table-condensed table-bordered table-striped">
                     <tbody>
                     <tr id="acc<!--{$account->account_id}-->">
@@ -145,6 +158,7 @@ $(function(){
         	},
         	"dataType": "jsonp",
         	"success": function(data){
+            	var first = true;
             	for(var index in data){
                 	var item = data[index];
                 	var $tweets = $(".tweets[data-account='" + item.account_id + "']").append($("<hr />")).append(item.tweet_text);
@@ -157,6 +171,10 @@ $(function(){
                     }).attr("value", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
                     $button.text("このツイートを選択");
                     $("<div />").append($button).appendTo($tweets);
+                    if(first){
+                        $("<input />").attr("type", "hidden").attr("name", "retweet_targets[]").val("https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id).appendTo("#retweet_targets");
+                        first = false;
+                    }
                 }
             	readedTweets[account_id] += pageSize;
             	if(data.length >= pageSize){
