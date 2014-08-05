@@ -170,7 +170,10 @@ $(function(){
                     	$("#retweet_target").val($(this).val());
                     }).attr("value", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
                     $button.text("このツイートを選択");
-                    $("<div />").append($button).appendTo($tweets);
+                    var $button2 = $("<a />").addClass("btn").addClass("btn-default").attr("target", "_blank");
+                    $button2.attr("href", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
+                    $button2.text("開く");
+                    $("<div />").append($button).append($button2).appendTo($tweets);
                     if(first){
                         $("<input />").attr("type", "hidden").attr("name", "retweet_targets[]").val("https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id).appendTo("#retweet_targets");
                         first = false;

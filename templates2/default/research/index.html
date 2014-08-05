@@ -84,6 +84,7 @@
                         <div>
                             <i class="icon-retweet"></i> <!--{$tweet->retweet_count|number_format}-->
                             <i class="icon-star"></i> <!--{$tweet->favorite_count|number_format}-->
+                            <a target="_blank" class="btn btn-default" href="https://twitter.com/<!--{$tweet->user->id_str}-->/statuses/<!--{$tweet->id_str}-->">開く</a>
                         </div>
                     </div>
                     </td><td style="width: 50%;" id="row_<!--{$tweet->id_str}-->">
