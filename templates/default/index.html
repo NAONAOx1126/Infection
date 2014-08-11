@@ -51,8 +51,8 @@
                     <a id="advertise_status_<!--{$account->account_id}-->" class="advertise_status"></a>
                     <a id="rakuten_status_<!--{$account->account_id}-->" class="rakuten_status"></a>
                     <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
-                    <span class="unfollow_status"></span>
-                </td>
+                    <a id="frozen_status_<!--{$account->account_id}-->" class="frozen_status"></a>
+                    </td>
                 <td class="col-md-2">
                     <div class="row">
                     <div class="col-md-5">ツイート</div><div class="col-md-7"><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
@@ -148,7 +148,11 @@ $(function() {
        	        		if(data.follow_status == "1"){
        	        			$status.addClass("label-primary").text("フォロー待機中");
        	        		}else if(data.follow_status == "2"){
-       	        			$status.addClass("label-success").text("フォロー実行中");
+       	        		    if(data.isUnfollowable){
+       	        		    	$status.addClass("label-danger").text("アンフォロー中");
+       	        		    }else{
+       	       	        		$status.addClass("label-success").text("フォロー実行中");
+       	       	            }
        	        		}else if(data.follow_status == "3"){
        	        			$status.addClass("label-default").text("フォロー終了");
        	        		}else if(data.follow_status == "4"){
@@ -161,12 +165,6 @@ $(function() {
        	        			$status.addClass("label-default").text("フォロー停止中");
        	        		}
        	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
-   	        		    if(data.isUnfollowable){
-   		   	        		$("#acc" + data.account_id + " .unfollow_status").html("");
-   		   	        		if(data.follow_status == "1" || data.follow_status == "2"){
-   	   	        		       $("<span />").addClass("label").addClass("label-danger").text("アンフォロー中").appendTo("#acc" + data.account_id + " .unfollow_status");
-   	   	        		    }
-   	        		    }
                 		$status = $("<span />").addClass("label");
                 		if(data.tweet_status == "1"){
                 			$status.addClass("label-primary").text("取込BOT稼働中");
@@ -195,7 +193,12 @@ $(function() {
                 			$status.addClass("label-default").text("楽天BOT停止中");
                 		}
                 		$("#acc" + data.account_id + " .rakuten_status").html($status[0]);
-            		}
+                		$status = $("<span />").addClass("label");
+                		if(data.account_status == "1"){
+                			$status.addClass("label-danger").text("凍結中");
+                		}
+                		$("#acc" + data.account_id + " .frozen_status").html($status[0]);
+}
             	}
             });
     	}
@@ -228,7 +231,11 @@ $(function() {
    	        		if(data.status.follow_status == "1"){
    	        			$status.addClass("label-primary").text("フォロー待機中");
    	        		}else if(data.status.follow_status == "2"){
-   	        			$status.addClass("label-success").text("フォロー実行中");
+   	        		    if(data.isUnfollowable){
+   	        		        $status.addClass("label-danger").text("アンフォロー中");
+   	        		    }else{
+      	        		    $status.addClass("label-success").text("フォロー実行中");
+      	        		}
    	        		}else if(data.status.follow_status == "3"){
    	        			$status.addClass("label-default").text("フォロー終了");
    	        		}else if(data.status.follow_status == "4"){
@@ -241,12 +248,6 @@ $(function() {
    	        			$status.addClass("label-default").text("フォロー停止中");
    	        		}
    	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
-        		    if(data.isUnfollowable){
-	   	        		$("#acc" + data.account_id + " .unfollow_status").html("");
-	   	        		if(data.status.follow_status == "1" || data.status.follow_status == "2"){
-   	        		       $("<span />").addClass("label").addClass("label-danger").text("アンフォロー中").appendTo("#acc" + data.account_id + " .unfollow_status");
-   	        		    }
-        		    }
    	        		$status = $("<span />").addClass("label");
             		if(data.status.tweet_status == "1"){
             			$status.addClass("label-primary").text("取込BOT稼働中");
@@ -275,6 +276,11 @@ $(function() {
             			$status.addClass("label-default").text("楽天BOT停止中");
             		}
             		$("#acc" + data.account_id + " .rakuten_status").html($status[0]);
+            		$status = $("<span />").addClass("label");
+            		if(data.status.account_status == "1"){
+            			$status.addClass("label-danger").text("凍結中");
+            		}
+            		$("#acc" + data.account_id + " .frozen_status").html($status[0]);
             		if(data.notification == "1"){
             			$("#acc" + data.account_id + " .notification").html("○");
             		}else{

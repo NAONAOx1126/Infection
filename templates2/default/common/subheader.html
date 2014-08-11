@@ -1,0 +1,37 @@
+<!-- topbar starts -->
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </a> <a class="brand" href="<!--{base}-->/index.html"><span><!--{$configure.site_name}--></span></a>
+            <!-- user dropdown starts -->
+            <div class="btn-group pull-right">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="icon-user"></i><span class="hidden-phone"> <!--{$attr[VizualizerAdmin::KEY]->operator_name}--></span> <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <!--{if $attr[VizualizerAdmin::KEY]->hasRole(array("administrator"))}-->
+                    <li><a href="<!--{base}-->/administrator/index.html">ユーザー管理</a></li>
+                    <li><a href="<!--{base}-->/group/index.html">グループ管理</a></li>
+                    <li><a href="<!--{base}-->/company/index.html">外注グループ管理</a></li>
+                    <li><a href="<!--{base}-->/operator/index.html">外注管理</a></li>
+                    <li class="devider"></li>
+                    <!--{/if}-->
+                    <li><a href="<!--{base}-->/login.html">ログアウト</a></li>
+                </ul>
+            </div>
+            <div class="top-nav nav-collapse">
+            <ul class="nav">
+            <!--{if $attr[VizualizerAdmin::KEY]->hasRole(array("administrator"))}-->
+            <li><a href="<!--{base}-->/index.html">アカウント管理</a></li>
+            <li><a href="<!--{base}-->/retweet/index.html">リツイート管理</a></li>
+            <!--{/if}-->
+            <li><a href="<!--{base}-->/tweet/index.html">ツイート管理</a></li>
+            <li><a href="<!--{base}-->/research/index.html">競合リサーチ管理</a></li>
+            </ul>
+            </div>
+            <!-- user dropdown ends -->
+        </div>
+    </div>
+</div>
+<!-- topbar ends -->

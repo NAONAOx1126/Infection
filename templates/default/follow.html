@@ -34,11 +34,11 @@
                 <!--{/if}-->
                 <div class="col-md-12">
                     <table class="table table-condensed table-bordered">
+                        <!--{if $account->account_id > 0}-->
                         <tr><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">フォロー状態</li>
                             </ol>
-                            <!--{if $account->account_id > 0}-->
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <div class="radio">
@@ -55,9 +55,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--{else}-->
-                            フォロー状態は各アカウントのフォロー設定で変更してください。
-                            <!--{/if}-->
                         </td><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">
@@ -100,7 +97,9 @@
                                 <input type="button" class="add_keyword form-control" data-column="follower_keywords" value="追加">
                             </div>
                             <div class="follower_keywords col-md-12"></div>
-                        </td></tr><tr><td class="col-md-6">
+                        </td></tr>
+                        <!--{/if}-->
+                        <tr><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">フォロー除外対象設定</li>
                             </ol>
@@ -130,10 +129,12 @@
                                     </div>
                                 </div>
                             </div>
+                        <!--{if $account->account_id > 0}-->
                         </td><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">フォロー除外キーワード</li>
                             </ol>
+                            <!--{if $account->account_id > 0}-->
                             <div class="col-md-10">
                                 <input type="text" data-column="ignore_keywords_<!--{$account->account_id|default:0}-->" class="ignore_keywords form-control" placeholder="プロフィールに含まないキーワードをスペース区切りで入力してください">
                             </div>
@@ -141,17 +142,26 @@
                                 <input type="button" class="add_keyword form-control" data-column="ignore_keywords" value="追加">
                             </div>
                             <div class="ignore_keywords col-md-12"></div>
+                            <!--{else}-->
+                            フォロー除外キーワードは各アカウントのフォロー設定で変更してください。
+                            <!--{/if}-->
+                        <!--{/if}-->
                         </td></tr>
                     </table>
                 </div>
+                <!--{if $account->account_id == 0}-->
                 <div class="col-md-12 form-inline">
                     <input type="text" size="6" data-column="follow_unit_<!--{$account->account_id|default:0}-->" class="follow_unit form-control">
-                    <label class="control-label">人フォロー／アンフォローする毎に</label>
+                    <label class="control-label">人フォローする毎に</label>
                     <input type="text" size="6" data-column="follow_unit_interval_<!--{$account->account_id|default:0}-->" class="follow_unit_interval form-control">
                     <label class="control-label">分間休憩する。リフォローは最低</label>
                     <input type="text" size="6" data-column="refollow_timeout_<!--{$account->account_id|default:0}-->" class="refollow_timeout form-control">
-                    <label class="control-label">時間待機し、アンフォロー対象とする</label>
-                </div>
+                    <label class="control-label">時間待機し、アンフォロー対象とする。また</label>
+                    <input type="text" size="6" data-column="unfollow_unit_<!--{$account->account_id|default:0}-->" class="unfollow_unit form-control">
+                    <label class="control-label">人アンフォローする毎に</label>
+                    <input type="text" size="6" data-column="unfollow_unit_interval_<!--{$account->account_id|default:0}-->" class="unfollow_unit_interval form-control">
+                    <label class="control-label">分間休憩する。</label>
+                    </div>
                 <div class="col-md-12">
                     <ol class="breadcrumb">
                         <li class="active">フォロー詳細設定</li>
@@ -170,6 +180,7 @@
                         </tbody>
                     </table>
                 </div>
+                <!--{/if}-->
             </div>
         </div>
     </div>

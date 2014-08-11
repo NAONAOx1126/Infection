@@ -1,0 +1,201 @@
+<!--{include file="common/header1.html"}-->
+<!--{if !$attr[VizualizerAdmin::KEY]->hasRole("administrator")}-->
+<meta http-equiv="Refresh" content="0; URL=<!--{base}-->/tweet/index.html">
+<script type="text/javascript">
+location.replace("<!--{base}-->/tweet/index.html");
+</script>
+<!--{/if}-->
+<!--{include file="common/header2.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Initialize" />
+<meta name="loadmodule" content="Twitter.Account.InitializeGroup" />
+<meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
+<meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
+<!--{include file="common/subheader.html"}-->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span1 main-menu-span">
+			<div class="well nav-collapse sidebar-nav">
+				<ul class="nav nav-tabs nav-stacked main-menu">
+					<li class="nav-header hidden-tablet">グループ</li>
+					<!--{assign var="groupIds" value=$post.group_id}-->
+					<!--{foreach from=$attr.groups key="group_id" item="group_name"}-->
+					<!--{if isset($groupIds[$group_id]) && $groupIds[$group_id] > 0}-->
+					<li class="active"><a class="ajax-link" href="index.html?del_group_id=<!--{$group_id}-->"><span class="hidden-tablet"><!--{$group_name}--></span></a></li>
+					<!--{else}-->
+					<li><a class="ajax-link" href="index.html?add_group_id=<!--{$group_id}-->"><span class="hidden-tablet"><!--{$group_name}--></span></a></li>
+					<!--{/if}-->
+					<!--{/foreach}-->
+					<li class="nav-header hidden-tablet">並び順</li>
+					<li<!--{if $post.sort != "retweet_count" && $post.sort != "favorite_count"}--> class="active"<!--{/if}-->><a class="ajax-link" href="index.html?sort=create_time"><span class="hidden-tablet">時系列</span></a></li>
+					<li<!--{if $post.sort == "retweet_count"}--> class="active"<!--{/if}-->><a class="ajax-link" href="index.html?sort=retweet_count"><span class="hidden-tablet">RT数</span></a></li>
+					<li<!--{if $post.sort == "favorite_count"}--> class="active"<!--{/if}-->><a class="ajax-link" href="index.html?sort=favorite_count"><span class="hidden-tablet">ファボ数</span></a></li>
+				</ul>
+			</div><!--/.well -->
+		</div>
+        <div id="content" class="span11">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> タイムライン一覧
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <form action="complete.html" method="POST">
+                    <div>
+                    URL：<input type="text" id="retweet_target" class="input-medium" name="retweet_target" value="" style="ime-mode: disabled;" />のツイートを
+                    <select name="target_group_id">
+                    <!--{html_options options=$attr.groups}-->
+                    </select>のうち、最大
+                    <input type="text" name="max_accounts" class="input-mini" value="" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
+                    <input type="text" name="retweet_delay" class="input-mini" value="" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
+                    <input type="text" name="retweet_duration" class="input-mini" value="" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
+                    <button type="submit" name="save" value="1" class="btn btn-success">RTを実行</button>
+                    </div>
+                    </form>
+                    <form action="complete.html" method="POST">
+                    <div>
+                    <span id="retweet_targets"></span>
+                    TLの最上位のツイートを
+                    <select name="target_group_id">
+                    <!--{html_options options=$attr.groups}-->
+                    </select>のうち、最大
+                    <input type="text" name="max_accounts" class="input-mini" value="" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
+                    <input type="text" name="retweet_delay" class="input-mini" value="" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
+                    <input type="text" name="retweet_duration" class="input-mini" value="" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
+                    <button type="submit" name="save" value="1" class="btn btn-success">RTを実行</button>
+                    </div>
+                    </form>
+                    <table class="table-condensed table-bordered table-striped">
+                    <tbody>
+                    <tr id="acc<!--{$account->account_id}-->">
+                    <!--{foreach from=$attr.accounts item="account"}-->
+                    <td width="50">
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a><br />
+                        <!--{if $account->description != ""}-->
+                        <a href="#" class="label label-info" data-rel="popover" data-content="<!--{$account->description}-->" title="メモ" data-placement="bottom">メモ有り</a><br />
+                        <!--{/if}-->
+                        <a href="post.html?account_id=<!--{$account->account_id}-->" class="btn btn-info span10" target="retweetLog">RT履歴</a>
+                    </td>
+                    <td width="100">
+                        <div style="white-space: nowrap;">ツイート数</div>
+                        <div style="white-space: nowrap;"><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
+                        <div style="white-space: nowrap;">フォロー数</div>
+                        <div style="white-space: nowrap;"><span class="friend_count"><!--{$account->friend_count}--></span>人</div>
+                        <div style="white-space: nowrap;">フォロワー数</div>
+                        <div style="white-space: nowrap;"><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
+                    </td>
+                    <!--{/foreach}-->
+                    <tr></tr>
+                    <!--{foreach from=$attr.accounts item="account"}-->
+                    <!--{assign var="historys" value=$account->followHistorys(3)}-->
+                    <td colspan="2" width="150">
+                        <hr />
+                        ＜フォロワー数推移＞<br>
+                        <!--{foreach from=$historys key="index" item="history"}-->
+                        <!--{if $index == 1}-->
+                        前日：<!--{$history->followed_count}--><br />
+                        <!--{elseif $index == 2}-->
+                        前々日：<!--{$history->followed_count}--><br />
+                        <!--{/if}-->
+                        <!--{/foreach}-->
+                    </td>
+                    <!--{/foreach}-->
+                    <tr></tr>
+                    <!--{foreach from=$attr.accounts item="account"}-->
+                    <!--{if $post.sort != ""}-->
+                    <!--{assign var="tweets" value=$account->limitedTweetLogs(50, 0, $post.sort, true)}-->
+                    <!--{else}-->
+                    <!--{assign var="tweets" value=$account->limitedTweetLogs(50, 0, "tweet_time", true)}-->
+                    <!--{/if}-->
+                    <td data-account="<!--{$account->account_id}-->" class="tweets" colspan="2" width="150" style="white-space: normal; vertical-align: top;">
+                    </td>
+                    <!--{/foreach}-->
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function(){
+	$(".retweet_select").click(function(){
+		$("#retweet_target").val($(this).val());
+	});
+
+	var pageSize = 50;
+
+	var readedTweets = {
+    <!--{foreach from=$attr.accounts item="account"}-->
+	"<!--{$account->account_id}-->":0,
+	<!--{/foreach}-->
+	};
+
+	function readTweets(account_id){
+		$.ajax({
+        	"type": "POST",
+        	"url": "<!--{base}-->/twitter/LimitedTweets.json",
+        	"data": {
+        		"account_id": account_id,
+        		"offset": readedTweets[account_id],
+        		"limit": pageSize,
+        		"sort": "<!--{if $post.sort != ""}--><!--{$post.sort}--><!--{else}-->tweet_time<!--{/if}-->",
+        		"reverse": 1
+        	},
+        	"dataType": "jsonp",
+        	"success": function(data){
+            	var first = true;
+            	for(var index in data){
+                	var item = data[index];
+                	var $tweets = $(".tweets[data-account='" + item.account_id + "']").append($("<hr />")).append(item.tweet_text);
+                	if(item.media_link != ""){
+                    	$("<div />").append($("<img />").attr("src", item.media_link).attr("width", "150")).appendTo($tweets);
+                	}
+                	$("<div />").append($("<i />").addClass("icon-retweet")).append(item.retweet_count).append($("<i />").addClass("icon-star")).append(item.favorite_count).appendTo($tweets);
+                    var $button = $("<button />").addClass("btn").addClass("btn-default").click(function(){
+                    	$("#retweet_target").val($(this).val());
+                    }).attr("value", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
+                    $button.text("このツイートを選択");
+                    var $button2 = $("<a />").addClass("btn").addClass("btn-default").attr("target", "_blank");
+                    $button2.attr("href", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
+                    $button2.text("開く");
+                    $("<div />").append($button).append($button2).appendTo($tweets);
+                    if(first){
+                        $("<input />").attr("type", "hidden").attr("name", "retweet_targets[]").val("https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id).appendTo("#retweet_targets");
+                        first = false;
+                    }
+                }
+            	readedTweets[account_id] += pageSize;
+            	if(data.length >= pageSize){
+                    var $button = $("<button />").addClass("btn").addClass("btn-default");
+                    $button.click(function(){
+                        $(this).remove();
+                        readTweets(account_id);
+                    });
+                    $button.text("次のツイートを取得").appendTo($tweets);
+            	}
+        	}
+   	    });
+	}
+
+    <!--{foreach from=$attr.accounts item="account"}-->
+    readTweets(<!--{$account->account_id}-->);
+	<!--{/foreach}-->
+
+});
+</script>
+<!--{include file="common/footer.html"}-->

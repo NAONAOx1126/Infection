@@ -1,0 +1,205 @@
+<!--{include file="common/header.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Delete" />
+<meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
+<!--{include file="common/subheader.html"}-->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> アカウント一覧
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                    <td width="100">アカウント</td>
+                    <td width="100">実績</td>
+                    <td width="100">Tweet状態</td>
+                    <td width="200">最新ツイート</td>
+                    <td width="200">外注用メモ</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--{foreach from=$attr.accounts item="account"}-->
+                    <!--{assign var="followSetting" value=$account->followSetting()}-->
+                    <!--{assign var="status" value=$account->status()}-->
+                    <tr id="acc<!--{$account->account_id}-->">
+                    <td>
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
+                        <br />
+                        <a href="post.html?account_id=<!--{$account->account_id}-->" class="btn btn-success span10" target="postTweet">投稿</a>
+                    </td>
+                    <td>
+                        <div>ツイート数</div>
+                        <div><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
+                        <div>フォロー数</div>
+                        <div><span class="friend_count"><!--{$account->friend_count}--></span>人</div>
+                        <div>フォロワー数</div>
+                        <div><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
+                    </td>
+                    <td>
+                        <!--{assign var="preTweetCount" value=$account->getPreTweetCount()}-->
+                        <div>残ツイート数</div>
+                        <div><span class="pre_tweet_count"><!--{$preTweetCount}--></span>ツイート</div>
+                        <div>BOTモード</div>
+                        <div>
+                            <a id="bot_status_<!--{$account->account_id}-->" class="bot_status"></a>
+                        </div>
+                        <div>ツイート状態</div>
+                        <div><a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status"></a></div>
+                    </td>
+                    <td style="white-space: normal">
+                    <!--{assign var="lastTweet" value=$account->limitedTweetLogs(1)->current()}-->
+                    <div><!--{$lastTweet->getText()|nl2br}--></div>
+                    <!--{if $lastTweet->getUrl() != ""}-->
+                    <div><img src="<!--{$lastTweet->getUrl()}-->" style="max-width: 300px" /></div>
+                    <!--{/if}-->
+                    </td>
+                    <td>
+                    <div id="comment_<!--{$account->account_id}-->" class="comment"><!--{$account->comment}--></div>
+                    </td>
+                    </tr>
+                    <!--{/foreach}-->
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function() {
+    $('.comment').editable('<!--{base}-->/account/comment.html', {
+        type : "textarea",
+        rows : 4,
+        indicator : 'Saving...',
+        tooltip   : 'Click to edit...',
+        submit  : '登録する'
+    });
+    $(".bot_status").click(function(){
+		$this = $(this);
+    	if(confirm("変更してもよろしいですか？")){
+            $.ajax({
+            	"type": "POST",
+            	"url": "<!--{base}-->/twitter/AccountStatus.json",
+            	"data": {
+            		"target": $this.attr("id")
+            	},
+            	"dataType": "jsonp",
+            	"success": function(data){
+            		if(data.error !== void 0){
+            			alert(data.error);
+            		}else if(data.account_id > 0){
+            			reload(data.account_id);
+            		}
+            	}
+            });
+    	}
+    });
+    $(".tweet_status").click(function(){
+		$this = $(this);
+    	if(confirm("変更してもよろしいですか？")){
+            $.ajax({
+            	"type": "POST",
+            	"url": "<!--{base}-->/twitter/AccountStatus.json",
+            	"data": {
+            		"target": $this.attr("id"),
+            	},
+            	"dataType": "jsonp",
+            	"success": function(data){
+            		if(data.error !== void 0){
+            			alert(data.error);
+            		}else if(data.account_id > 0){
+                        $.ajax({
+                        	"type": "POST",
+                        	"url": "<!--{base}-->/twitter/AccountStatus.json",
+                        	"data": {
+                        		"target": $this.attr("id").replace("tweet_status_", "original_status_"),
+                        		"value": data.status.tweet_status
+                        	},
+                        	"dataType": "jsonp",
+                        	"success": function(data){
+                        		if(data.error !== void 0){
+                        			alert(data.error);
+                        		}else if(data.account_id > 0){
+                        			reload(data.account_id);
+                        		}
+                        	}
+                        });
+            		}
+            	}
+            });
+    	}
+    });
+
+   	reload = function(account_id){
+   		if(account_id > 0){
+   	        $.ajax({
+   	        	"type": "POST",
+   	        	"url": "<!--{base}-->/twitter/Account.json",
+   	        	"data": {
+   	        		"account_id": account_id
+   	        	},
+   	        	"dataType": "jsonp",
+   	        	"success": function(data){
+            		$status = $("<span />").addClass("label");
+            		if(data.status.tweet_status == "1"){
+            			$status.addClass("label-primary").text("ツイート稼働中");
+   	        		}else{
+            			$status.addClass("label-default").text("ツイート停止中");
+            		}
+            		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
+            		$status = $("<span />").addClass("label");
+            		if(data.status.tweet_status == "1"){
+            			$status.addClass("label-success").text("ツイート実行中");
+   	        		}else{
+            			$status.addClass("label-default").text("ツイート停止中");
+            		}
+            		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
+
+            		$status = $("<span />").addClass("label");
+            		if(data.status.bot_status == "1"){
+                		if(data.preTweetCount > 0){
+                		    $status.addClass("label-success").text("BOTモードON");
+                		}else{
+                		    $status.addClass("label-warn").text("BOTモード有効");
+                		}
+   	        		}else{
+            			$status.addClass("label-default").text("BOTモードOFF");
+            		}
+            		$("#acc" + data.account_id + " .bot_status").html($status[0]);
+
+            		$("#acc" + data.account_id + " .pre_tweet_count").text(data.preTweetCount);
+            		$("#acc" + data.account_id + " .tweet_count").text(data.status_count);
+   	        		$("#acc" + data.account_id + " .friend_count").text(data.friend_count);
+   	        		$("#acc" + data.account_id + " .follower_count").text(data.follower_count);
+   	        	}
+   	        });
+   		}
+    }
+    <!--{foreach from=$attr.accounts item="account"}-->
+	reloadLoop<!--{$account->account_id}--> = function(){
+		reload(<!--{$account->account_id}-->);
+		setTimeout(reloadLoop<!--{$account->account_id}-->, 60000);
+	}
+	setTimeout(reloadLoop<!--{$account->account_id}-->(), 60000);
+	<!--{/foreach}-->
+});
+</script>
+<!--{include file="common/footer.html"}-->
