@@ -1,4 +1,5 @@
 {
+    "minimum-stability": "dev",
     "require": {
         "naonaox1126/vizualizer": ">=1.3.0",
         "naonaox1126/vizualizer_admin": ">=1.3.0",
