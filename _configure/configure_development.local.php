@@ -6,7 +6,7 @@ Vizualizer_Configure::set("timezone", "Asia/Tokyo");
 Vizualizer_Configure::set("site_code", "infection");
 
 // サイト名
-Vizualizer_Configure::set("site_name", "ツイート拡散");
+Vizualizer_Configure::set("site_name", "ツイッターツール");
 
 // サイトメールアドレス
 Vizualizer_Configure::set("site_email", "info@sweetberry.jp");
@@ -15,7 +15,7 @@ Vizualizer_Configure::set("site_email", "info@sweetberry.jp");
 Vizualizer_Configure::set("site_domain", $_SERVER["SERVER_NAME"]);
 
 // サイトホームディレクトリ
-Vizualizer_Configure::set("site_home", realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . "..") . DIRECTORY_SEPARATOR . "templates");
+Vizualizer_Configure::set("site_home", realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . "..") . DIRECTORY_SEPARATOR . "templates2");
 
 // データベースの接続設定
 Vizualizer_Configure::set("database", array(
