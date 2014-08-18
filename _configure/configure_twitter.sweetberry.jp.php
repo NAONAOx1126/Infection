@@ -6,7 +6,7 @@ Vizualizer_Configure::set("timezone", "Asia/Tokyo");
 Vizualizer_Configure::set("site_code", "twitter");
 
 // サイト名
-Vizualizer_Configure::set("site_name", "NEO CHERRY");
+Vizualizer_Configure::set("site_name", "ネオチェリー・ザ・サード");
 
 // サイトメールアドレス
 Vizualizer_Configure::set("site_email", "info@sweetberry.jp");
