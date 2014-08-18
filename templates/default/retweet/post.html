@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Detail" />
+<!--{include file="common/header.html" subtitle=""}-->
+</head>
+<body>
+    <!--{include file="common/menu.html"}-->
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <ol class="breadcrumb">
+                    <li><a href="<!--{base}-->/timeline.html">タイムライン一覧</a></li>
+                    <li class="active">リツイート履歴</li>
+                </ol>
+                <!--{include file="common/errors.html"}-->
+                    <table class="table table-condensed table-bordered">
+                    <tbody id="original_tweets">
+                    <!--{foreach from=$attr.account->retweets("create_time") item="retweet"}-->
+                    <!--{assign var="tweet" value=$retweet->tweet()}-->
+                    <!--{assign var="account" value=$tweet->account()}-->
+                    <tr>
+                    <td><!--{$account->name}--></td>
+                    <td>
+                    <!--{if $retweet->cancel_retweet_time != "0000-00-00 00:00:00"}-->
+                    削除済み
+                    <!--{elseif $retweet->scheduled_cancel_retweet_time != "" &&  $retweet->scheduled_cancel_retweet_time != "0000-00-00 00:00:00" &&  $retweet->scheduled_cancel_retweet_time < Vizualizer::now()->date("Y-m-d H:i:s")}-->
+                    削除予約済み
+                    <!--{else}-->
+                    <form action="post_complete.html" method="POST">
+                    <input type="hidden" name="retweet_id" value="<!--{$retweet->retweet_id}-->" />
+                    <input type="hidden" name="scheduled_cancel_retweet_time" value="<!--{now}-->" />
+                    <button type="submit" name="save" value="1" class="btn btn-default">削除</button>
+                    </form>
+                    <!--{/if}-->
+                    </td>
+                    </tr>
+                    <tr>
+                    <td colspan="2"><!--{$tweet->tweet_text|nl2br}--></td>
+                    </tr>
+                    <!--{/foreach}-->
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+    <div class="footer_space"></div>
+    <!--{include file="common/footer.html"}-->
+    <!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function(){
+	$(".retweet_select").click(function(){
+		$("#retweet_target").val($(this).val());
+	});
+
+	var pageSize = 50;
+
+	var readedTweets = {
+    <!--{foreach from=$attr.accounts item="account"}-->
+	"<!--{$account->account_id}-->":0,
+	<!--{/foreach}-->
+	};
+
+	function readTweets(account_id){
+		$.ajax({
+        	"type": "POST",
+        	"url": "<!--{base}-->/twitter/LimitedTweets.json",
+        	"data": {
+        		"account_id": account_id,
+        		"offset": readedTweets[account_id],
+        		"limit": pageSize,
+        		"sort": "<!--{if $post.sort != ""}--><!--{$post.sort}--><!--{else}-->tweet_time<!--{/if}-->",
+        		"reverse": 1
+        	},
+        	"dataType": "jsonp",
+        	"success": function(data){
+            	var first = true;
+            	for(var index in data){
+                	var item = data[index];
+                	var $tweets = $(".tweets[data-account='" + item.account_id + "']").append($("<hr />")).append(item.tweet_text);
+                	if(item.media_link != ""){
+                    	$("<div />").append($("<img />").attr("src", item.media_link).attr("width", "150")).appendTo($tweets);
+                	}
+                	$("<div />").append($("<i />").addClass("icon-retweet")).append(item.retweet_count).append($("<i />").addClass("icon-star")).append(item.favorite_count).appendTo($tweets);
+                    var $button = $("<button />").addClass("btn").addClass("btn-default").click(function(){
+                    	$("#retweet_target").val($(this).val());
+                    }).attr("value", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
+                    $button.text("このツイートを選択");
+                    var $button2 = $("<a />").addClass("btn").addClass("btn-default").attr("target", "_blank");
+                    $button2.attr("href", "https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id);
+                    $button2.text("開く");
+                    $("<div />").append($button).append($button2).appendTo($tweets);
+                    if(first){
+                        $("<input />").attr("type", "hidden").attr("name", "retweet_targets[]").val("https://twitter.com/" + item.account.screen_name + "/status/" + item.twitter_id).appendTo("#retweet_targets");
+                        first = false;
+                    }
+                }
+            	readedTweets[account_id] += pageSize;
+            	if(data.length >= pageSize){
+                    var $button = $("<button />").addClass("btn").addClass("btn-default");
+                    $button.click(function(){
+                        $(this).remove();
+                        readTweets(account_id);
+                    });
+                    $button.text("次のツイートを取得").appendTo($tweets);
+            	}
+        	}
+   	    });
+	}
+
+    <!--{foreach from=$attr.accounts item="account"}-->
+    readTweets(<!--{$account->account_id}-->);
+	<!--{/foreach}-->
+
+});
+</script>
+</body>
+</html>
