@@ -1,0 +1,30 @@
+<meta name="loadmodule" content="Twitter.Setting.List" mode="select" select="account_attribute|account_attribute" result="attributes" />
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<!--{base}-->/index.html?account_attribute="><!--{$configure.site_name}--></a>
+    </div>
+    <!--{if $attr[VizualizerAdmin::KEY] && $attr[VizualizerAdmin::KEY]->operator_id > 0}-->
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="<!--{base}-->/timeline.html?account_attribute=">ALL</a></li>
+        <!--{foreach from=$attr.attributes item="attribute"}-->
+        <li><a href="<!--{base}-->/timeline.html?account_attribute=<!--{$attribute}-->"><!--{$attribute}--></a></li>
+        <!--{/foreach}-->
+        <li><a href="<!--{base}-->/follow.html?account_id=">共通フォロー設定</a></li>
+        <li><a href="<!--{base}-->/setting.html">共通設定</a></li>
+        <li><a href="<!--{base}-->/login.html">ログアウト</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      <li><!--{$attr[VizualizerAdmin::KEY]->operator_name}--></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+    <!--{/if}-->
+  </div>
+</div>
