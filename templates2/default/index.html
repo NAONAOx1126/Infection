@@ -47,8 +47,10 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <td>
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
-                        <br />
-                        <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-danger span10" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
+                        <p>
+                        <a href="account/edit.html?account_id=<!--{$account->account_id}-->" class="btn btn-success span5">編集</a>
+                        <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-danger span5" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
+                        </p>
                     </td>
                     <td>
                         <div>ツイート数</div>
@@ -59,69 +61,60 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <div><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
                     </td>
                     <td>
-                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium group_id" name="group_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.groups}-->
-                        </select>
-                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium group_id" name="group_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.groups}-->
-                        </select><br />
-                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium group_id" name="group_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.groups}-->
-                        </select>
-                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="4" class="form-control input-medium group_id" name="group_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.groups}-->
-                        </select><br />
-                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="5" class="form-control input-medium group_id" name="group_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.groups}-->
-                        </select>
-                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="6" class="form-control input-medium group_id" name="group_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.groups}-->
-                        </select>
+                        <!--{foreach from=$account->accountGroups() item="accountGroup"}-->
+                        <!--{assign var="group" value=$accountGroup->group()}-->
+                        <div><!--{$group->group_name}--></div>
+                        <!--{/foreach}-->
                     </td>
                     <td>
-                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium operator_id" name="operator_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.operators}-->
-                        </select><br />
-                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium operator_id" name="operator_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.operators}-->
-                        </select><br />
-                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium operator_id" name="operator_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.operators}-->
-                        </select>
+                        <!--{foreach from=$account->accountOperators() item="accountOperator"}-->
+                        <!--{assign var="operator" value=$accountOperator->operator()}-->
+                        <div><!--{$operator->operator_name}--></div>
+                        <!--{/foreach}-->
                     </td>
                     <td>
-                        <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
+                    <a id="follow_status_<!--{$account->account_id}-->" class="follow_status">
+                    <!--{if $status->follow_status == "1"}--><span class="label label-inverse">フォロー待機中</span>
+                    <!--{elseif $status->follow_status == "2"}-->
+                        <!--{if $account->isUnfollowable()}-->
+                        <span class="label label-important">アンフォロー中</span>
+                        <!--{else}-->
+                        <span class="label label-success">フォロー実行中</span>
+                        <!--{/if}-->
+                    <!--{elseif $status->follow_status == "3"}--><span class="label label-info">フォロー終了</span>
+                    <!--{elseif $status->follow_status == "4"}--><span class="label label-info">フォロー対象無し</span>
+                    <!--{elseif $status->follow_status == "5"}--><span class="label label-warning">フォローリトライ</span>
+                    <!--{elseif $status->follow_status == "6"}--><span class="label label-important">フォロースキップ</span>
+                    <!--{else}--><span class="label">フォロー停止中</span>
+                    <!--{/if}-->
+                    </a>
                         <div>フォロー</div>
                         <div>
-                            1日<input type="text" data-column="daily_follows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_follows" name="daily_follows" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
-                            <input type="text" data-column="follow_unit_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_unit_interval" name="follow_unit_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                            1日<!--{$followSetting->daily_follows_1}-->人まで<!--{$followSetting->follow_unit_interval}-->分毎
                         </div>
                         <div>アンフォロー</div>
                         <div>
-                            フォロー後<input type="text" data-column="refollow_timeout_<!--{$account->account_id}-->" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間経過したら<br />
-                            1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
-                            <input type="text" data-column="unfollow_unit_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_unit_interval" name="unfollow_unit_interval" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                            フォロー後<!--{$followSetting->refollow_timeout}-->時間経過したら<br />
+                            1日<!--{$followSetting->daily_unfollows_1}-->人まで<!--{$followSetting->unfollow_unit_interval}-->分毎
                         </div>
                     </td>
                     <td>
-                        <a id="retweet_status_<!--{$account->account_id}-->" class="retweet_status"></a>
+                        <a id="retweet_status_<!--{$account->account_id}-->" class="retweet_status">
+                        <!--{if $status->retweet_status == "1"}-->
+                        <span class="label label-success">強化アカウントON</span>
+                        <!--{else}-->
+                        <span class="label label-info">強化アカウントOFF</span>
+                        <!--{/if}-->
+                        </a>
                         <div>リツイートグループ</div>
-                        <select data-column="retweet_group_id_<!--{$account->account_id}-->" class="form-control input-medium retweet_group_id" name="retweet_group_id">
-                        <option value="">指定なし</option>
-                        <!--{html_options options=$attr.groups}-->
-                        </select>
+                        <!--{if array_key_exists($followSetting->retweet_group_id, $attr.groups)}-->
+                        <!--{$attr.groups[$followSetting->retweet_group_id]}-->
+                        <!--{else}-->
+                        指定なし
+                        <!--{/if}-->
                         <div>最新ツイートをRT</div>
-                        <div><input type="text" data-column="retweet_delay_<!--{$account->account_id}-->" class="form-control input-mini retweet_delay" name="retweet_delay" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分後に実行し</div>
-                        <div><input type="text" data-column="retweet_duration_<!--{$account->account_id}-->" class="form-control input-mini retweet_duration" name="retweet_duration" value="" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間後に削除</div>
+                        <div><!--{$followSetting->retweet_delay}-->分後に実行し</div>
+                        <div><!--{$followSetting->retweet_duration}-->時間後に削除</div>
                     </td>
                     <td class="col-md-1">
                     <div id="description_<!--{$account->account_id}-->" class="description"><!--{$account->description}--></div>
@@ -151,53 +144,7 @@ $(function() {
         tooltip   : 'Click to edit...',
         submit  : '登録する'
     });
-    $(".retweet_group_id, .retweet_delay, .retweet_duration, .follow_unit_interval, .unfollow_unit_interval, .refollow_timeout, .daily_follows, .daily_unfollows").change(function(){
-        var $this = $(this);
-        $.ajax({
-            "type": "POST",
-            "url": "<!--{base}-->/twitter/SettingText.json",
-            "data": {
-                "target": $this.attr("data-column"),
-                "value": $this.val()
-            },
-            "dataType": "jsonp",
-            "success": function(data){
-				reload(data.account_id);
-            }
-        });
-    });
-    $(".group_id").change(function(){
-        var $this = $(this);
-        $.ajax({
-            "type": "POST",
-            "url": "<!--{base}-->/twitter/AccountGroup.json",
-            "data": {
-                "target": $this.attr("data-column"),
-                "index": $this.attr("data-index"),
-                "value": $this.val()
-            },
-            "dataType": "jsonp",
-            "success": function(data){
-				reload(data.account_id);
-            }
-        });
-    });
-    $(".operator_id").change(function(){
-        var $this = $(this);
-        $.ajax({
-            "type": "POST",
-            "url": "<!--{base}-->/twitter/AccountOperator.json",
-            "data": {
-                "target": $this.attr("data-column"),
-                "index": $this.attr("data-index"),
-                "value": $this.val()
-            },
-            "dataType": "jsonp",
-            "success": function(data){
-				reload(data.account_id);
-            }
-        });
-    });
+
     $(".follow_status, .retweet_status").click(function(){
 		$this = $(this);
     	if(confirm("変更してもよろしいですか？")){
@@ -229,105 +176,6 @@ $(function() {
    	        	},
    	        	"dataType": "jsonp",
    	        	"success": function(data){
-   	        	    if(data.setting.use_follow_setting == 0){
-         	   	          $.ajax({
-             	               "type": "POST",
-             	               "url": "<!--{base}-->/twitter/SettingText.json",
-             	               "data": {
-             	                   "target": "use_follow_setting_" + data.account_id,
-             	                   "value": 1
-             	               },
-             	               "dataType": "jsonp",
-             	           });
-     	        	    }
-   	        	    if(data.setting.follower_limit_2 > 0){
-       	   	          $.ajax({
-           	               "type": "POST",
-           	               "url": "<!--{base}-->/twitter/SettingText.json",
-           	               "data": {
-           	                   "target": "follower_limit_2_" + data.account_id,
-           	                   "value": 0
-           	               },
-           	               "dataType": "jsonp",
-           	           });
-   	        	    }
-   	        	    if(data.setting.follower_limit_3 > 0){
-     	   	          $.ajax({
-         	               "type": "POST",
-         	               "url": "<!--{base}-->/twitter/SettingText.json",
-         	               "data": {
-         	                   "target": "follower_limit_3_" + data.account_id,
-         	                   "value": 0
-         	               },
-         	               "dataType": "jsonp",
-         	           });
- 	        	    }
-   	        	    if(data.setting.follower_limit_4 > 0){
-       	   	          $.ajax({
-           	               "type": "POST",
-           	               "url": "<!--{base}-->/twitter/SettingText.json",
-           	               "data": {
-           	                   "target": "follower_limit_4_" + data.account_id,
-           	                   "value": 0
-           	               },
-           	               "dataType": "jsonp",
-           	           });
-   	        	    }
-   	        	    if(data.setting.follower_limit_5 > 0){
-       	   	          $.ajax({
-           	               "type": "POST",
-           	               "url": "<!--{base}-->/twitter/SettingText.json",
-           	               "data": {
-           	                   "target": "follower_limit_5_" + data.account_id,
-           	                   "value": 0
-           	               },
-           	               "dataType": "jsonp",
-           	           });
-   	        	    }
-   	        	    if(data.setting.follower_limit_6 > 0){
-       	   	          $.ajax({
-           	               "type": "POST",
-           	               "url": "<!--{base}-->/twitter/SettingText.json",
-           	               "data": {
-           	                   "target": "follower_limit_6_" + data.account_id,
-           	                   "value": 0
-           	               },
-           	               "dataType": "jsonp",
-           	           });
-   	        	    }
-   	        	    if(data.setting.follower_limit_7 > 0){
-       	   	          $.ajax({
-           	               "type": "POST",
-           	               "url": "<!--{base}-->/twitter/SettingText.json",
-           	               "data": {
-           	                   "target": "follower_limit_7_" + data.account_id,
-           	                   "value": 0
-           	               },
-           	               "dataType": "jsonp",
-           	           });
-   	        	    }
-   	        	    if(data.setting.follower_limit_8 > 0){
-       	   	          $.ajax({
-           	               "type": "POST",
-           	               "url": "<!--{base}-->/twitter/SettingText.json",
-           	               "data": {
-           	                   "target": "follower_limit_8_" + data.account_id,
-           	                   "value": 0
-           	               },
-           	               "dataType": "jsonp",
-           	           });
-   	        	    }
-   	        	    if(data.setting.follower_limit_9 > 0){
-       	   	          $.ajax({
-           	               "type": "POST",
-           	               "url": "<!--{base}-->/twitter/SettingText.json",
-           	               "data": {
-           	                   "target": "follower_limit_9_" + data.account_id,
-           	                   "value": 0
-           	               },
-           	               "dataType": "jsonp",
-           	           });
-   	        	    }
    	        	    $("#acc" + data.account_id + " .tweet_count").text(data.status_count);
    	        		$("#acc" + data.account_id + " .friend_count").text(data.friend_count);
    	        		$("#acc" + data.account_id + " .follower_count").text(data.follower_count);
@@ -359,31 +207,10 @@ $(function() {
    	        			$status.addClass("label-info").text("強化アカウントOFF");
    	        		}
    	        		$("#acc" + data.account_id + " .retweet_status").html($status[0]);
-   	        		$("#acc" + data.account_id + " .follow_unit_interval").val(data.setting.follow_unit_interval);
-   	        		$("#acc" + data.account_id + " .unfollow_unit_interval").val(data.setting.unfollow_unit_interval);
-   	        		$("#acc" + data.account_id + " .daily_follows").val(data.setting.daily_follows_1);
-   	        		$("#acc" + data.account_id + " .daily_unfollows").val(data.setting.daily_unfollows_1);
-   	        		$("#acc" + data.account_id + " .refollow_timeout").val(data.setting.refollow_timeout);
-   	        		$("#acc" + data.account_id + " .retweet_group_id").val(data.setting.retweet_group_id);
-   	        		$("#acc" + data.account_id + " .retweet_delay").val(data.setting.retweet_delay);
-   	        		$("#acc" + data.account_id + " .retweet_duration").val(data.setting.retweet_duration);
-   	        		for(var index in data.groups){
-   	   	        		$("#acc" + data.account_id + " .group_id[data-index='" + index + "']").val(data.groups[index]);
-   	        		}
-   	        		for(var index in data.operators){
-   	   	        		$("#acc" + data.account_id + " .operator_id[data-index='" + index + "']").val(data.operators[index]);
-   	        		}
    	        	}
    	        });
    		}
     }
-    <!--{foreach from=$attr.accounts item="account"}-->
-	reloadLoop<!--{$account->account_id}--> = function(){
-		reload(<!--{$account->account_id}-->);
-		setTimeout(reloadLoop<!--{$account->account_id}-->, 60000);
-	}
-	setTimeout(reloadLoop<!--{$account->account_id}-->(), 60000);
-	<!--{/foreach}-->
 });
 </script>
 <!--{include file="common/footer.html"}-->
