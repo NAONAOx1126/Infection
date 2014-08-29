@@ -45,6 +45,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <!--{assign var="status" value=$account->status()}-->
                     <input type="hidden" name="account_id" value="<!--{$account->account_id}-->" />
                     <input type="hidden" name="setting_id" value="<!--{$followSetting->setting_id}-->" />
+                    <input type="hidden" name="use_follow_setting" value="1" />
                     <tr id="acc<!--{$account->account_id}-->">
                     <td>
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
