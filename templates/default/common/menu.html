@@ -12,19 +12,21 @@
     </div>
     <!--{if $attr[VizualizerAdmin::KEY] && $attr[VizualizerAdmin::KEY]->operator_id > 0}-->
     <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
         <form action="<!--{base}-->/index.html" method="GET">
-        <li><select name="account_attribute">
-        <option value="">ALL</option>
-        <!--{foreach from=$attr.attributes item="attribute"}-->
-        <option value="<!--{$attribute}-->"><!--{$attribute}--></option>
-        <!--{/foreach}-->
-        </select></li>
+            <ul class="nav navbar-nav">
+                <li><select name="account_attribute" onchange="this.form.submit()">
+                <option value="">ALL</option>
+                <!--{foreach from=$attr.attributes item="attribute"}-->
+                <!--{if $attribute != ""}-->
+                <option value="<!--{$attribute}-->"<!--{if $attribute == $post.account_attribute}--> selected<!--{/if}-->><!--{$attribute}--></option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+                </select></li>
+                <li><a href="<!--{base}-->/follow.html?account_id=">共通フォロー設定</a></li>
+                <li><a href="<!--{base}-->/setting.html">楽天アフィリ設定</a></li>
+                <li><a href="<!--{base}-->/login.html">ログアウト</a></li>
+            </ul>
         </form>
-        <li><a href="<!--{base}-->/follow.html?account_id=">共通フォロー設定</a></li>
-        <li><a href="<!--{base}-->/setting.html">楽天アフィリ設定</a></li>
-        <li><a href="<!--{base}-->/login.html">ログアウト</a></li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
       <li><!--{$attr[VizualizerAdmin::KEY]->operator_name}--></li>
       </ul>
