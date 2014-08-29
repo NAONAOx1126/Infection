@@ -1,11 +1,59 @@
 <!--{include file="common/header.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
 <meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
+<meta name="loadmodule" content="Twitter.Setting.List" wkey="account_id" wvalue="0" />
 <!--{include file="common/subheader.html"}-->
 <div class="container-fluid">
     <div class="row-fluid">
         <div id="content" class="span12">
             <!-- content starts -->
+            <!--{if $attr[VizualizerAdmin::KEY]->hasRole(array("administrator"))}-->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> Tweet共通設定
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <!--{if is_array($ERRORS) && count($ERRORS) > 0}-->
+                <div class="box-content alerts">
+                    <!--{foreach from=$ERRORS item="error"}-->
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <!--{$error}-->
+                    </div>
+                    <!--{/foreach}-->
+                </div>
+                <!--{/if}-->
+                <div class="box-content">
+                    <form action="default_setting_complete.html" method="POST">
+                    <!--{foreach from=$attr.settings item="setting"}-->
+                    <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
+                    <div class="form-group form-inline well">
+                        ツイート条件
+                        <input type="text" data-column="tweet_interval_0" class="form-control input-mini tweet_interval" name="tweet_interval" value="<!--{$setting->tweet_interval}-->" />分〜
+                        <input type="text" data-column="max_tweet_interval_0" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="<!--{$setting->max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="daytime_start_0" class="form-control input-mini daytime_start" name="daytime_start" value="<!--{$setting->daytime_start}-->" />時〜
+                        <input type="text" data-column="daytime_end_0" class="form-control input-mini daytime_end" name="daytime_end" value="<!--{$setting->daytime_end}-->" />時までの間
+                        <input type="text" data-column="daily_tweets_0" class="form-control input-mini daily_tweets" name="daily_tweets" value="<!--{$setting->daily_tweets}-->" />回までツイートする。<br />
+                        BOT条件
+                        <input type="text" data-column="bot_tweet_interval_0" class="form-control input-mini bot_tweet_interval" name="bot_tweet_interval" value="<!--{$setting->bot_tweet_interval}-->" />分〜
+                        <input type="text" data-column="bot_max_tweet_interval_0" class="form-control input-mini bot_max_tweet_interval" name="bot_max_tweet_interval" value="<!--{$setting->bot_max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="bot_daytime_start_0" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="<!--{$setting->bot_daytime_start}-->" />時〜
+                        <input type="text" data-column="bot_daytime_end_0" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="<!--{$setting->bot_daytime_end}-->" />時までの間
+                        <input type="text" data-column="bot_daily_tweets_0" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="<!--{$setting->bot_daily_tweets}-->" />回までツイートする。<br />
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="1"<!--{if $setting->tweet_order == "1"}--> checked<!--{/if}--> />登録順</label>
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="0"<!--{if $setting->tweet_order != "1"}--> checked<!--{/if}--> />ランダム</label>
+                    </div>
+                    <button type="submit" name="save" value="1" class="btn btn-default">設定する。</button>
+                    <!--{/foreach}-->
+                    </form>
+                </div>
+            </div>
+            <!-- content ends -->
+            <!--{/if}-->
             <div class="box">
                 <div class="box-header well">
                     <h2>
