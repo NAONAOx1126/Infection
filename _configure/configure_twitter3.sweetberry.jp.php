@@ -23,12 +23,12 @@ Vizualizer_Configure::set("database", array(
         "read" => array(
             "dbtype" => "mysql", "host" => "192.168.252.156",
             "user" => "viz_twitter", "password" => "viz_twitter",
-            "database" => "viz_twitter3", "query" => "SET NAMES utf8"
+            "database" => "viz_twitter4", "query" => "SET NAMES utf8"
         ),
         "write" => array(
             "dbtype" => "mysql", "host" => "192.168.252.156",
             "user" => "viz_twitter", "password" => "viz_twitter",
-            "database" => "viz_twitter3", "query" => "SET NAMES utf8"
+            "database" => "viz_twitter4", "query" => "SET NAMES utf8"
         )
     )
 ));
