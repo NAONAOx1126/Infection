@@ -13,10 +13,14 @@
     <!--{if $attr[VizualizerAdmin::KEY] && $attr[VizualizerAdmin::KEY]->operator_id > 0}-->
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="<!--{base}-->/index.html?account_attribute=">ALL</a></li>
+        <form action="<!--{base}-->/index.html" method="GET">
+        <li><select name="account_attribute">
+        <option value="">ALL</option>
         <!--{foreach from=$attr.attributes item="attribute"}-->
-        <li><a href="<!--{base}-->/index.html?account_attribute=<!--{$attribute}-->"><!--{$attribute}--></a></li>
+        <option value="<!--{$attribute}-->"><!--{$attribute}--></option>
         <!--{/foreach}-->
+        </select></li>
+        </form>
         <li><a href="<!--{base}-->/follow.html?account_id=">共通フォロー設定</a></li>
         <li><a href="<!--{base}-->/setting.html">楽天アフィリ設定</a></li>
         <li><a href="<!--{base}-->/login.html">ログアウト</a></li>
