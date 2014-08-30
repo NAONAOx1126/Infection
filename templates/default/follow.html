@@ -34,8 +34,7 @@
                 <!--{/if}-->
                 <div class="col-md-12">
                     <table class="table table-condensed table-bordered">
-                        <!--{if $account->account_id > 0}-->
-                        <tr><td class="col-md-6">
+                        <tr><!--{if $account->account_id > 0}--><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">フォロー状態</li>
                             </ol>
@@ -55,7 +54,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </td><td class="col-md-6">
+                        </td><!--{/if}--><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">
                                 <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="1">
@@ -69,7 +68,7 @@
                                 <input type="button" class="add_keyword form-control" data-column="follow_keywords" value="追加">
                             </div>
                             <div class="follow_keywords col-md-12"></div>
-                        </td></tr><tr><td class="col-md-6">
+                        </td><!--{if $account->account_id > 0}--></tr><tr><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">グループ設定</li>
                             </ol>
@@ -83,7 +82,7 @@
                                 <option value="">グループ指定なし</option>
                                 </select>
                             </div>
-                        </td><td class="col-md-6">
+                        </td><!--{/if}--><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">
                                 <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="2">
@@ -98,7 +97,6 @@
                             </div>
                             <div class="follower_keywords col-md-12"></div>
                         </td></tr>
-                        <!--{/if}-->
                         <tr><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">フォロー除外対象設定</li>
