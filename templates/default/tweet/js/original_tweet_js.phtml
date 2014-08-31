@@ -152,3 +152,10 @@ $("div#upload_image").dropzone({
         $("#media_filename").val(_return);
     }
 });
+
+$(".tweet_text").each(function(){
+	$(this).next(".text_count").children("span").text($(this).val().length);
+});
+$(".tweet_text").keyup(function(){
+	$(this).next(".text_count").children("span").text($(this).val().length);
+});
