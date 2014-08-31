@@ -59,7 +59,11 @@ var reloadPreTweet = function(data){
 	        });
 		});
 		var text = $("<td />").attr("id", "text_" + data[i].id_str).addClass("col-md-7").text(data[i].text);
-		if(data[i].text.length > 140){
+		var textLimit = 140;
+	    if(!!images){
+		  textLimit = 117;
+		}
+		if(data[i].text.length > textLimit){
            text.css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
 		}
 		text.editable('<!--{base}-->/tweet/pre_tweet.html', {
@@ -69,7 +73,7 @@ var reloadPreTweet = function(data){
 	        tooltip   : 'Click to edit...',
 	        submit  : '登録する',
 	        callback : function(value, setting){
-	           if(value.length > 140){
+	           if(value.length > textLimit){
                    $(this).css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
    	           }else{
 	               $(this).css("border", "1px solid rgb(221, 221, 221)").css("background-color", "transparent");
