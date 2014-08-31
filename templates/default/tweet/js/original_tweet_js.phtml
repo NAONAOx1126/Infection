@@ -61,7 +61,11 @@ reloadOriginalTweet = function(data){
 	        });
 		});
 		var text = $("<td />").attr("id", "tweet_text_" + data[i].tweet_id).addClass("col-md-7").text(data[i].tweet_text);
-		if(data[i].tweet_text.length > 140){
+		var textLimit = 140;
+		if(data[i].media_filename != ""){
+		  textLimit = 117;
+		}
+		if(data[i].tweet_text.length > textLimit){
            text.css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
 		}
 		text.editable('<!--{base}-->/tweet/tweet.html', {
@@ -71,7 +75,7 @@ reloadOriginalTweet = function(data){
 	        tooltip   : 'Click to edit...',
 	        submit  : '登録する',
 	        callback : function(value, setting){
-	           if(value.length > 140){
+	           if(value.length > textLimit){
                    $(this).css("border", "2px solid rgb(221, 35, 35)").css("background-color", "rgb(255, 232, 232)");
    	           }else{
 	               $(this).css("border", "1px solid rgb(221, 221, 221)").css("background-color", "transparent");
@@ -151,4 +155,11 @@ $("div#upload_image").dropzone({
         $(".dz-preview-remove").remove();
         $("#media_filename").val(_return);
     }
+});
+
+$(".tweet_text").each(function(){
+	$(this).next(".text_count").children("span").text($(this).val().length);
+});
+$(".tweet_text").keyup(function(){
+	$(this).next(".text_count").children("span").text($(this).val().length);
 });
