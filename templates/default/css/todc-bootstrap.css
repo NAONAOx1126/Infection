@@ -4,6 +4,10 @@
  * Licensed under MIT (http://www.opensource.org/licenses/mit-license.php)
  */
 
+blockquote {
+  margin: 30px 0 20px;
+}
+
 .panel-group .panel-heading a:before,
 .panel-group .panel-heading a.collapsed:before {
   position: relative;
