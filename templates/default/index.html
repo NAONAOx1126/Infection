@@ -147,56 +147,52 @@ $(function() {
             			alert(data.error);
             		}else if(data.account_id > 0){
        	        		var $status = $("<span />").addClass("label");
-       	        		if(data.follow_status == "1"){
+       	        		if(data.status.follow_status == "1"){
        	        			$status.addClass("label-primary").text("フォロー待機中");
-       	        		}else if(data.follow_status == "2"){
-       	        		    if(data.isUnfollowable){
-       	        		    	$status.addClass("label-danger").text("アンフォロー中");
-       	        		    }else{
-       	       	        		$status.addClass("label-success").text("フォロー実行中");
-       	       	            }
-       	        		}else if(data.follow_status == "3"){
+       	        		}else if(data.status.follow_status == "2"){
+   	       	        		$status.addClass("label-success").text("フォロー実行中");
+       	        		}else if(data.status.follow_status == "3"){
        	        			$status.addClass("label-default").text("フォロー終了");
-       	        		}else if(data.follow_status == "4"){
+       	        		}else if(data.status.follow_status == "4"){
        	        			$status.addClass("label-danger").text("フォローリスト無し");
-       	        		}else if(data.follow_status == "5"){
-       	        			$status.addClass("label-info").text("フォローリトライ");
-       	        		}else if(data.follow_status == "6"){
-       	        			$status.addClass("label-warning").text("フォロースキップ");
+       	        		}else if(data.status.follow_status == "5"){
+       	        			$status.addClass("label-danger").text("アンフォロー中");
+       	        		}else if(data.status.follow_status == "6"){
+       	        			$status.addClass("label-default").text("アンフォロー終了");
        	        		}else{
        	        			$status.addClass("label-default").text("フォロー停止中");
        	        		}
        	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
                 		$status = $("<span />").addClass("label");
-                		if(data.tweet_status == "1"){
+                		if(data.status.tweet_status == "1"){
                 			$status.addClass("label-primary").text("取込BOT稼働中");
        	        		}else{
                 			$status.addClass("label-default").text("取込BOT停止中");
                 		}
                 		$("#acc" + data.account_id + " .tweet_status").html($status[0]);
                 		$status = $("<span />").addClass("label");
-                		if(data.original_status == "1"){
+                		if(data.status.original_status == "1"){
                 			$status.addClass("label-primary").text("独自BOT稼働中");
        	        		}else{
                 			$status.addClass("label-default").text("独自BOT停止中");
                 		}
                 		$("#acc" + data.account_id + " .original_status").html($status[0]);
                 		$status = $("<span />").addClass("label");
-                		if(data.advertise_status == "1"){
+                		if(data.status.advertise_status == "1"){
                 			$status.addClass("label-primary").text("広告BOT稼働中");
        	        		}else{
                 			$status.addClass("label-default").text("広告BOT停止中");
                 		}
                 		$("#acc" + data.account_id + " .advertise_status").html($status[0]);
                 		$status = $("<span />").addClass("label");
-                		if(data.rakuten_status == "1"){
+                		if(data.status.rakuten_status == "1"){
                 			$status.addClass("label-primary").text("楽天BOT稼働中");
        	        		}else{
                 			$status.addClass("label-default").text("楽天BOT停止中");
                 		}
                 		$("#acc" + data.account_id + " .rakuten_status").html($status[0]);
                 		$status = $("<span />").addClass("label");
-                		if(data.account_status == "1"){
+                		if(data.status.account_status == "1"){
                 			$status.addClass("label-danger").text("凍結中");
                 		}
                 		$("#acc" + data.account_id + " .frozen_status").html($status[0]);
@@ -233,19 +229,15 @@ $(function() {
    	        		if(data.status.follow_status == "1"){
    	        			$status.addClass("label-primary").text("フォロー待機中");
    	        		}else if(data.status.follow_status == "2"){
-   	        		    if(data.isUnfollowable){
-   	        		        $status.addClass("label-danger").text("アンフォロー中");
-   	        		    }else{
-      	        		    $status.addClass("label-success").text("フォロー実行中");
-      	        		}
+  	        		    $status.addClass("label-success").text("フォロー実行中");
    	        		}else if(data.status.follow_status == "3"){
    	        			$status.addClass("label-default").text("フォロー終了");
    	        		}else if(data.status.follow_status == "4"){
    	        			$status.addClass("label-danger").text("フォローリスト無し");
    	        		}else if(data.status.follow_status == "5"){
-   	        			$status.addClass("label-info").text("フォローリトライ");
+   	        			$status.addClass("label-danger").text("アンフォロー中");
    	        		}else if(data.status.follow_status == "6"){
-   	        			$status.addClass("label-warning").text("フォロースキップ");
+   	        			$status.addClass("label-default").text("アンフォロー終了");
    	        		}else{
    	        			$status.addClass("label-default").text("フォロー停止中");
    	        		}
