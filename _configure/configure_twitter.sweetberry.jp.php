@@ -44,7 +44,7 @@ Vizualizer_Configure::set("refollow_enabled", true);
 
 // デフォルト設定を利用するカラム
 Vizualizer_Configure::set("twitter_default_setting_keys", array(
-"japanese_flg", "unlock_user_flg", "unique_icon_flg", "non_bot_flg",
+"follow_unit", "follow_unit_interval", "refollow_timeout", "unfollow_unit", "unfollow_unit_interval",
 "follow_ratio_1", "daily_follows_1", "daily_unfollows_1",
 "follower_limit_2", "follow_ratio_2", "daily_follows_2", "daily_unfollows_2",
 "follower_limit_3", "follow_ratio_3", "daily_follows_3", "daily_unfollows_3",
