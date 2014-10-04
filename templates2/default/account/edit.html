@@ -110,6 +110,38 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="6" class="form-control input-medium group_id" name="group_id[]">
                         <option value="">指定なし</option>
                         <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select><br />
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if $accountGroups->next()->valid()}-->
+                        <!--{assign var="groupId" value=$accountGroups->current()->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="7" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if $accountGroups->next()->valid()}-->
+                        <!--{assign var="groupId" value=$accountGroups->current()->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="8" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select><br />
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if $accountGroups->next()->valid()}-->
+                        <!--{assign var="groupId" value=$accountGroups->current()->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="9" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if $accountGroups->next()->valid()}-->
+                        <!--{assign var="groupId" value=$accountGroups->current()->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="10" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select>
                     </td>
                     <td>
