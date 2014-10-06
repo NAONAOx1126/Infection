@@ -18,6 +18,11 @@ location.replace("<!--{base}-->/tweet/index.html");
 			<div class="well nav-collapse sidebar-nav">
 				<ul class="nav nav-tabs nav-stacked main-menu">
 					<li class="nav-header hidden-tablet">グループ</li>
+					<!--{if $post.group_all > 0}-->
+					<li class="active"><a class="ajax-link" href="index.html?group_all=0"><span class="hidden-tablet">全て</span></a></li>
+					<!--{else}-->
+					<li><a class="ajax-link" href="index.html?group_all=1"><span class="hidden-tablet">全て</span></a></li>
+					<!--{/if}-->
 					<!--{assign var="groupIds" value=$post.group_id}-->
 					<!--{foreach from=$attr.groups key="group_id" item="group_name"}-->
 					<!--{if isset($groupIds[$group_id]) && $groupIds[$group_id] > 0}-->
@@ -26,6 +31,11 @@ location.replace("<!--{base}-->/tweet/index.html");
 					<li><a class="ajax-link" href="index.html?add_group_id=<!--{$group_id}-->"><span class="hidden-tablet"><!--{$group_name}--></span></a></li>
 					<!--{/if}-->
 					<!--{/foreach}-->
+					<!--{if $post.no_group > 0}-->
+					<li class="active"><a class="ajax-link" href="index.html?no_group=0"><span class="hidden-tablet">所属なし</span></a></li>
+					<!--{else}-->
+					<li><a class="ajax-link" href="index.html?no_group=1"><span class="hidden-tablet">所属なし</span></a></li>
+					<!--{/if}-->
 					<li class="nav-header hidden-tablet">並び順</li>
 					<li<!--{if $post.sort != "retweet_count" && $post.sort != "favorite_count"}--> class="active"<!--{/if}-->><a class="ajax-link" href="index.html?sort=create_time"><span class="hidden-tablet">時系列</span></a></li>
 					<li<!--{if $post.sort == "retweet_count"}--> class="active"<!--{/if}-->><a class="ajax-link" href="index.html?sort=retweet_count"><span class="hidden-tablet">RT数</span></a></li>

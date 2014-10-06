@@ -97,7 +97,11 @@ location.replace("<!--{base}-->/tweet/index.html");
                             フォロー後<!--{$followSetting->refollow_timeout}-->時間経過したら<br />
                             1日<!--{$followSetting->daily_unfollows_1}-->人まで<!--{$followSetting->unfollow_unit_interval}-->分毎
                         </div>
-                    </td>
+                        <div>フォロワーターゲット</div>
+                        <div>
+                            <!--{$followSetting->follow_account}-->
+                        </div>
+                        </td>
                     <td>
                         <a id="retweet_status_<!--{$account->account_id}-->" class="retweet_status">
                         <!--{if $status->retweet_status == "1"}-->

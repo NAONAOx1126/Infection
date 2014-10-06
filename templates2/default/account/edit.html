@@ -184,7 +184,11 @@ location.replace("<!--{base}-->/tweet/index.html");
                             1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows_1" value="<!--{$followSetting->daily_unfollows_1}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
                             <input type="text" data-column="unfollow_unit_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_unit_interval" name="unfollow_unit_interval" value="<!--{$followSetting->unfollow_unit_interval}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
                         </div>
-                    </td>
+                        <div>フォロワーターゲット</div>
+                        <div>
+                            <input type="text" data-column="follow_account_<!--{$account->account_id}-->" class="form-control input-medium follow_account" name="follow_account" value="<!--{$followSetting->follow_account}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />
+                        </div>
+                        </td>
                     <td>
                         <a id="retweet_status_<!--{$account->account_id}-->" class="retweet_status"></a>
                         <div>リツイートグループ</div>
