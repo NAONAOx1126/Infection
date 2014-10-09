@@ -1,0 +1,58 @@
+<!--{include file="common/header.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Tweet.Log.List" />
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> Tweetログ一覧
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <!--{if is_array($ERRORS) && count($ERRORS) > 0}-->
+                <div class="box-content alerts">
+                    <!--{foreach from=$ERRORS item="error"}-->
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <!--{$error}-->
+                    </div>
+                    <!--{/foreach}-->
+                </div>
+                <!--{/if}-->
+                <div class="box-content">
+                    <form action="log.html" method="POST">
+                    <div class="form-group form-inline span10 well">
+                        RT数
+                        <input type="text" data-column="retweet_count" class="form-control input-mini retweet_count" name="lt:retweet_count" value="<!--{$post["lt:retweet_count"]}-->" />未満
+                        お気に入り数
+                        <input type="text" data-column="favorite_count" class="form-control input-mini favorite_count" name="lt:favorite_count" value="<!--{$post["lt:favorite_count"]}-->" />未満のツイートを
+                        <div style="text-align: right; margin: 5px 0;"><button type="submit" name="save" value="1" class="btn btn-default span4">検索する。</button></div>
+                    </div>
+                    </form>
+                    <table class="table table-condensed table-bordered">
+                    <tbody id="original_tweets">
+                    <!--{foreach from=$attr.tweetLogs item="tweetLog"}-->
+                    <tr>
+                    <td><!--{$tweetLog->toArray()|@print_r}--></td>
+                    </tr>
+                    <!--{/foreach}-->
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<!--{include file="common/footer.html"}-->
