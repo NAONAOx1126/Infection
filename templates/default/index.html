@@ -25,13 +25,13 @@
                 <table class="table table-condensed table-bordered table-striped">
                 <thead>
                 <tr>
+                <td>ID</td>
                 <td>アイコン</td>
                 <td>アカウント名</td>
                 <td>ステータス</td>
                 <td>実績</td>
                 <td>設定</td>
-                <td>グループ</td>
-                <td>ﾓ-ﾄﾞ</td>
+                <td>グループ<br />モード</td>
                 <td>通知</td>
                 <td>メモ</td>
                 </tr>
@@ -41,6 +41,7 @@
                 <!--{assign var="followSetting" value=$account->followSetting()}-->
                 <!--{assign var="status" value=$account->status()}-->
                 <tr id="acc<!--{$account->account_id}-->">
+                <td>9999<!--{$account->account_id}--></td>
                 <td>
                     <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                     <br />
@@ -101,9 +102,7 @@
                     </div>
                 </td>
                 <td class="col-md-1">
-                <div id="attribute_<!--{$account->account_id}-->" class="attribute"><!--{$followSetting->account_attribute}--></div>
-                </td>
-                <td>
+                <div id="attribute_<!--{$account->account_id}-->" class="attribute"><!--{$followSetting->account_attribute|default:"グループ無し"}--></div>
                     <!--{if $followSetting->follow_type == "1"}-->指定ユーザー
                     <!--{elseif $followSetting->follow_type == "2"}-->フォロワー
                     <!--{elseif $followSetting->follow_type == "3"}-->指定ユーザー<br />フォローワー

@@ -92,6 +92,23 @@ $(function(){
         });
     });
 
+    $(".ignore_search_follow").click(function(){
+        var $this = $(this);
+        $.ajax({
+            "type": "POST",
+            "url": "<!--{base}-->/twitter/SettingText.json",
+            "data": {
+                "target": $this.attr("data-column"),
+                "value": $this.val()
+            },
+            "dataType": "jsonp",
+            "success": function(data){
+				reload(data);
+            }
+        });
+    });
+
+
     $(".follow_type, .account_attribute, .follow_unit, .follow_unit_interval, .unfollow_unit, .unfollow_unit_interval, .refollow_timeout, .follower_limit, .follow_ratio, .daily_follows, .daily_unfollows").change(function(){
         var $this = $(this);
         $.ajax({
