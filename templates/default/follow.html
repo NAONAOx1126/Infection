@@ -42,20 +42,30 @@
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <div class="radio">
-                                        <label> <input type="radio" data-column="follow_status_<!--{$account->account_id|default:0}-->" class="follow_status" name="follow_status" value="<!--{if $account->status()->follow_status > 0}--><!--{$account->status()->follow_status}--><!--{else}-->1<!--{/if}-->"<!--{if $account->status()->follow_status > 0}--> checked<!--{/if}-->> 自動フォロー有効
+                                        <label> <input type="radio" data-column="follow_status_<!--{$account->account_id|default:0}-->" class="follow_status" name="follow_status" value="<!--{if $account->status()->follow_status == 1}--><!--{$account->status()->follow_status}--><!--{else}-->1<!--{/if}-->"<!--{if $account->status()->follow_status == 1}--> checked<!--{/if}-->> 自動フォロー有効
                                         </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
                                 <div class="col-md-6">
                                     <div class="radio">
                                         <label> <input type="radio" data-column="follow_status_<!--{$account->account_id|default:0}-->" class="follow_status" name="follow_status" value="0"<!--{if !($account->status()->follow_status > 0)}--> checked<!--{/if}-->> 自動フォロー無効
                                         </label>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="radio">
+                                        <label> <input type="radio" data-column="ignore_search_follow_<!--{$account->account_id|default:0}-->" class="ignore_search_follow" name="ignore_search_follow" value="0"> 検索フォロー有効
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="radio">
+                                        <label> <input type="radio" data-column="ignore_search_follow_<!--{$account->account_id|default:0}-->" class="ignore_search_follow" name="ignore_search_follow" value="1"> 検索フォロー無効
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                        </td><td class="col-md-6">
+                         </td><td class="col-md-6">
                             <ol class="breadcrumb">
                                 <li class="active">
                                 <input type="radio" data-column="follow_type_<!--{$account->account_id|default:0}-->" class="follow_type" name="follow_type" value="1">
