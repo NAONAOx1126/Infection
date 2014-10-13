@@ -25,12 +25,12 @@
                 <table class="table table-condensed table-bordered table-striped">
                 <thead>
                 <tr>
-                <td>ID</td>
                 <td>アイコン</td>
                 <td>アカウント名</td>
                 <td>ステータス</td>
                 <td>実績</td>
                 <td>設定</td>
+                <td>APP</td>
                 <td>グループ<br />モード</td>
                 <td>通知</td>
                 <td>メモ</td>
@@ -41,7 +41,6 @@
                 <!--{assign var="followSetting" value=$account->followSetting()}-->
                 <!--{assign var="status" value=$account->status()}-->
                 <tr id="acc<!--{$account->account_id}-->">
-                <td>9999<!--{$account->account_id}--></td>
                 <td>
                     <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                     <br />
@@ -101,11 +100,18 @@
                     </div>
                     </div>
                 </td>
+                <td><!--{$account->application_id}--></td>
                 <td class="col-md-1">
-                <div id="attribute_<!--{$account->account_id}-->" class="attribute"><!--{$followSetting->account_attribute|default:"グループ無し"}--></div>
+                    <div id="attribute_<!--{$account->account_id}-->" class="attribute">
+                        <!--{$followSetting->account_attribute|default:"グループ無し"}-->
+                    </div>
+                    <!--{if $followSetting->follow_target == "1"}-->RT・ファボをフォローする
+                    <!--{elseif $followSetting->follow_target == "2"}-->リフォロー・RT・ファボをフォローする
+                    <!--{elseif $followSetting->follow_target == "3"}-->検索・リフォロー・RT・ファボをフォローする
+                    <!--{else}-->自動フォロー無効<!--{/if}--><br />
                     <!--{if $followSetting->follow_type == "1"}-->指定ユーザー
                     <!--{elseif $followSetting->follow_type == "2"}-->フォロワー
-                    <!--{elseif $followSetting->follow_type == "3"}-->指定ユーザー<br />フォローワー
+                    <!--{elseif $followSetting->follow_type == "3"}-->指定ユーザー／フォローワー
                     <!--{else}-->対象無し<!--{/if}-->
                 </td>
                 <td><div class="notification"><!--{if $account->notification == "1"}-->○<!--{/if}--></div></td>
