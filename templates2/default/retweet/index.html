@@ -36,9 +36,14 @@ location.replace("<!--{base}-->/tweet/index.html");
         <div id="content" class="span11">
             <!-- content starts -->
             <div class="box">
+                <!--{assign var="follower_count" value=0}-->
+                <!--{foreach from=$attr.accounts item="account"}-->
+                <!--{assign var="add_followers" value=$account->follower_count}-->
+                <!--{assign var="follower_count" value=$follower_count+$add_followers}-->
+                <!--{/foreach}-->
                 <div class="box-header well">
                     <h2>
-                        <i class="icon-list-alt"></i> タイムライン一覧
+                        <i class="icon-list-alt"></i> タイムライン一覧（総フォロワー数：<!--{$follower_count|number_format}-->人）
                     </h2>
                     <div class="box-icon">
                         <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
