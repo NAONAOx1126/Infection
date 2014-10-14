@@ -17,9 +17,15 @@ location.replace("<!--{base}-->/tweet/index.html");
         <div id="content" class="span12">
             <!-- content starts -->
             <div class="box">
+                <!--{assign var="total_accounts" value=0}-->
+                <!--{assign var="suspended_accounts" value=0}-->
+                <!--{foreach from=$attr.accounts item="account"}-->
+                <!--{assign var="total_accounts" value=$total_accounts+1}-->
+                <!--{if $account->account_status == 1}--><!--{assign var="suspended_accounts" value=$suspended_accounts+1}--><!--{/if}-->
+                <!--{/foreach}-->
                 <div class="box-header well">
                     <h2>
-                        <i class="icon-list-alt"></i> アカウント一覧
+                        <i class="icon-list-alt"></i> アカウント一覧（<!--{$total_accounts}-->件、うち凍結中<!--{$suspended_accounts}-->件）
                     </h2>
                     <div class="box-icon">
                         <a href="<!--{base}-->/account/create.html?add_account=1" class="btn btn-round" data-rel="popover" data-content="Twitterのサイトで認証を行い、アカウントを登録します。登録済みのアカウントの場合はアクセストークンを更新します。" title="Twitterアカウント登録／更新" data-placement="left"><i class="icon-plus"></i></a>
@@ -47,6 +53,9 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <td>
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
+                        <!--{if $account->account_status == "1"}-->
+                        <p><span class="label label-important">凍結中</span></p>
+                        <!--{/if}-->
                         <p>
                         <a href="account/edit.html?account_id=<!--{$account->account_id}-->" class="btn btn-success span5">編集</a>
                         <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-danger span5" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
