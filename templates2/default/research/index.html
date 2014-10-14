@@ -99,7 +99,7 @@
                         <!--{foreach from=$tweet->entities->media item="media"}-->
                         <!--{if $media->type == "photo"}-->
                         <img src="<!--{$media->media_url}-->" width="150" />
-                        <input type="hidden" id="original_image_url_<!--{$tweet->id_str}-->" name="original_image_url" value="<!--{$media->media_url}-->" />
+                        <input type="hidden" id="original_image_url_<!--{$tweet->id_str}-->" class="original_image_url" name="original_image_url" value="<!--{$media->media_url}-->" />
                         <!--{assign var="tweet_text" value=$media->url|str_replace:"":$tweet_text}-->
                         <!--{/if}-->
                         <!--{/foreach}-->
@@ -181,10 +181,26 @@ $(function(){
     	}
     });
     $(".tweet_text").each(function(){
-   		$(this).next(".text_count").children("span").text($(this).val().length);
-   	});
+   	   	var maxLength = ((!!$(this).parents("form").find(".original_image_url").val() && $(this).parents("form").find(".original_image_url").val() != "")?123:140);
+   	    $(this).next(".text_count").children("span").text($(this).val().length + " / " + maxLength);
+   		if(maxLength < $(this).val().length){
+   		    $(this).css("background-color", "#ffaaaa");
+   		    $(this).parents("form").find("button").attr("disabled", true);
+   		}else{
+   		    $(this).css("background-color", "#ffffff");
+   		    $(this).parents("form").find("button").removeAttr("disabled");
+   		}
+    });
    	$(".tweet_text").keyup(function(){
-   		$(this).next(".text_count").children("span").text($(this).val().length);
+   	   	var maxLength = ((!!$(this).parents("form").find(".original_image_url").val() && $(this).parents("form").find(".original_image_url").val() != "")?123:140);
+   	    $(this).next(".text_count").children("span").text($(this).val().length + " / " + maxLength);
+   		if(maxLength < $(this).val().length){
+   		    $(this).css("background-color", "#ffaaaa");
+   		    $(this).parents("form").find("button").attr("disabled", true);
+   		}else{
+   		    $(this).css("background-color", "#ffffff");
+   		    $(this).parents("form").find("button").removeAttr("disabled");
+   		}
    	});
 
 });

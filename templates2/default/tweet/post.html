@@ -96,7 +96,9 @@
                     <button type="submit" name="save" value="1" class="btn btn-success span8">登録</button>
                     <!--{else}-->
                     <!--{$tweet->tweet_text|nl2br}-->
-                    <!--{if $tweet->media_filename != ""}--><div><img src="<!--{base}-->/upload/<!--{$tweet->media_filename}-->" style="max-width: 500px;" /></div><!--{/if}-->
+                    <!--{if $tweet->media_filename != ""}-->
+                    <div><img src="<!--{base}-->/upload/<!--{$tweet->media_filename}-->" style="max-width: 500px;" /></div>
+                    <!--{/if}-->
                     <!--{/if}-->
                     </form>
                     </div>
@@ -134,10 +136,10 @@ $(function() {
    		var maxLength = (($(this).parents("form").find(".media_filename").val() != "")?123:140);
    	    $(this).next(".text_count").children("span").text($(this).val().length + " / " + maxLength);
    		if(maxLength < $(this).val().length){
-   		    $(this).parents("form").find("textarea").css("background-color", "#ffaaaa");
+   		    $(this).css("background-color", "#ffaaaa");
    		    $(this).parents("form").find("button").attr("disabled", true);
    		}else{
-   		    $(this).parents("form").find("textarea").css("background-color", "#ffffff");
+   		    $(this).css("background-color", "#ffffff");
    		    $(this).parents("form").find("button").removeAttr("disabled");
    		}
    	});
@@ -145,10 +147,10 @@ $(function() {
    	   	var maxLength = (($(this).parents("form").find(".media_filename").val() != "")?123:140);
    	    $(this).next(".text_count").children("span").text($(this).val().length + " / " + maxLength);
    		if(maxLength < $(this).val().length){
-   		    $(this).parents("form").find("textarea").css("background-color", "#ffaaaa");
+   		    $(this).css("background-color", "#ffaaaa");
    		    $(this).parents("form").find("button").attr("disabled", true);
    		}else{
-   		    $(this).parents("form").find("textarea").css("background-color", "#ffffff");
+   		    $(this).css("background-color", "#ffffff");
    		    $(this).parents("form").find("button").removeAttr("disabled");
    		}
    	});
