@@ -108,6 +108,7 @@
                         <textarea name="tweet_text" id="tweet_text_<!--{$tweet->id_str}-->" class="tweet_text" cols="80" rows="5" style="width: 50%;"><!--{$tweet_text}--></textarea>
                         <div class="text_count" align="right"><span></span>文字</div>
                         <button type="button" data-twitter-id="<!--{$tweet->id_str}-->" class="save_tweet" name="save" value="1" class="btn btn-success span6">登録する</button>
+                        <button type="button" data-twitter-id="<!--{$tweet->id_str}-->" class="save_tweet" name="tweet" value="1" class="btn btn-success span6">ツイートして登録</button>
                         </form>
                     </td></tr>
                     <!--{/foreach}-->
