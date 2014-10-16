@@ -39,6 +39,9 @@
                     </form>
                     <div class="span12">
                     <form action="index.html" method="POST">
+                    <input type="hidden" name="search[account_id]" value="<!--{$search.account_id}-->" />
+                    <input type="hidden" name="search[lt:retweet_count]" value="<!--{$search["lt:retweet_count"]|default:""}-->" />
+                    <input type="hidden" name="search[lt:favorite_count]" value="<!--{$search["lt:favorite_count"]|default:""}-->" />
                     <!--{foreach from=$attr.tweetLogs item="tweetLog"}-->
                     <input type="hidden" name="tweet_log_id[]" value="<!--{$tweetLog->tweet_log_id}-->" />
                     <!--{/foreach}-->
@@ -56,6 +59,9 @@
                     </td>
                     <td width="50">
                     <form action="index.html" method="POST">
+                    <input type="hidden" name="search[account_id]" value="<!--{$search.account_id}-->" />
+                    <input type="hidden" name="search[lt:retweet_count]" value="<!--{$search["lt:retweet_count"]|default:""}-->" />
+                    <input type="hidden" name="search[lt:favorite_count]" value="<!--{$search["lt:favorite_count"]|default:""}-->" />
                     <input type="hidden" name="tweet_log_id" value="<!--{$tweetLog->tweet_log_id}-->" />
                     <button type="submit" name="delete" value="1">削除</button>
                     </form>
