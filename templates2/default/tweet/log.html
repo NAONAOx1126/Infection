@@ -1,6 +1,7 @@
 <!--{include file="common/header.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
-<meta name="loadmodule" content="Twitter.Tweet.Log.List" />
+<meta name="loadmodule" content="Twitter.Tweet.Log.Delete" />
+<meta name="loadmodule" content="Twitter.Tweet.Log.List" sort="rev@create_time" />
 <div class="container-fluid">
     <div class="row-fluid">
         <div id="content" class="span12">
@@ -34,11 +35,26 @@
                         <div style="text-align: right; margin: 5px 0;"><button type="submit" name="save" value="1" class="btn btn-default span4">検索する。</button></div>
                     </div>
                     </form>
+                    <div class="span12">
+                    <form action="log.html" method="POST">
+                    <!--{foreach from=$attr.tweetLogs item="tweetLog"}-->
+                    <input type="hidden" name="tweet_log_id[]" value="<!--{$tweetLog->tweet_log_id}-->" />
+                    <!--{/foreach}-->
+                    <button type="submit" name="delete" value="1">該当するツイートを削除</button>
+                    </form>
+                    </div>
                     <table class="table table-condensed table-bordered">
                     <tbody id="original_tweets">
                     <!--{foreach from=$attr.tweetLogs item="tweetLog"}-->
                     <tr>
-                    <td><!--{$tweetLog->toArray()|@print_r}--></td>
+                    <td><img src="<!--{$tweetLog->media_link}-->" width="150" /></td>
+                    <td><!--{$tweetLog->tweet_text|nl2br}--></td>
+                    <td width="50">
+                    <form action="log.html" method="POST">
+                    <input type="hidden" name="tweet_log_id" value="<!--{$tweetLog->tweet_log_id}-->" />
+                    <button type="submit" name="delete" value="1">削除</button>
+                    </form>
+                    </td>
                     </tr>
                     <!--{/foreach}-->
                     </tbody>
