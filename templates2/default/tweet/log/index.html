@@ -29,6 +29,7 @@
                     <form action="index.html" method="POST">
                     <div class="form-group form-inline span10 well">
                         <!--{assign var="search" value=$post.search}-->
+                        <input type="hidden" name="search[account_id]" value="<!--{$search.account_id}-->" />
                         RT数
                         <input type="text" data-column="retweet_count" class="form-control input-mini retweet_count" name="search[lt:retweet_count]" value="<!--{$search["lt:retweet_count"]|default:""}-->" />未満
                         お気に入り数
