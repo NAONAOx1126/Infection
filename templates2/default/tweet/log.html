@@ -29,9 +29,9 @@
                     <form action="log.html" method="POST">
                     <div class="form-group form-inline span10 well">
                         RT数
-                        <input type="text" data-column="retweet_count" class="form-control input-mini retweet_count" name="lt:retweet_count" value="<!--{$post["lt:retweet_count"]}-->" />未満
+                        <input type="text" data-column="retweet_count" class="form-control input-mini retweet_count" name="search[lt:retweet_count]" value="<!--{$post["search"]["lt:retweet_count"]}-->" />未満
                         お気に入り数
-                        <input type="text" data-column="favorite_count" class="form-control input-mini favorite_count" name="lt:favorite_count" value="<!--{$post["lt:favorite_count"]}-->" />未満のツイートを
+                        <input type="text" data-column="favorite_count" class="form-control input-mini favorite_count" name="search[lt:favorite_count]" value="<!--{$post["search"]["lt:favorite_count"]}-->" />未満のツイートを
                         <div style="text-align: right; margin: 5px 0;"><button type="submit" name="save" value="1" class="btn btn-default span4">検索する。</button></div>
                     </div>
                     </form>
@@ -48,7 +48,10 @@
                     <!--{foreach from=$attr.tweetLogs item="tweetLog"}-->
                     <tr>
                     <td><img src="<!--{$tweetLog->media_link}-->" width="150" /></td>
-                    <td><!--{$tweetLog->tweet_text|nl2br}--></td>
+                    <td>
+                    <!--{$tweetLog->tweet_text|nl2br}--><br />
+                    RT数：<!--{$tweetLog->retweet_count}-->、お気に入り数：<!--{$tweetLog->favorite_count}-->
+                    </td>
                     <td width="50">
                     <form action="log.html" method="POST">
                     <input type="hidden" name="tweet_log_id" value="<!--{$tweetLog->tweet_log_id}-->" />
