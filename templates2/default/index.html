@@ -45,6 +45,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <!--{assign var="status" value=$account->status()}-->
                     <tr id="acc<!--{$account->account_id}-->">
                     <td>
+                        No.<!--{$account->account_id}--> :
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                         <p>
