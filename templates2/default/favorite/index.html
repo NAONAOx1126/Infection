@@ -91,6 +91,7 @@
                         <textarea name="tweet_text" id="tweet_text_<!--{$tweet->twitter_id}-->" class="tweet_text" cols="80" rows="5" style="width: 50%;"><!--{$tweet_text}--></textarea>
                         <div class="text_count" align="right"><span></span>文字</div>
                         <button type="button" data-twitter-id="<!--{$tweet->twitter_id}-->" class="save_tweet" name="save" value="1" class="btn btn-success span6">登録する</button>
+                        <button type="button" data-twitter-id="<!--{$tweet->twitter_id}-->" name="tweet" class="execute_tweet" value="1">ツイートして登録</button>
                         </form>
                     </td></tr>
                     <!--{/foreach}-->
@@ -111,7 +112,7 @@
 <script type="text/javascript">
 $(function(){
 	var saving = false;
-    $(".save_tweet").click(function(){
+    $(".save_tweet,.execute_tweet").click(function(){
         if(!saving){
             saving = true;
             var twitterId = $(this).attr("data-twitter-id");
@@ -124,6 +125,9 @@ $(function(){
                 "retweet_count": $("#retweet_count_" + twitterId).val(),
                 "favorite_count": $("#favorite_count_" + twitterId).val()
             };
+            if($(this).hasClass("execute_tweet")){
+                param["execute"] = "1";
+            }
             if($("#original_image_url_" + twitterId).length > 0){
                 param["original_image_url"] = $("#original_image_url_" + twitterId).val();
             }
