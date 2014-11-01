@@ -199,6 +199,7 @@ $(function() {
                 		$status = $("<span />").addClass("label");
                 		if(data.status.account_status == "1"){
                 			$status.addClass("label-danger").text("凍結中");
+                			$("#acc" + data.account_id).css("border", "1.5px solid #ff0000")
                 		}
                 		$("#acc" + data.account_id + " .frozen_status").html($status[0]);
 }
@@ -278,6 +279,7 @@ $(function() {
             		$status = $("<span />").addClass("label");
             		if(data.status.account_status == "1"){
             			$status.addClass("label-danger").text("凍結中");
+            			$("#acc" + data.account_id).css("border", "2.5px solid #ff0000");
             		}
             		$("#acc" + data.account_id + " .frozen_status").html($status[0]);
             		if(data.notification == "1"){
