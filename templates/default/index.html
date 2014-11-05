@@ -198,7 +198,10 @@ $(function() {
                 		$("#acc" + data.account_id + " .rakuten_status").html($status[0]);
                 		$status = $("<span />").addClass("label");
                 		if(data.status.account_status == "1"){
-                			$status.addClass("label-danger").text("凍結中");
+                			$status.addClass("label-danger").text("アカウント凍結中");
+                			$("#acc" + data.account_id).css("border", "1.5px solid #0000ff")
+                		}else if(data.status.account_status == "2"){
+                			$status.addClass("label-danger").text("アプリ凍結中");
                 			$("#acc" + data.account_id).css("border", "1.5px solid #ff0000")
                 		}
                 		$("#acc" + data.account_id + " .frozen_status").html($status[0]);
