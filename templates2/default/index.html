@@ -8,6 +8,8 @@ location.replace("<!--{base}-->/tweet/index.html");
 <!--{include file="common/header2.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
 <meta name="loadmodule" content="Twitter.Account.Delete" />
+<meta name="loadmodule" content="Twitter.Account.Initialize" />
+<meta name="loadmodule" content="Twitter.Account.InitializeGroup" default_all_groups="1" />
 <meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
 <meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" />
 <meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
