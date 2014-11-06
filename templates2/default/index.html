@@ -35,6 +35,12 @@ location.replace("<!--{base}-->/tweet/index.html");
                     </div>
                 </div>
                 <div class="box-content">
+                    <form action="index.html" method="GET">
+                    <div><select id="selected_group" name="group_id">
+                    <option value="">グループ指定なし</option>
+                    <!--{html_options options=$attr.groups selected=$post.group_id}-->
+                    </select></div>
+                    </form>
                     <table class="table table-condensed table-bordered table-striped">
                     <thead>
                     <tr>
@@ -153,6 +159,9 @@ location.replace("<!--{base}-->/tweet/index.html");
 <!--{include file="common/script.html"}-->
 <script type="text/javascript">
 $(function() {
+	$("#selected_group").change(function(){
+		$(this).parents("form").submit();
+	});
     $('.description').editable('<!--{base}-->/account/description.html', {
         type : "textarea",
         rows : 4,
