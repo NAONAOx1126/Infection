@@ -241,13 +241,6 @@ $(function() {
    	        });
    		}
     }
-    <!--{foreach from=$attr.accounts item="account"}-->
-	reloadLoop<!--{$account->account_id}--> = function(){
-		reload(<!--{$account->account_id}-->);
-		setTimeout(reloadLoop<!--{$account->account_id}-->, 60000);
-	}
-	setTimeout(reloadLoop<!--{$account->account_id}-->(), 60000);
-	<!--{/foreach}-->
 });
 </script>
 <!--{include file="common/footer.html"}-->
