@@ -64,7 +64,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <td>
                         <!--{assign var="accountGroups" value=$account->accountGroups()}-->
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(0, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(0, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[0]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium group_id" name="group_id[]">
@@ -72,7 +72,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select>
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(1, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(1, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[1]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium group_id" name="group_id[]">
@@ -80,7 +80,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select><br />
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(2, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(2, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[2]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium group_id" name="group_id[]">
@@ -88,7 +88,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select>
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(3, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(3, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[3]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="4" class="form-control input-medium group_id" name="group_id[]">
@@ -96,7 +96,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select><br />
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(4, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(4, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[4]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="5" class="form-control input-medium group_id" name="group_id[]">
@@ -104,7 +104,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select>
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(5, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(5, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[5]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="6" class="form-control input-medium group_id" name="group_id[]">
@@ -112,7 +112,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select><br />
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(6, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(6, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[6]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="7" class="form-control input-medium group_id" name="group_id[]">
@@ -120,7 +120,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select>
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(7, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(7, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[7]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="8" class="form-control input-medium group_id" name="group_id[]">
@@ -128,7 +128,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select><br />
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(8, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(8, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[8]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="9" class="form-control input-medium group_id" name="group_id[]">
@@ -136,7 +136,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.groups selected=$groupId}-->
                         </select>
                         <!--{assign var="groupId" value=""}-->
-                        <!--{if array_key_exists(9, $accountGroups)}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(9, $accountGroups)}-->
                         <!--{assign var="groupId" value=$accountGroups[9]->group_id}-->
                         <!--{/if}-->
                         <select data-column="group_id_<!--{$account->account_id}-->" data-index="10" class="form-control input-medium group_id" name="group_id[]">
@@ -147,7 +147,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <td>
                         <!--{assign var="accountOperators" value=$account->accountOperators()}-->
                         <!--{assign var="operatorId" value=""}-->
-                        <!--{if array_key_exists(0, $accountOperators)}-->
+                        <!--{if is_array($accountOperators) && array_key_exists(0, $accountOperators)}-->
                         <!--{assign var="operatorId" value=$accountOperators[0]->operator_id}-->
                         <!--{/if}-->
                         <select data-column="operator_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium operator_id" name="operator_id[]">
@@ -155,7 +155,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.operators selected=$operatorId}-->
                         </select><br />
                         <!--{assign var="operatorId" value=""}-->
-                        <!--{if array_key_exists(1, $accountOperators)}-->
+                        <!--{if is_array($accountOperators) && array_key_exists(1, $accountOperators)}-->
                         <!--{assign var="operatorId" value=$accountOperators[1]->operator_id}-->
                         <!--{/if}-->
                         <select data-column="operator_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium operator_id" name="operator_id[]">
@@ -163,7 +163,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{html_options options=$attr.operators selected=$operatorId}-->
                         </select><br />
                         <!--{assign var="operatorId" value=""}-->
-                        <!--{if array_key_exists(2, $accountOperators)}-->
+                        <!--{if is_array($accountOperators) && array_key_exists(2, $accountOperators)}-->
                         <!--{assign var="operatorId" value=$accountOperators[2]->operator_id}-->
                         <!--{/if}-->
                         <select data-column="operator_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium operator_id" name="operator_id[]">
