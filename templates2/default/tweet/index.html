@@ -106,7 +106,7 @@
                         <div><a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status"></a></div>
                     </td>
                     <td style="white-space: normal">
-                    <!--{assign var="lastTweet" value=$account->limitedTweetLogs(1)->current()}-->
+                    <!--{assign var="lastTweet" value=$account->lastTweetLog()}-->
                     <div><!--{$lastTweet->getText()|nl2br}--></div>
                     <!--{if $lastTweet->getUrl() != ""}-->
                     <div><img src="<!--{$lastTweet->getUrl()}-->" style="max-width: 300px" /></div>
