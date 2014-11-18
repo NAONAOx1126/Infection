@@ -10,6 +10,7 @@ location.replace("<!--{base}-->/tweet/index.html");
 <meta name="loadmodule" content="Twitter.Account.Delete" />
 <meta name="loadmodule" content="Twitter.Account.Initialize" />
 <meta name="loadmodule" content="Twitter.Account.InitializeGroup" default_all_groups="1" />
+<meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" result="allAccounts" />
 <meta name="loadmodule" content="Twitter.Account.Page" operator="list" adminRoles="administrator" _pager_per_page="30" _pager_displays="99" />
 <meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" />
 <meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
@@ -22,7 +23,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                 <!--{assign var="follower_count" value=0}-->
                 <!--{assign var="total_accounts" value=0}-->
                 <!--{assign var="suspended_accounts" value=0}-->
-                <!--{foreach from=$attr.accounts item="account"}-->
+                <!--{foreach from=$attr.allAccounts item="account"}-->
                 <!--{assign var="total_accounts" value=$total_accounts+1}-->
                 <!--{if $account->account_status == 1}--><!--{assign var="suspended_accounts" value=$suspended_accounts+1}--><!--{/if}-->
                 <!--{assign var="add_followers" value=$account->follower_count}-->
