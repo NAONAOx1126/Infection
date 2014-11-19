@@ -50,7 +50,8 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <option value="">外注指定なし</option>
                     <!--{html_options options=$attr.operators selected=$post.operator_id}-->
                     </select>&nbsp;
-                    <input type="text" name="search[part:screen_name]" value="<!--{$post["search"]["part:screen_name"]|default:""}-->" placeholder="IDで検索する" />
+                    <input type="text" name="search[part:screen_name]" value="<!--{$post["search"]["part:screen_name"]|default:""}-->" placeholder="IDで検索する" />&nbsp;
+                    <input type="text" name="search[part:name]" value="<!--{$post["search"]["part:name"]|default:""}-->" placeholder="名前で検索する" />
                     <button type="submit" class="btn btn-default" name="exec_search" value="1">検索</button>
                     </div>
                     <div id="pagination pagination-centered">
@@ -178,12 +179,6 @@ location.replace("<!--{base}-->/tweet/index.html");
 <!--{include file="common/script.html"}-->
 <script type="text/javascript">
 $(function() {
-	$("#selected_group").change(function(){
-		$(this).parents("form").submit();
-	});
-	$("#selected_operator").change(function(){
-		$(this).parents("form").submit();
-	});
 	$('.description').editable('<!--{base}-->/account/description.html', {
         type : "textarea",
         rows : 4,
