@@ -211,6 +211,8 @@ $(function() {
     	}
     });
 
+    var timer;
+
    	reload = function(){
         $.ajax({
         	"type": "POST",
@@ -219,6 +221,9 @@ $(function() {
         	},
         	"dataType": "jsonp",
         	"success": function(result){
+            	if(!!timer){
+                	clearTimeout(timer);
+            	}
    	        	for(var index in result){
    	                var data = result[index];
             		$("#acc" + data.account_id + " .tweet_count").text(data.status_count);
@@ -301,14 +306,11 @@ $(function() {
             			$("#acc" + data.account_id + " .notification").html("");
             		}
    	        	}
+   	        	timer = setTimeout(reload, 300000);
         	}
         });
     }
-	reloadLoop = function(){
-		reload();
-		setTimeout(reloadLoop, 300000);
-	}
-	reloadLoop();
+    reload();
 });
 </script>
 </body>
