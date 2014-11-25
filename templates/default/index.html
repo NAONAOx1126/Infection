@@ -305,11 +305,11 @@ $(function() {
      	 	});
    		}
     }
-    <!--{foreach from=$attr.accounts item="account"}-->
+    <!--{foreach from=$attr.accounts key="index" item="account"}-->
 	reloadLoop<!--{$account->account_id}--> = function(){
 		reload(<!--{$account->account_id}-->, reloadLoop<!--{$account->account_id}-->);
 	}
-	reloadLoop<!--{$account->account_id}-->();
+	setTimeout(reloadLoop<!--{$account->account_id}-->(), 3000 * <!--{$index}-->);
 	<!--{/foreach}-->
 });
 </script>
