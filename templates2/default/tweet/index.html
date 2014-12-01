@@ -54,6 +54,25 @@
                         <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="0"<!--{if $setting->tweet_order != "1"}--> checked<!--{/if}--> />ランダム</label>
                     </div>
                     <button type="submit" name="save" value="1" class="btn btn-default">設定する。</button>
+                    <!--{foreachelse}-->
+                    <input type="hidden" name="account_id" value="0" />
+                    <div class="form-group form-inline well">
+                        ツイート条件
+                        <input type="text" data-column="tweet_interval_0" class="form-control input-mini tweet_interval" name="tweet_interval" value="" />分〜
+                        <input type="text" data-column="max_tweet_interval_0" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="" />分間隔で
+                        <input type="text" data-column="daytime_start_0" class="form-control input-mini daytime_start" name="daytime_start" value="" />時〜
+                        <input type="text" data-column="daytime_end_0" class="form-control input-mini daytime_end" name="daytime_end" value="" />時までの間
+                        <input type="text" data-column="daily_tweets_0" class="form-control input-mini daily_tweets" name="daily_tweets" value="" />回までツイートする。<br />
+                        BOT条件
+                        <input type="text" data-column="bot_tweet_interval_0" class="form-control input-mini bot_tweet_interval" name="bot_tweet_interval" value="" />分〜
+                        <input type="text" data-column="bot_max_tweet_interval_0" class="form-control input-mini bot_max_tweet_interval" name="bot_max_tweet_interval" value="" />分間隔で
+                        <input type="text" data-column="bot_daytime_start_0" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="" />時〜
+                        <input type="text" data-column="bot_daytime_end_0" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="" />時までの間
+                        <input type="text" data-column="bot_daily_tweets_0" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="" />回までツイートする。<br />
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="1" />登録順</label>
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="0" checked />ランダム</label>
+                    </div>
+                    <button type="submit" name="save" value="1" class="btn btn-default">設定する。</button>
                     <!--{/foreach}-->
                     </form>
                 </div>
@@ -124,10 +143,24 @@
                         <div><span class="pre_tweet_count"><!--{$preTweetCount}--></span>ツイート</div>
                         <div>BOTモード</div>
                         <div>
-                            <a id="bot_status_<!--{$account->account_id}-->" class="bot_status"></a>
+                            <!--{if $status->tweet_status == "1"}-->
+                            <span class="label label-success">ツイート稼働中</span>
+                            <!--{else}-->
+                            <span class="label label-default">ツイート停止中</span>
+                            <!--{/if}-->
                         </div>
                         <div>ツイート状態</div>
-                        <div><a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status"></a></div>
+                        <div>
+                            <!--{if $status->bot_status == "1"}-->
+                            <!--{if $preTweetCount > 0}-->
+                            <span class="label label-primary">BOTモードON</span>
+                            <!--{else}-->
+                            <span class="label label-success">BOTモード有効</span>
+                            <!--{/if}-->
+                            <!--{else}-->
+                            <span class="label label-default">BOTモードOFF</span>
+                            <!--{/if}-->
+                        </div>
                     </td>
                     <td style="white-space: normal">
                     <!--{assign var="lastTweet" value=$account->lastTweetLog()}-->

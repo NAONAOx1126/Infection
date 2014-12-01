@@ -43,6 +43,19 @@
                     </form>
                     <div></div>
                     <!--{if $attr[VizualizerAdmin::KEY]->hasRole(array("administrator"))}-->
+                    <form action="status_complete.html" method="POST">
+                    <!--{assign var="status" value=$attr.account->status()}-->
+                    <input type="hidden" name="account_status_id" value="<!--{$status->account_status_id}-->" />
+                    <div class="form-group form-inline span10 well">
+                        ツイート
+                        <label><input type="radio" data-column="tweet_status_<!--{$attr.account->account_id}-->" class="form-control tweet_status" name="tweet_status" value="1"<!--{if $status->tweet_status == "1"}--> checked<!--{/if}--> />ツイートON</label>
+                        <label><input type="radio" data-column="tweet_status_<!--{$attr.account->account_id}-->" class="form-control tweet_status" name="tweet_status" value="0"<!--{if $status->tweet_status != "1"}--> checked<!--{/if}--> />ツイートOFF</label><br />
+                        BOT条件
+                        <label><input type="radio" data-column="bot_status_<!--{$attr.account->account_id}-->" class="form-control bot_status" name="bot_status" value="1"<!--{if $status->bot_status == "1"}--> checked<!--{/if}--> />BOTモードON</label>
+                        <label><input type="radio" data-column="bot_status_<!--{$attr.account->account_id}-->" class="form-control bot_status" name="bot_status" value="0"<!--{if $status->bot_status != "1"}--> checked<!--{/if}--> />BOTモードOFF</label>
+                        <div style="text-align: right; margin: 5px 0;"><button type="submit" name="save" value="1" class="btn btn-default span4">設定する。</button></div>
+                    </div>
+                    </form>
                     <form action="setting_complete.html" method="POST">
                     <!--{assign var="setting" value=$attr.account->tweetSetting()}-->
                     <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
