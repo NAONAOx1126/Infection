@@ -11,6 +11,7 @@ location.replace("<!--{base}-->/tweet/index.html");
 <meta name="loadmodule" content="Twitter.Account.InitializeGroup" />
 <meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
 <meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
+<meta name="loadmodule" content="Twitter.GlobalSetting.List" />
 <!--{include file="common/subheader.html"}-->
 <div class="container-fluid">
     <div class="row-fluid">
@@ -66,9 +67,15 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <select name="target_group_id">
                     <!--{html_options options=$attr.groups}-->
                     </select>のうち、最大
+                    <!--{foreach from=$attr.globalSettings item="setting"}-->
+                    <input type="text" name="max_accounts" class="input-mini" value="<!--{$setting->default_retweet_accounts}-->" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
+                    <input type="text" name="retweet_delay" class="input-mini" value="<!--{$setting->default_retweet_delay}-->" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
+                    <input type="text" name="retweet_duration" class="input-mini" value="<!--{$setting->default_retweet_duration}-->" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
+                    <!--{foreachelse}-->
                     <input type="text" name="max_accounts" class="input-mini" value="" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
                     <input type="text" name="retweet_delay" class="input-mini" value="" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
                     <input type="text" name="retweet_duration" class="input-mini" value="" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
+                    <!--{/foreach}-->
                     <button type="submit" name="save" value="1" class="btn btn-success">RTを実行</button>
                     </div>
                     </form>
@@ -79,9 +86,15 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <select name="target_group_id">
                     <!--{html_options options=$attr.groups}-->
                     </select>のうち、最大
+                    <!--{foreach from=$attr.globalSettings item="setting"}-->
+                    <input type="text" name="max_accounts" class="input-mini" value="<!--{$setting->default_retweet_accounts}-->" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
+                    <input type="text" name="retweet_delay" class="input-mini" value="<!--{$setting->default_retweet_delay}-->" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
+                    <input type="text" name="retweet_duration" class="input-mini" value="<!--{$setting->default_retweet_duration}-->" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
+                    <!--{foreachelse}-->
                     <input type="text" name="max_accounts" class="input-mini" value="" data-rel="popover" data-content="リツイートするアカウントの数を指定します。0もしくは空欄の場合はグループの全てのアカウントでリツイートを行います。" title="リツイートアカウント数" data-placement="right" style="ime-mode: disabled;" />個のアカウントで
                     <input type="text" name="retweet_delay" class="input-mini" value="" data-rel="popover" data-content="設定してからだいたい所定時間経過後にリツイートを行います。0もしくは空欄の場合は即時にリツイートを行います。" title="リツイート遅延" data-placement="right" style="ime-mode: disabled;" />分後くらいに
                     <input type="text" name="retweet_duration" class="input-mini" value="" data-rel="popover" data-content="リツイートを行う期間です。所定時間経過後、リツイートは削除されます。0もしくは空欄の場合は削除を行いません。" title="リツイート期間" data-placement="right" style="ime-mode: disabled;" />時間後に削除するように
+                    <!--{/foreach}-->
                     <button type="submit" name="save" value="1" class="btn btn-success">RTを実行</button>
                     </div>
                     </form>
