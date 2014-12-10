@@ -40,7 +40,7 @@
                 <!--{foreach from=$attr.accounts item="account"}-->
                 <!--{assign var="followSetting" value=$account->followSetting()}-->
                 <!--{assign var="status" value=$account->status()}-->
-                <tr id="acc<!--{$account->account_id}-->">
+                <tr id="acc<!--{$account->account_id}-->"<!--{if $status->account_status == "1" || $status->account_status == "2"}--> style="border", "1.5px solid #0000ff;"<!--{/if}-->>
                 <td>
                     <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                     <br />
@@ -48,13 +48,59 @@
                 </td>
                 <td>
                     <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
-                    <a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status"></a>
-                    <a id="original_status_<!--{$account->account_id}-->" class="original_status"></a>
-                    <a id="advertise_status_<!--{$account->account_id}-->" class="advertise_status"></a>
-                    <a id="rakuten_status_<!--{$account->account_id}-->" class="rakuten_status"></a>
-                    <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
-                    <a id="frozen_status_<!--{$account->account_id}-->" class="frozen_status"></a>
-                    </td>
+                    <a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status">
+                    <!--{if $status->tweet_status == "1"}-->
+                    <span class="label label-primary">取込BOT稼働中</span>
+                    <!--{else}-->
+                    <span class="label label-default">取込BOT停止中</span>
+                    <!--{/if}-->
+                    </a>
+                    <a id="original_status_<!--{$account->account_id}-->" class="original_status">
+                    <!--{if $status->original_status == "1"}-->
+                    <span class="label label-primary">独自BOT稼働中</span>
+                    <!--{else}-->
+                    <span class="label label-default">独自BOT停止中</span>
+                    <!--{/if}-->
+                    </a>
+                    <a id="advertise_status_<!--{$account->account_id}-->" class="advertise_status">
+                    <!--{if $status->advertise_status == "1"}-->
+                    <span class="label label-primary">広告BOT稼働中</span>
+                    <!--{else}-->
+                    <span class="label label-default">広告BOT停止中</span>
+                    <!--{/if}-->
+                    </a>
+                    <a id="rakuten_status_<!--{$account->account_id}-->" class="rakuten_status">
+                    <!--{if $status->rakuten_status == "1"}-->
+                    <span class="label label-primary">楽天BOT稼働中</span>
+                    <!--{else}-->
+                    <span class="label label-default">楽天BOT停止中</span>
+                    <!--{/if}-->
+                    </a>
+                    <a id="follow_status_<!--{$account->account_id}-->" class="follow_status">
+                    <!--{if $status->follow_status == "1"}-->
+                    <span class="label label-primary">フォロー待機中</span>
+                    <!--{elseif $status->follow_status == "2"}-->
+                    <span class="label label-success">フォロー実行中</span>
+                    <!--{elseif $status->follow_status == "3"}-->
+                    <span class="label label-default">フォロー終了</span>
+                    <!--{elseif $status->follow_status == "4"}-->
+                    <span class="label label-danger">フォローリスト無し</span>
+                    <!--{elseif $status->follow_status == "5"}-->
+                    <span class="label label-danger">アンフォロー中</span>
+                    <!--{elseif $status->follow_status == "6"}-->
+                    <span class="label label-default">アンフォロー終了</span>
+                    <!--{else}-->
+                    <span class="label label-default">フォロー停止中</span>
+                    <!--{/if}-->
+                    </a>
+                    <a id="frozen_status_<!--{$account->account_id}-->" class="frozen_status">
+                    <!--{if $status->account_status == "1"}-->
+                    <span class="label label-danger">アカウント凍結中</span>
+                    <!--{elseif $status->account_status == "2"}-->
+                    <span class="label label-danger">アプリ凍結中</span>
+                    <!--{/if}-->
+                    </a>
+                </td>
                 <td class="col-md-2">
                     <div class="row">
                     <div class="col-md-5">ツイート</div><div class="col-md-7"><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
@@ -300,7 +346,7 @@ $(function() {
             		}else{
             			$("#acc" + data.account_id + " .notification").html("");
             		}
-            		setTimeout(callback, 300000);
+            		setTimeout(callback, 1000000);
             	}
      	 	});
    		}
@@ -309,7 +355,7 @@ $(function() {
 	reloadLoop<!--{$account->account_id}--> = function(){
 		reload(<!--{$account->account_id}-->, reloadLoop<!--{$account->account_id}-->);
 	}
-	setTimeout(reloadLoop<!--{$account->account_id}-->(), 3000 * <!--{$index}-->);
+	setTimeout(reloadLoop<!--{$account->account_id}-->(), 10000 * <!--{$index}--> + 60000);
 	<!--{/foreach}-->
 });
 </script>
