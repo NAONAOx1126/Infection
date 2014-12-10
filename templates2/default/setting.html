@@ -1,0 +1,129 @@
+<!--{include file="common/header.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.GlobalSetting.List" />
+<meta name="loadmodule" content="Twitter.Setting.List" wkey="account_id" wvalue="0" force_operator="1" />
+<!--{include file="common/subheader.html"}-->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> 共通設定
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <!--{if is_array($ERRORS) && count($ERRORS) > 0}-->
+                <div class="box-content alerts">
+                    <!--{foreach from=$ERRORS item="error"}-->
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <!--{$error}-->
+                    </div>
+                    <!--{/foreach}-->
+                </div>
+                <!--{/if}-->
+                <div class="box-content">
+                    <form action="setting_complete.html" method="POST">
+                    <!--{foreach from=$attr.settings item="setting"}-->
+                    <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
+                    <div class="form-group form-inline well">
+                        <div>フォロー：
+                            1日<input type="text" data-column="daily_follows_1_0" class="form-control input-mini daily_follows" name="daily_follows_1" value="<!--{$setting->daily_follows_1|input:"daily_follows_1"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="follow_unit_interval_0" class="form-control input-mini follow_unit_interval" name="follow_unit_interval" value="<!--{$setting->follow_unit_interval|input:"follow_unit_interval"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                        </div>
+                        <div>アンフォロー：
+                            フォロー後<input type="text" data-column="refollow_timeout_0" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="<!--{$setting->refollow_timeout|input:"refollow_timeout"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間経過したら、
+                            1日<input type="text" data-column="daily_unfollows_1_0" class="form-control input-mini daily_unfollows" name="daily_unfollows_1" value="<!--{$setting->daily_unfollows_1|input:"daily_unfollows_1"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="unfollow_unit_interval_0" class="form-control input-mini unfollow_unit_interval" name="unfollow_unit_interval" value="<!--{$setting->unfollow_unit_interval|input:"unfollow_unit_interval"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                        </div>
+                    </div>
+                    <div class="form-group form-inline well">
+                        <div>強化アカウント設定：
+                        <input type="text" data-column="retweet_delay_0" class="form-control input-mini retweet_delay" name="retweet_delay" value="<!--{$setting->retweet_delay|input:"retweet_delay"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分後に実行し
+                        <input type="text" data-column="retweet_duration_0" class="form-control input-mini retweet_duration" name="retweet_duration" value="<!--{$setting->retweet_duration|input:"retweet_duration"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間後に削除</div>
+                    </div>
+                    <div class="form-group form-inline well">
+                        ツイート条件
+                        <input type="text" data-column="tweet_interval_0" class="form-control input-mini tweet_interval" name="tweet_interval" value="<!--{$setting->tweet_interval|input:"tweet_interval"}-->" />分〜
+                        <input type="text" data-column="max_tweet_interval_0" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="<!--{$setting->max_tweet_interval|input:"max_tweet_interval"}-->" />分間隔で
+                        <input type="text" data-column="daytime_start_0" class="form-control input-mini daytime_start" name="daytime_start" value="<!--{$setting->daytime_start|input:"daytime_start"}-->" />時〜
+                        <input type="text" data-column="daytime_end_0" class="form-control input-mini daytime_end" name="daytime_end" value="<!--{$setting->daytime_end|input:"daytime_end"}-->" />時までの間
+                        <input type="text" data-column="daily_tweets_0" class="form-control input-mini daily_tweets" name="daily_tweets" value="<!--{$setting->daily_tweets|input:"daily_tweets"}-->" />回までツイートする。<br />
+                        BOT条件
+                        <input type="text" data-column="bot_tweet_interval_0" class="form-control input-mini bot_tweet_interval" name="bot_tweet_interval" value="<!--{$setting->bot_tweet_interval|input:"bot_tweet_interval"}-->" />分〜
+                        <input type="text" data-column="bot_max_tweet_interval_0" class="form-control input-mini bot_max_tweet_interval" name="bot_max_tweet_interval" value="<!--{$setting->bot_max_tweet_interval|input:"bot_max_tweet_interval"}-->" />分間隔で
+                        <input type="text" data-column="bot_daytime_start_0" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="<!--{$setting->bot_daytime_start|input:"bot_daytime_start"}-->" />時〜
+                        <input type="text" data-column="bot_daytime_end_0" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="<!--{$setting->bot_daytime_end|input:"bot_daytime_end"}-->" />時までの間
+                        <input type="text" data-column="bot_daily_tweets_0" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="<!--{$setting->bot_daily_tweets|input:"bot_daily_tweets"}-->" />回までツイートする。<br />
+                        <!--{assign var="tweet_order" value=$setting->tweet_order|input:"tweet_order"}-->
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="1"<!--{if $tweet_order == "1"}--> checked<!--{/if}--> />登録順</label>
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="0"<!--{if $tweet_order != "1"}--> checked<!--{/if}--> />ランダム</label>
+                    </div>
+                    <!--{foreachelse}-->
+                    <input type="hidden" name="account_id" value="0" />
+                    <div class="form-group form-inline well">
+                        <div>フォロー：
+                            1日<input type="text" data-column="daily_follows_1_0" class="form-control input-mini daily_follows" name="daily_follows_1" value="<!--{$post.daily_follows_1}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="follow_unit_interval_0" class="form-control input-mini follow_unit_interval" name="follow_unit_interval" value="<!--{$post.follow_unit_interval}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                        </div>
+                        <div>アンフォロー：
+                            フォロー後<input type="text" data-column="refollow_timeout_0" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="<!--{$post.refollow_timeout}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間経過したら、
+                            1日<input type="text" data-column="daily_unfollows_1_0" class="form-control input-mini daily_unfollows" name="daily_unfollows_1" value="<!--{$post.daily_unfollows_1}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="unfollow_unit_interval_0" class="form-control input-mini unfollow_unit_interval" name="unfollow_unit_interval" value="<!--{$post.unfollow_unit_interval}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                        </div>
+                    </div>
+                    <div class="form-group form-inline well">
+                        <div>強化アカウント設定：
+                        <input type="text" data-column="retweet_delay_0" class="form-control input-mini retweet_delay" name="retweet_delay" value="<!--{$post.retweet_delay}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分後に実行し
+                        <input type="text" data-column="retweet_duration_0" class="form-control input-mini retweet_duration" name="retweet_duration" value="<!--{$post.retweet_duration}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間後に削除</div>
+                    </div>
+                    <div class="form-group form-inline well">
+                        ツイート条件
+                        <input type="text" data-column="tweet_interval_0" class="form-control input-mini tweet_interval" name="tweet_interval" value="<!--{$post.tweet_interval}-->" />分〜
+                        <input type="text" data-column="max_tweet_interval_0" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="<!--{$post.max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="daytime_start_0" class="form-control input-mini daytime_start" name="daytime_start" value="<!--{$post.daytime_start}-->" />時〜
+                        <input type="text" data-column="daytime_end_0" class="form-control input-mini daytime_end" name="daytime_end" value="<!--{$post.daytime_end}-->" />時までの間
+                        <input type="text" data-column="daily_tweets_0" class="form-control input-mini daily_tweets" name="daily_tweets" value="<!--{$post.daily_tweets}-->" />回までツイートする。<br />
+                        BOT条件
+                        <input type="text" data-column="bot_tweet_interval_0" class="form-control input-mini bot_tweet_interval" name="bot_tweet_interval" value="<!--{$post.bot_tweet_interval}-->" />分〜
+                        <input type="text" data-column="bot_max_tweet_interval_0" class="form-control input-mini bot_max_tweet_interval" name="bot_max_tweet_interval" value="<!--{$post.bot_max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="bot_daytime_start_0" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="<!--{$post.bot_daytime_start}-->" />時〜
+                        <input type="text" data-column="bot_daytime_end_0" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="<!--{$post.bot_daytime_end}-->" />時までの間
+                        <input type="text" data-column="bot_daily_tweets_0" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="<!--{$post.bot_daily_tweets}-->" />回までツイートする。<br />
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="1"<!--{if $post.tweet_order == "1"}--> checked<!--{/if}--> />登録順</label>
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="0"<!--{if $post.tweet_order != "1"}--> checked<!--{/if}--> />ランダム</label>
+                    </div>
+                    <!--{/foreach}-->
+                    <!--{foreach from=$attr.globalSettings item="setting"}-->
+                    <input type="hidden" name="global_setting_id" value="<!--{$setting->global_setting_id}-->" />
+                    <div class="form-group form-inline well">
+                        最大<input type="text" data-column="default_retweet_accounts" class="form-control input-mini default_retweet_delay" name="default_retweet_accounts" value="<!--{$setting->default_retweet_accounts|input:"default_retweet_accounts"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />個のアカウントで
+                        <input type="text" data-column="default_retweet_delay" class="form-control input-mini default_retweet_delay" name="default_retweet_delay" value="<!--{$setting->default_retweet_delay|input:"default_retweet_delay"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分後に実行し
+                        <input type="text" data-column="default_retweet_duration" class="form-control input-mini default_retweet_duration" name="default_retweet_duration" value="<!--{$setting->default_retweet_duration|input:"default_retweet_duration"}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間後に削除する設定をデフォルトにする
+                    </div>
+                    <!--{foreachelse}-->
+                    <div class="form-group form-inline well">
+                        最大<input type="text" data-column="default_retweet_accounts" class="form-control input-mini default_retweet_delay" name="default_retweet_accounts" value="<!--{$post.default_retweet_accounts}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />個のアカウントで
+                        <input type="text" data-column="default_retweet_delay" class="form-control input-mini default_retweet_delay" name="default_retweet_delay" value="<!--{$post.default_retweet_delay}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分後に実行し
+                        <input type="text" data-column="default_retweet_duration" class="form-control input-mini default_retweet_duration" name="default_retweet_duration" value="<!--{$post.default_retweet_duration}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間後に削除する設定をデフォルトにする
+                    </div>
+                    <!--{/foreach}-->
+                    <button type="submit" name="save" value="1" class="btn btn-default">設定する。</button>
+                    </form>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<!--{include file="common/footer.html"}-->

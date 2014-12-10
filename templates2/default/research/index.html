@@ -90,7 +90,7 @@
                     </td><td style="width: 50%;" id="row_<!--{$tweet->id_str}-->">
                         <form action="complete.html" method="POST">
                         <input type="hidden" id="user_id_<!--{$tweet->id_str}-->" name="user_id" value="<!--{$tweet->user->id_str}-->" />
-                        <input type="hidden" id="screen_name_<!--{$tweet->id_str}-->" name="screen_name" value="<!--{$tweet->user->screen_name}-->" />
+                        <input type="hidden" id="screen_name_<!--{$tweet->id_str}-->" name="screen_name" value="<!--{$tweet->user->screen_name|escape}-->" />
                         <input type="hidden" id="retweet_count_<!--{$tweet->id_str}-->" name="retweet_count" value="<!--{$tweet->retweet_count}-->" />
                         <input type="hidden" id="favorite_count_<!--{$tweet->id_str}-->" name="favorite_count" value="<!--{$tweet->favorite_count}-->" />
                         <div>
@@ -99,15 +99,18 @@
                         <!--{foreach from=$tweet->entities->media item="media"}-->
                         <!--{if $media->type == "photo"}-->
                         <img src="<!--{$media->media_url}-->" width="150" />
-                        <input type="hidden" id="original_image_url_<!--{$tweet->id_str}-->" name="original_image_url" value="<!--{$media->media_url}-->" />
+                        <input type="hidden" id="original_image_url_<!--{$tweet->id_str}-->" class="original_image_url" name="original_image_url" value="<!--{$media->media_url}-->" />
                         <!--{assign var="tweet_text" value=$media->url|str_replace:"":$tweet_text}-->
                         <!--{/if}-->
                         <!--{/foreach}-->
                         <!--{/if}-->
                         </div>
+                        <input type="hidden" id="tweet_text_original_<!--{$tweet->id_str}-->" name="tweet_text_original" value="<!--{$tweet_text|escape}-->" />
                         <textarea name="tweet_text" id="tweet_text_<!--{$tweet->id_str}-->" class="tweet_text" cols="80" rows="5" style="width: 50%;"><!--{$tweet_text}--></textarea>
                         <div class="text_count" align="right"><span></span>文字</div>
                         <button type="button" data-twitter-id="<!--{$tweet->id_str}-->" class="save_tweet" name="save" value="1" class="btn btn-success span6">登録する</button>
+                        <button type="button" data-twitter-id="<!--{$tweet->id_str}-->" name="tweet" class="execute_tweet" value="1">ツイートして登録</button>
+                        <button type="button" data-twitter-id="<!--{$tweet->id_str}-->" class="add_favorite" name="save" value="1" class="btn btn-success span6">お気に入りに追加</button>
                         </form>
                     </td></tr>
                     <!--{/foreach}-->
@@ -128,7 +131,7 @@
 <script type="text/javascript">
 $(function(){
 	var saving = false;
-    $(".save_tweet").click(function(){
+    $(".save_tweet,.execute_tweet").click(function(){
         if(!saving){
             saving = true;
             var twitterId = $(this).attr("data-twitter-id");
@@ -141,6 +144,9 @@ $(function(){
                 "retweet_count": $("#retweet_count_" + twitterId).val(),
                 "favorite_count": $("#favorite_count_" + twitterId).val()
             };
+            if($(this).hasClass("execute_tweet")){
+                param["execute"] = "1";
+            }
             if($("#original_image_url_" + twitterId).length > 0){
                 param["original_image_url"] = $("#original_image_url_" + twitterId).val();
             }
@@ -165,6 +171,38 @@ $(function(){
             });
         }
     });
+    $(".add_favorite").click(function(){
+        if(!saving){
+            saving = true;
+            var twitterId = $(this).attr("data-twitter-id");
+            var param = {
+                "twitter_id": twitterId,
+                "account_id": "<!--{$post.account_id}-->",
+                "user_id": $("#user_id_" + twitterId).val(),
+                "screen_name": $("#screen_name_" + twitterId).val(),
+                "tweet_text": $("#tweet_text_original_" + twitterId).val(),
+                "retweet_count": $("#retweet_count_" + twitterId).val(),
+                "favorite_count": $("#favorite_count_" + twitterId).val()
+            };
+            if($("#original_image_url_" + twitterId).length > 0){
+                param["original_image_url"] = $("#original_image_url_" + twitterId).val();
+            }
+            $.ajax({
+            	"type": "POST",
+            	"url": "<!--{base}-->/twitter/AddFavorite.json",
+            	"data": param,
+            	"dataType": "jsonp",
+            	"success": function(data){
+                	alert("お気に入りに登録しました。");
+                	saving = false;
+                },
+            	"error": function(data){
+                	alert("お気に入りの登録に失敗しました。");
+                    saving = false;
+            	}
+            });
+        }
+    });
     $.ajax({
     	"type": "POST",
     	"url": "<!--{base}-->/twitter/SaveTweet.json",
@@ -181,10 +219,26 @@ $(function(){
     	}
     });
     $(".tweet_text").each(function(){
-   		$(this).next(".text_count").children("span").text($(this).val().length);
-   	});
+   	   	var maxLength = ((!!$(this).parents("form").find(".original_image_url").val() && $(this).parents("form").find(".original_image_url").val() != "")?123:140);
+   	    $(this).next(".text_count").children("span").text($(this).val().length + " / " + maxLength);
+   		if(maxLength < $(this).val().length){
+   		    $(this).css("background-color", "#ffaaaa");
+   		    $(this).parents("form").find("button").attr("disabled", true);
+   		}else{
+   		    $(this).css("background-color", "#ffffff");
+   		    $(this).parents("form").find("button").removeAttr("disabled");
+   		}
+    });
    	$(".tweet_text").keyup(function(){
-   		$(this).next(".text_count").children("span").text($(this).val().length);
+   	   	var maxLength = ((!!$(this).parents("form").find(".original_image_url").val() && $(this).parents("form").find(".original_image_url").val() != "")?123:140);
+   	    $(this).next(".text_count").children("span").text($(this).val().length + " / " + maxLength);
+   		if(maxLength < $(this).val().length){
+   		    $(this).css("background-color", "#ffaaaa");
+   		    $(this).parents("form").find("button").attr("disabled", true);
+   		}else{
+   		    $(this).css("background-color", "#ffffff");
+   		    $(this).parents("form").find("button").removeAttr("disabled");
+   		}
    	});
 
 });

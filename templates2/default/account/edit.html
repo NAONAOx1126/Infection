@@ -1,0 +1,219 @@
+<!--{include file="common/header1.html"}-->
+<!--{if !$attr[VizualizerAdmin::KEY]->hasRole("administrator")}-->
+<meta http-equiv="Refresh" content="0; URL=<!--{base}-->/tweet/index.html">
+<script type="text/javascript">
+location.replace("<!--{base}-->/tweet/index.html");
+</script>
+<!--{/if}-->
+<!--{include file="common/header2.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Delete" />
+<meta name="loadmodule" content="Twitter.Account.Detail" />
+<meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" />
+<meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
+<!--{include file="common/subheader.html"}-->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> アカウント編集
+                    </h2>
+                    <div class="box-icon">
+                        <a href="<!--{base}-->/account/create.html?add_account=1" class="btn btn-round" data-rel="popover" data-content="Twitterのサイトで認証を行い、アカウントを登録します。登録済みのアカウントの場合はアクセストークンを更新します。" title="Twitterアカウント登録／更新" data-placement="left"><i class="icon-plus"></i></a>
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <form action="complete.html" method="POST">
+                    <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                    <td>アカウント</td>
+                    <td>実績</td>
+                    <td>グループ</td>
+                    <td>外注</td>
+                    <td>自動フォロー</td>
+                    <td>強化アカウント</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--{assign value=$attr.account var="account"}-->
+                    <!--{assign var="followSetting" value=$account->followSetting()}-->
+                    <!--{assign var="status" value=$account->status()}-->
+                    <input type="hidden" name="account_id" value="<!--{$account->account_id}-->" />
+                    <input type="hidden" name="setting_id" value="<!--{$followSetting->setting_id}-->" />
+                    <input type="hidden" name="use_follow_setting" value="1" />
+                    <tr id="acc<!--{$account->account_id}-->">
+                    <td>
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
+                        <br />
+                        <button type="submit" name="save" value="1" class="btn btn-success span10">設定完了</button>
+                    </td>
+                    <td>
+                        <div>ツイート数</div>
+                        <div><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
+                        <div>フォロー数</div>
+                        <div><span class="friend_count"><!--{$account->friend_count}--></span>人</div>
+                        <div>フォロワー数</div>
+                        <div><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
+                    </td>
+                    <td>
+                        <!--{assign var="accountGroups" value=$account->accountGroups()}-->
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(0, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[0]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(1, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[1]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select><br />
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(2, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[2]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(3, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[3]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="4" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select><br />
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(4, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[4]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="5" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(5, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[5]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="6" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select><br />
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(6, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[6]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="7" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(7, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[7]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="8" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select><br />
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(8, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[8]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="9" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                        <!--{assign var="groupId" value=""}-->
+                        <!--{if is_array($accountGroups) && array_key_exists(9, $accountGroups)}-->
+                        <!--{assign var="groupId" value=$accountGroups[9]->group_id}-->
+                        <!--{/if}-->
+                        <select data-column="group_id_<!--{$account->account_id}-->" data-index="10" class="form-control input-medium group_id" name="group_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$groupId}-->
+                        </select>
+                    </td>
+                    <td>
+                        <!--{assign var="accountOperators" value=$account->accountOperators()}-->
+                        <!--{assign var="operatorId" value=""}-->
+                        <!--{if is_array($accountOperators) && array_key_exists(0, $accountOperators)}-->
+                        <!--{assign var="operatorId" value=$accountOperators[0]->operator_id}-->
+                        <!--{/if}-->
+                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium operator_id" name="operator_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.operators selected=$operatorId}-->
+                        </select><br />
+                        <!--{assign var="operatorId" value=""}-->
+                        <!--{if is_array($accountOperators) && array_key_exists(1, $accountOperators)}-->
+                        <!--{assign var="operatorId" value=$accountOperators[1]->operator_id}-->
+                        <!--{/if}-->
+                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium operator_id" name="operator_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.operators selected=$operatorId}-->
+                        </select><br />
+                        <!--{assign var="operatorId" value=""}-->
+                        <!--{if is_array($accountOperators) && array_key_exists(2, $accountOperators)}-->
+                        <!--{assign var="operatorId" value=$accountOperators[2]->operator_id}-->
+                        <!--{/if}-->
+                        <select data-column="operator_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium operator_id" name="operator_id[]">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.operators selected=$operatorId}-->
+                        </select>
+                    </td>
+                    <td>
+                        <a id="follow_status_<!--{$account->account_id}-->" class="follow_status"></a>
+                        <div>フォロー</div>
+                        <div>
+                            1日<input type="text" data-column="daily_follows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_follows" name="daily_follows_1" value="<!--{$followSetting->daily_follows_1}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="follow_unit_interval_<!--{$account->account_id}-->" class="form-control input-mini follow_unit_interval" name="follow_unit_interval" value="<!--{$followSetting->follow_unit_interval}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                        </div>
+                        <div>アンフォロー</div>
+                        <div>
+                            フォロー後<input type="text" data-column="refollow_timeout_<!--{$account->account_id}-->" class="form-control input-mini refollow_timeout" name="refollow_timeout" value="<!--{$followSetting->refollow_timeout}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間経過したら<br />
+                            1日<input type="text" data-column="daily_unfollows_1_<!--{$account->account_id}-->" class="form-control input-mini daily_unfollows" name="daily_unfollows_1" value="<!--{$followSetting->daily_unfollows_1}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />人まで
+                            <input type="text" data-column="unfollow_unit_interval_<!--{$account->account_id}-->" class="form-control input-mini unfollow_unit_interval" name="unfollow_unit_interval" value="<!--{$followSetting->unfollow_unit_interval}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分毎
+                        </div>
+                        <div>フォロワーターゲット</div>
+                        <div>
+                            <input type="text" data-column="follow_account_<!--{$account->account_id}-->" class="form-control input-medium follow_account" name="follow_account" value="<!--{$followSetting->follow_account}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />
+                        </div>
+                        </td>
+                    <td>
+                        <a id="retweet_status_<!--{$account->account_id}-->" class="retweet_status"></a>
+                        <div>リツイートグループ</div>
+                        <select data-column="retweet_group_id_<!--{$account->account_id}-->" class="form-control input-medium retweet_group_id" name="retweet_group_id">
+                        <option value="">指定なし</option>
+                        <!--{html_options options=$attr.groups selected=$followSetting->retweet_group_id}-->
+                        </select>
+                        <div>最新ツイートをRT</div>
+                        <div><input type="text" data-column="retweet_delay_<!--{$account->account_id}-->" class="form-control input-mini retweet_delay" name="retweet_delay" value="<!--{$followSetting->retweet_delay}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />分後に実行し</div>
+                        <div><input type="text" data-column="retweet_duration_<!--{$account->account_id}-->" class="form-control input-mini retweet_duration" name="retweet_duration" value="<!--{$followSetting->retweet_duration}-->" style="ime-mode: disabled; -webkit-ime-mode:disabled" />時間後に削除</div>
+                    </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    </form>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<!--{include file="common/footer.html"}-->

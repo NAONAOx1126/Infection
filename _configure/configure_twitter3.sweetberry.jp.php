@@ -6,7 +6,7 @@ Vizualizer_Configure::set("timezone", "Asia/Tokyo");
 Vizualizer_Configure::set("site_code", "twitter");
 
 // サイト名
-Vizualizer_Configure::set("site_name", "NEO CHERRY");
+Vizualizer_Configure::set("site_name", "Cherry RT");
 
 // サイトメールアドレス
 Vizualizer_Configure::set("site_email", "info@sweetberry.jp");
@@ -15,20 +15,20 @@ Vizualizer_Configure::set("site_email", "info@sweetberry.jp");
 Vizualizer_Configure::set("site_domain", $_SERVER["SERVER_NAME"]);
 
 // サイトホームディレクトリ
-Vizualizer_Configure::set("site_home", realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . "..") . DIRECTORY_SEPARATOR . "templates");
+Vizualizer_Configure::set("site_home", realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . "..") . DIRECTORY_SEPARATOR . "templates2");
 
 // データベースの接続設定
 Vizualizer_Configure::set("database", array(
     "default" => array(
         "read" => array(
-            "dbtype" => "mysql", "host" => "192.168.252.156",
+            "dbtype" => "mysql", "host" => "p:192.168.252.156",
             "user" => "viz_twitter", "password" => "viz_twitter",
-            "database" => "viz_twitter3", "query" => "SET NAMES utf8"
+            "database" => "viz_twitter4", "query" => "SET NAMES utf8"
         ),
         "write" => array(
-            "dbtype" => "mysql", "host" => "192.168.252.156",
+            "dbtype" => "mysql", "host" => "p:192.168.252.156",
             "user" => "viz_twitter", "password" => "viz_twitter",
-            "database" => "viz_twitter3", "query" => "SET NAMES utf8"
+            "database" => "viz_twitter4", "query" => "SET NAMES utf8"
         )
     )
 ));

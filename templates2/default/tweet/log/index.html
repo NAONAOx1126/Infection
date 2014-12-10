@@ -1,0 +1,85 @@
+<!--{include file="common/header.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Tweet.Log.Delete" />
+<meta name="loadmodule" content="Twitter.Tweet.Log.List" sort="rev@create_time" />
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> Tweetログ一覧
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <!--{if is_array($ERRORS) && count($ERRORS) > 0}-->
+                <div class="box-content alerts">
+                    <!--{foreach from=$ERRORS item="error"}-->
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <!--{$error}-->
+                    </div>
+                    <!--{/foreach}-->
+                </div>
+                <!--{/if}-->
+                <div class="box-content">
+                    <form action="index.html" method="POST">
+                    <div class="form-group form-inline span10 well">
+                        <!--{assign var="search" value=$post.search}-->
+                        <input type="hidden" name="search[account_id]" value="<!--{$search.account_id}-->" />
+                        RT数
+                        <input type="text" data-column="retweet_count" class="form-control input-mini retweet_count" name="search[lt:retweet_count]" value="<!--{$search["lt:retweet_count"]|default:""}-->" />未満
+                        お気に入り数
+                        <input type="text" data-column="favorite_count" class="form-control input-mini favorite_count" name="search[lt:favorite_count]" value="<!--{$search["lt:favorite_count"]|default:""}-->" />未満のツイートを
+                        <div style="text-align: right; margin: 5px 0;"><button type="submit" name="save" value="1" class="btn btn-default span4">検索する。</button></div>
+                    </div>
+                    </form>
+                    <div class="span12">
+                    <form action="index.html" method="POST">
+                    <input type="hidden" name="search[account_id]" value="<!--{$search.account_id}-->" />
+                    <input type="hidden" name="search[lt:retweet_count]" value="<!--{$search["lt:retweet_count"]|default:""}-->" />
+                    <input type="hidden" name="search[lt:favorite_count]" value="<!--{$search["lt:favorite_count"]|default:""}-->" />
+                    <!--{foreach from=$attr.tweetLogs item="tweetLog"}-->
+                    <input type="hidden" name="tweet_log_id[]" value="<!--{$tweetLog->tweet_log_id}-->" />
+                    <!--{/foreach}-->
+                    <button type="submit" name="delete" value="1">該当するツイートを削除</button>
+                    </form>
+                    </div>
+                    <table class="table table-condensed table-bordered">
+                    <tbody id="original_tweets">
+                    <!--{foreach from=$attr.tweetLogs item="tweetLog"}-->
+                    <tr>
+                    <td><img src="<!--{$tweetLog->media_link}-->" width="150" /></td>
+                    <td>
+                    <!--{$tweetLog->tweet_text|nl2br}--><br />
+                    RT数：<!--{$tweetLog->retweet_count}-->、お気に入り数：<!--{$tweetLog->favorite_count}-->
+                    </td>
+                    <td width="50">
+                    <form action="index.html" method="POST">
+                    <input type="hidden" name="search[account_id]" value="<!--{$search.account_id}-->" />
+                    <input type="hidden" name="search[lt:retweet_count]" value="<!--{$search["lt:retweet_count"]|default:""}-->" />
+                    <input type="hidden" name="search[lt:favorite_count]" value="<!--{$search["lt:favorite_count"]|default:""}-->" />
+                    <input type="hidden" name="tweet_log_id" value="<!--{$tweetLog->tweet_log_id}-->" />
+                    <button type="submit" name="delete" value="1">削除</button>
+                    </form>
+                    </td>
+                    </tr>
+                    <!--{/foreach}-->
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<!--{include file="common/footer.html"}-->

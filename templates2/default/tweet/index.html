@@ -1,12 +1,84 @@
 <!--{include file="common/header.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
-<meta name="loadmodule" content="Twitter.Account.Delete" />
-<meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" />
+<meta name="loadmodule" content="Twitter.Account.Initialize" />
+<meta name="loadmodule" content="Twitter.Setting.List" wkey="account_id" wvalue="0" force_operator="1" />
+<meta name="loadmodule" content="Twitter.Account.Initialize" />
+<meta name="loadmodule" content="Twitter.Account.InitializeGroup" default_all_groups="1" />
+<meta name="loadmodule" content="Twitter.Account.InitializeOperator" default_all_operators="1" />
+<meta name="loadmodule" content="Twitter.Account.Page" operator="list" adminRoles="administrator" _pager_per_page="30" _pager_displays="99" />
+<meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" />
+<meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
 <!--{include file="common/subheader.html"}-->
 <div class="container-fluid">
     <div class="row-fluid">
         <div id="content" class="span12">
             <!-- content starts -->
+            <!--{if $attr[VizualizerAdmin::KEY]->hasRole(array("administrator"))}-->
+            <div class="box">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> Tweet共通設定
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <!--{if is_array($ERRORS) && count($ERRORS) > 0}-->
+                <div class="box-content alerts">
+                    <!--{foreach from=$ERRORS item="error"}-->
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <!--{$error}-->
+                    </div>
+                    <!--{/foreach}-->
+                </div>
+                <!--{/if}-->
+                <div class="box-content">
+                    <form action="default_setting_complete.html" method="POST">
+                    <!--{foreach from=$attr.settings item="setting"}-->
+                    <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
+                    <div class="form-group form-inline well">
+                        ツイート条件
+                        <input type="text" data-column="tweet_interval_0" class="form-control input-mini tweet_interval" name="tweet_interval" value="<!--{$setting->tweet_interval}-->" />分〜
+                        <input type="text" data-column="max_tweet_interval_0" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="<!--{$setting->max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="daytime_start_0" class="form-control input-mini daytime_start" name="daytime_start" value="<!--{$setting->daytime_start}-->" />時〜
+                        <input type="text" data-column="daytime_end_0" class="form-control input-mini daytime_end" name="daytime_end" value="<!--{$setting->daytime_end}-->" />時までの間
+                        <input type="text" data-column="daily_tweets_0" class="form-control input-mini daily_tweets" name="daily_tweets" value="<!--{$setting->daily_tweets}-->" />回までツイートする。<br />
+                        BOT条件
+                        <input type="text" data-column="bot_tweet_interval_0" class="form-control input-mini bot_tweet_interval" name="bot_tweet_interval" value="<!--{$setting->bot_tweet_interval}-->" />分〜
+                        <input type="text" data-column="bot_max_tweet_interval_0" class="form-control input-mini bot_max_tweet_interval" name="bot_max_tweet_interval" value="<!--{$setting->bot_max_tweet_interval}-->" />分間隔で
+                        <input type="text" data-column="bot_daytime_start_0" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="<!--{$setting->bot_daytime_start}-->" />時〜
+                        <input type="text" data-column="bot_daytime_end_0" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="<!--{$setting->bot_daytime_end}-->" />時までの間
+                        <input type="text" data-column="bot_daily_tweets_0" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="<!--{$setting->bot_daily_tweets}-->" />回までツイートする。<br />
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="1"<!--{if $setting->tweet_order == "1"}--> checked<!--{/if}--> />登録順</label>
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="0"<!--{if $setting->tweet_order != "1"}--> checked<!--{/if}--> />ランダム</label>
+                    </div>
+                    <button type="submit" name="save" value="1" class="btn btn-default">設定する。</button>
+                    <!--{foreachelse}-->
+                    <input type="hidden" name="account_id" value="0" />
+                    <div class="form-group form-inline well">
+                        ツイート条件
+                        <input type="text" data-column="tweet_interval_0" class="form-control input-mini tweet_interval" name="tweet_interval" value="" />分〜
+                        <input type="text" data-column="max_tweet_interval_0" class="form-control input-mini max_tweet_interval" name="max_tweet_interval" value="" />分間隔で
+                        <input type="text" data-column="daytime_start_0" class="form-control input-mini daytime_start" name="daytime_start" value="" />時〜
+                        <input type="text" data-column="daytime_end_0" class="form-control input-mini daytime_end" name="daytime_end" value="" />時までの間
+                        <input type="text" data-column="daily_tweets_0" class="form-control input-mini daily_tweets" name="daily_tweets" value="" />回までツイートする。<br />
+                        BOT条件
+                        <input type="text" data-column="bot_tweet_interval_0" class="form-control input-mini bot_tweet_interval" name="bot_tweet_interval" value="" />分〜
+                        <input type="text" data-column="bot_max_tweet_interval_0" class="form-control input-mini bot_max_tweet_interval" name="bot_max_tweet_interval" value="" />分間隔で
+                        <input type="text" data-column="bot_daytime_start_0" class="form-control input-mini bot_daytime_start" name="bot_daytime_start" value="" />時〜
+                        <input type="text" data-column="bot_daytime_end_0" class="form-control input-mini bot_daytime_end" name="bot_daytime_end" value="" />時までの間
+                        <input type="text" data-column="bot_daily_tweets_0" class="form-control input-mini bot_daily_tweets" name="bot_daily_tweets" value="" />回までツイートする。<br />
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="1" />登録順</label>
+                        <label><input type="radio" data-column="tweet_order_0" class="form-control tweet_order" name="tweet_order" value="0" checked />ランダム</label>
+                    </div>
+                    <button type="submit" name="save" value="1" class="btn btn-default">設定する。</button>
+                    <!--{/foreach}-->
+                    </form>
+                </div>
+            </div>
+            <!-- content ends -->
+            <!--{/if}-->
             <div class="box">
                 <div class="box-header well">
                     <h2>
@@ -17,6 +89,24 @@
                     </div>
                 </div>
                 <div class="box-content">
+                    <form action="index.html" method="GET">
+                    <div>
+                    <select id="selected_group" name="group_id">
+                    <option value="">グループ指定なし</option>
+                    <!--{html_options options=$attr.groups selected=$post.group_id}-->
+                    </select>&nbsp;
+                    <select id="selected_operator" name="operator_id">
+                    <option value="">外注指定なし</option>
+                    <!--{html_options options=$attr.operators selected=$post.operator_id}-->
+                    </select>&nbsp;
+                    <input type="text" name="search[part:screen_name]" value="<!--{$post["search"]["part:screen_name"]|default:""}-->" placeholder="IDで検索する" />&nbsp;
+                    <input type="text" name="search[part:name]" value="<!--{$post["search"]["part:name"]|default:""}-->" placeholder="名前で検索する" />
+                    <button type="submit" class="btn btn-default" name="exec_search" value="1">検索</button>
+                    </div>
+                    <div id="pagination pagination-centered">
+                        <!--{$attr.accounts_pager->getPageLink()}-->
+                    </div>
+                    </form>
                     <table class="table table-condensed table-bordered table-striped">
                     <thead>
                     <tr>
@@ -37,7 +127,8 @@
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                         <br />
                         <a href="post.html?account_id=<!--{$account->account_id}-->" class="btn btn-success span10" target="postTweet">投稿</a>
-                    </td>
+                        <a href="log/index.html?search[account_id]=<!--{$account->account_id}-->" class="btn btn-success span10" target="postTweet">ツイートログ</a>
+                        </td>
                     <td>
                         <div>ツイート数</div>
                         <div><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
@@ -52,13 +143,27 @@
                         <div><span class="pre_tweet_count"><!--{$preTweetCount}--></span>ツイート</div>
                         <div>BOTモード</div>
                         <div>
-                            <a id="bot_status_<!--{$account->account_id}-->" class="bot_status"></a>
+                            <!--{if $status->tweet_status == "1"}-->
+                            <span class="label label-success">ツイート稼働中</span>
+                            <!--{else}-->
+                            <span class="label label-default">ツイート停止中</span>
+                            <!--{/if}-->
                         </div>
                         <div>ツイート状態</div>
-                        <div><a id="tweet_status_<!--{$account->account_id}-->" class="tweet_status"></a></div>
+                        <div>
+                            <!--{if $status->bot_status == "1"}-->
+                            <!--{if $preTweetCount > 0}-->
+                            <span class="label label-primary">BOTモードON</span>
+                            <!--{else}-->
+                            <span class="label label-success">BOTモード有効</span>
+                            <!--{/if}-->
+                            <!--{else}-->
+                            <span class="label label-default">BOTモードOFF</span>
+                            <!--{/if}-->
+                        </div>
                     </td>
                     <td style="white-space: normal">
-                    <!--{assign var="lastTweet" value=$account->limitedTweetLogs(1)->current()}-->
+                    <!--{assign var="lastTweet" value=$account->lastTweetLog()}-->
                     <div><!--{$lastTweet->getText()|nl2br}--></div>
                     <!--{if $lastTweet->getUrl() != ""}-->
                     <div><img src="<!--{$lastTweet->getUrl()}-->" style="max-width: 300px" /></div>
@@ -71,6 +176,9 @@
                     <!--{/foreach}-->
                     </tbody>
                     </table>
+                    <div id="pagination pagination-centered">
+                        <!--{$attr.accounts_pager->getPageLink()}-->
+                    </div>
                 </div>
             </div>
             <!-- content ends -->
@@ -193,13 +301,6 @@ $(function() {
    	        });
    		}
     }
-    <!--{foreach from=$attr.accounts item="account"}-->
-	reloadLoop<!--{$account->account_id}--> = function(){
-		reload(<!--{$account->account_id}-->);
-		setTimeout(reloadLoop<!--{$account->account_id}-->, 60000);
-	}
-	setTimeout(reloadLoop<!--{$account->account_id}-->(), 60000);
-	<!--{/foreach}-->
 });
 </script>
 <!--{include file="common/footer.html"}-->

@@ -21,12 +21,12 @@ Vizualizer_Configure::set("site_home", realpath(dirname(__FILE__) . DIRECTORY_SE
 Vizualizer_Configure::set("database", array(
     "default" => array(
         "read" => array(
-            "dbtype" => "mysql", "host" => "192.168.122.96",
+            "dbtype" => "mysql", "host" => "p:192.168.122.96",
             "user" => "twitter", "password" => "twitter",
             "database" => "twitter", "query" => "SET NAMES utf8"
         ),
         "write" => array(
-            "dbtype" => "mysql", "host" => "192.168.122.96",
+            "dbtype" => "mysql", "host" => "p:192.168.122.96",
             "user" => "twitter", "password" => "twitter",
             "database" => "twitter", "query" => "SET NAMES utf8"
         )

@@ -1,0 +1,179 @@
+<!--{include file="common/header.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.List" operator="list" selectSearchKeys="in:account_id" mode="select" select="account_id|name" adminRoles="administrator" />
+<meta name="loadmodule" content="Twitter.Account.Detail" />
+<meta name="loadmodule" content="Twitter.Tweet.Favorite.List" />
+<meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
+<!--{assign var="account" value=$attr.account}-->
+<!--{include file="common/subheader.html"}-->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box span12">
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> お気に入り一覧
+                    </h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <table class="table-condensed table-bordered table-striped">
+                    <tbody>
+                    <tr><td>
+                    <form action="index.html" method="POST">
+                    <select name="account_id">
+                    <!--{html_options options=$attr.accounts selected=$post.account_id}-->
+                    </select>
+                    <button type="submit" name="search" value="1" class="btn btn-default">選択</button>
+                    </form>
+                    <!--{if $post.account_id > 0}-->
+                    <table class="table-condensed table-bordered">
+                    <tbody>
+                    <tr id="acc<!--{$account->account_id}-->">
+                    <td width="50">
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a><br />
+                        <!--{if $account->description != ""}-->
+                        <a href="#" class="label label-info" data-rel="popover" data-content="<!--{$account->description}-->" title="メモ" data-placement="bottom">メモ有り</a>
+                        <!--{/if}-->
+                    </td>
+                    <td width="100">
+                        <div style="white-space: nowrap;">ツイート数</div>
+                        <div style="white-space: nowrap;"><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
+                        <div style="white-space: nowrap;">フォロー数</div>
+                        <div style="white-space: nowrap;"><span class="friend_count"><!--{$account->friend_count}--></span>人</div>
+                        <div style="white-space: nowrap;">フォロワー数</div>
+                        <div style="white-space: nowrap;"><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
+                    </td>
+                    <tr></tr>
+                    </tr>
+                    </tbody>
+                    </table>
+                    <!--{/if}-->
+                    </td></tr>
+                    <!--{if $post.account_id > 0 && $attr.tweetFavorites->count() > 0}-->
+                    <!--{foreach from=$attr.tweetFavorites item="tweet"}-->
+                    <tr><td style="width: 50%;" style="white-space: normal">
+                    <div>
+                        <div>
+                        <!--{assign var="tweet_text" value=$tweet->tweet_text}-->
+                        <!--{if isset($tweet->entities) && isset($tweet->entities->media)}-->
+                        <!--{foreach from=$tweet->entities->media item="media"}-->
+                        <!--{if $media->type == "photo"}-->
+                        <img src="<!--{$tweet->original_image_url}-->" width="150" />
+                        <input type="hidden" name="original_image_url" value="<!--{$tweet->original_image_url}-->" />
+                        <!--{assign var="tweet_text" value=$media->url|str_replace:"":$tweet_text}-->
+                        <!--{/if}-->
+                        <!--{/foreach}-->
+                        <!--{/if}-->
+                        </div>
+                        <!--{$tweet_text|nl2br}-->
+                        <div>
+                            <i class="icon-retweet"></i> <!--{$tweet->retweet_count|number_format}-->
+                            <i class="icon-star"></i> <!--{$tweet->favorite_count|number_format}-->
+                            <a target="_blank" class="btn btn-default" href="https://twitter.com/<!--{$tweet->user->id_str}-->/statuses/<!--{$tweet->id_str}-->">開く</a>
+                        </div>
+                    </div>
+                    </td><td style="width: 50%;" id="row_<!--{$tweet->twitter_id}-->">
+                        <form action="complete.html" method="POST">
+                        <input type="hidden" id="user_id_<!--{$tweet->twitter_id}-->" name="user_id" value="<!--{$tweet->user_id}-->" />
+                        <input type="hidden" id="screen_name_<!--{$tweet->twitter_id}-->" name="screen_name" value="<!--{$tweet->screen_name|escape}-->" />
+                        <input type="hidden" id="retweet_count_<!--{$tweet->twitter_id}-->" name="retweet_count" value="<!--{$tweet->retweet_count}-->" />
+                        <input type="hidden" id="favorite_count_<!--{$tweet->twitter_id}-->" name="favorite_count" value="<!--{$tweet->favorite_count}-->" />
+                        <div>
+                        <img src="<!--{$tweet->original_image_url}-->" width="150" />
+                        <input type="hidden" id="original_image_url_<!--{$tweet->twitter_id}-->" name="original_image_url" value="<!--{$tweet->original_image_url}-->" />
+                        </div>
+                        <input type="hidden" id="tweet_text_original_<!--{$tweet->twitter_id}-->" name="tweet_text_original" value="<!--{$tweet_text|escape}-->" />
+                        <textarea name="tweet_text" id="tweet_text_<!--{$tweet->twitter_id}-->" class="tweet_text" cols="80" rows="5" style="width: 50%;"><!--{$tweet_text}--></textarea>
+                        <div class="text_count" align="right"><span></span>文字</div>
+                        <button type="button" data-twitter-id="<!--{$tweet->twitter_id}-->" class="save_tweet" name="save" value="1" class="btn btn-success span6">登録する</button>
+                        <button type="button" data-twitter-id="<!--{$tweet->twitter_id}-->" name="tweet" class="execute_tweet" value="1">ツイートして登録</button>
+                        </form>
+                    </td></tr>
+                    <!--{/foreach}-->
+                    <!--{/if}-->
+                    </tbody></table>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function(){
+	var saving = false;
+    $(".save_tweet,.execute_tweet").click(function(){
+        if(!saving){
+            saving = true;
+            var twitterId = $(this).attr("data-twitter-id");
+            var param = {
+                "twitter_id": twitterId,
+                "account_id": "<!--{$post.account_id}-->",
+                "user_id": $("#user_id_" + twitterId).val(),
+                "screen_name": $("#screen_name_" + twitterId).val(),
+                "tweet_text": $("#tweet_text_" + twitterId).val(),
+                "retweet_count": $("#retweet_count_" + twitterId).val(),
+                "favorite_count": $("#favorite_count_" + twitterId).val()
+            };
+            if($(this).hasClass("execute_tweet")){
+                param["execute"] = "1";
+            }
+            if($("#original_image_url_" + twitterId).length > 0){
+                param["original_image_url"] = $("#original_image_url_" + twitterId).val();
+            }
+            $.ajax({
+            	"type": "POST",
+            	"url": "<!--{base}-->/twitter/SaveTweet.json",
+            	"data": param,
+            	"dataType": "jsonp",
+            	"success": function(data){
+                	for(var i = 0; i < data.length; i ++){
+                    	$("#row_" + data[i]).css({
+                        	"background-color": "#cf9f9f"
+                    	});
+                	}
+                	alert("ツイートを登録しました。");
+                	saving = false;
+                },
+            	"error": function(data){
+                	alert("ツイートの登録に失敗しました。");
+                saving = false;
+            	}
+            });
+        }
+    });
+    $.ajax({
+    	"type": "POST",
+    	"url": "<!--{base}-->/twitter/SaveTweet.json",
+    	"data": {
+        	"account_id": "<!--{$post.account_id}-->"
+    	},
+    	"dataType": "jsonp",
+    	"success": function(data){
+        	for(var i = 0; i < data.length; i ++){
+            	$("#row_" + data[i]).css({
+                	"background-color": "#cf9f9f"
+            	});
+        	}
+    	}
+    });
+    $(".tweet_text").each(function(){
+   		$(this).next(".text_count").children("span").text($(this).val().length);
+   	});
+   	$(".tweet_text").keyup(function(){
+   		$(this).next(".text_count").children("span").text($(this).val().length);
+   	});
+
+});
+</script>
+<!--{include file="common/footer.html"}-->
