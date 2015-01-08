@@ -65,6 +65,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <div>
                     URL：<input type="text" id="retweet_target" class="input-medium" name="retweet_target" value="" style="ime-mode: disabled;" />のツイートを
                     <select name="target_group_id">
+                    <option value="all">全グループ</option>
                     <!--{html_options options=$attr.groups}-->
                     </select>のうち、最大
                     <!--{foreach from=$attr.globalSettings item="setting"}-->
@@ -84,6 +85,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <span id="retweet_targets"></span>
                     TLの最上位のツイートを
                     <select name="target_group_id">
+                    <option value="all">全グループ</option>
                     <!--{html_options options=$attr.groups}-->
                     </select>のうち、最大
                     <!--{foreach from=$attr.globalSettings item="setting"}-->
