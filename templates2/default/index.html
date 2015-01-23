@@ -84,10 +84,10 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
                         <!--{if $account->account_status == "1"}-->
                         <p><span class="label label-important">アカウント凍結中</span></p>
-                        <!--{elseif $account->account_status == "2"}-->
-                        <p><span class="label label-important">アプリ凍結中</span></p>
                         <!--{elseif $attr.applications[$account->application_id] == "1"}-->
                         <p><span class="label label-important">アプリ書込制限中</span></p>
+                        <!--{elseif $attr.applications[$account->application_id] == "2"}-->
+                        <p><span class="label label-important">アプリ凍結中</span></p>
                         <!--{/if}-->
                         <p>
                         <a href="account/edit.html?account_id=<!--{$account->account_id}-->" class="btn btn-success span5">編集</a>
