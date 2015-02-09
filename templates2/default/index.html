@@ -14,7 +14,7 @@ location.replace("<!--{base}-->/tweet/index.html");
 <meta name="loadmodule" content="Twitter.Application.List" mode="select" select="application_id|suspended" />
 <meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" result="allAccounts" />
 <meta name="loadmodule" content="Twitter.Account.Page" operator="list" adminRoles="administrator" _pager_per_page="30" _pager_displays="99" />
-<meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" />
+<meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" with_company="1" />
 <meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
 <!--{include file="common/subheader.html"}-->
 <div class="container-fluid">
