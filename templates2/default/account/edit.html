@@ -148,7 +148,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         <!--{assign var="accountOperators" value=$account->accountOperators()}-->
                         <!--{assign var="operatorId" value=""}-->
                         <!--{if is_array($accountOperators) && array_key_exists(0, $accountOperators)}-->
-                        <!--{assign var="operatorId" value=$accountOperators[0]->operator_id}-->
+                        <!--{assign var="operatorId" value=$accountOperators[0]->operator_id|default:"*`$accountOperators[0]->company_id`"}-->
                         <!--{/if}-->
                         <select data-column="operator_id_<!--{$account->account_id}-->" data-index="1" class="form-control input-medium operator_id" name="operator_id[]">
                         <option value="">指定なし</option>

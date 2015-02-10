@@ -111,7 +111,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     <td>
                         <!--{foreach from=$account->accountOperators() item="accountOperator"}-->
                         <!--{assign var="operator" value=$accountOperator->operator()}-->
-                        <div><!--{$operator->operator_name}--></div>
+                        <div><!--{$operator->operator_name|default:$operator->company_name}--></div>
                         <!--{/foreach}-->
                     </td>
                     <td>
