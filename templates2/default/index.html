@@ -51,7 +51,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     </select>&nbsp;
                     <select id="selected_operator" name="operator_id">
                     <option value="">外注指定なし</option>
-                    <!--{html_options options=$attr.operators selected=$post.operator_id}-->
+                    <!--{html_options options=$attr.operators selected=$post.operator_id|default:"*`$post.company_id`"}-->
                     </select>&nbsp;
                     <input type="text" name="search[part:screen_name]" value="<!--{$post["search"]["part:screen_name"]|default:""}-->" placeholder="IDで検索する" />&nbsp;
                     <input type="text" name="search[part:name]" value="<!--{$post["search"]["part:name"]|default:""}-->" placeholder="名前で検索する" />
