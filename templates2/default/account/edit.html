@@ -156,7 +156,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         </select><br />
                         <!--{assign var="operatorId" value=""}-->
                         <!--{if is_array($accountOperators) && array_key_exists(1, $accountOperators)}-->
-                        <!--{assign var="operatorId" value=$accountOperators[1]->operator_id}-->
+                        <!--{assign var="operatorId" value=$accountOperators[1]->operator_id|default:"*`$accountOperators[1]->company_id`"}-->
                         <!--{/if}-->
                         <select data-column="operator_id_<!--{$account->account_id}-->" data-index="2" class="form-control input-medium operator_id" name="operator_id[]">
                         <option value="">指定なし</option>
@@ -164,7 +164,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         </select><br />
                         <!--{assign var="operatorId" value=""}-->
                         <!--{if is_array($accountOperators) && array_key_exists(2, $accountOperators)}-->
-                        <!--{assign var="operatorId" value=$accountOperators[2]->operator_id}-->
+                        <!--{assign var="operatorId" value=$accountOperators[2]->operator_id|default:"*`$accountOperators[2]->company_id`"}-->
                         <!--{/if}-->
                         <select data-column="operator_id_<!--{$account->account_id}-->" data-index="3" class="form-control input-medium operator_id" name="operator_id[]">
                         <option value="">指定なし</option>
