@@ -36,6 +36,9 @@ Vizualizer_Configure::set("database", array(
 // 機能名
 Vizualizer_Configure::set("f_login", "ログイン");
 
+// リフォローを利用するかどうかのフラグ
+Vizualizer_Configure::set("default_setting_operaotr_id", "1");
+
 // Twitterの画像保存先
 Vizualizer_Configure::set("twitter_image_savepath", "/upload");
 

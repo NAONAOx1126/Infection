@@ -9,11 +9,11 @@
         "jublonet/codebird-php": "2.4.1"
     }, 
     "require-dev": {
-        "naonaox1126/vizualizer": "dev-develop@dev",
-        "naonaox1126/vizualizer_admin": "dev-develop@dev",
-        "naonaox1126/vizualizer_advertise": "dev-develop@dev",
-        "naonaox1126/vizualizer_twitter": "dev-develop@dev",
-        "smarty/smarty": "dev-trunk", 
+        "naonaox1126/vizualizer": "dev-develop",
+        "naonaox1126/vizualizer_admin": "dev-develop",
+        "naonaox1126/vizualizer_advertise": "dev-develop",
+        "naonaox1126/vizualizer_twitter": "dev-develop",
+        "smarty/smarty": ">=3.1.0", 
         "jublonet/codebird-php": "2.4.1"
     }
 }

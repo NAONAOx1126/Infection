@@ -1,0 +1,265 @@
+<!--{include file="common/header1.html"}-->
+<!--{if !$attr[VizualizerAdmin::KEY]->hasRole("administrator")}-->
+<meta http-equiv="Refresh" content="0; URL=<!--{base}-->/tweet/index.html">
+<script type="text/javascript">
+location.replace("<!--{base}-->/tweet/index.html");
+</script>
+<!--{/if}-->
+<!--{include file="common/header2.html"}-->
+<meta name="loadmodule" content="Admin.Login" error="login.html" />
+<meta name="loadmodule" content="Twitter.Account.Delete" />
+<meta name="loadmodule" content="Twitter.Account.Initialize" />
+<meta name="loadmodule" content="Twitter.Account.InitializeGroup" default_all_groups="1" />
+<meta name="loadmodule" content="Twitter.Account.InitializeOperator" default_all_operators="1" />
+<meta name="loadmodule" content="Twitter.Application.List" mode="select" select="application_id|suspended" />
+<meta name="loadmodule" content="Twitter.Account.List" operator="list" adminRoles="administrator" result="allAccounts" />
+<meta name="loadmodule" content="Twitter.Account.Page" operator="list" adminRoles="administrator" _pager_per_page="30" _pager_displays="99" />
+<meta name="loadmodule" content="Admin.Operator.List" mode="select" select="operator_id|operator_name" wkey="role_id" wvalue="2" with_company="1" />
+<meta name="loadmodule" content="Twitter.Group.List" mode="select" select="group_id|group_name" />
+<!--{include file="common/subheader.html"}-->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="content" class="span12">
+            <!-- content starts -->
+            <div class="box">
+                <!--{assign var="follower_count" value=0}-->
+                <!--{assign var="total_accounts" value=0}-->
+                <!--{assign var="suspended_accounts" value=0}-->
+                <!--{assign var="write_restricted_accounts" value=0}-->
+            <!--{foreach from=$attr.allAccounts item="account"}-->
+                <!--{assign var="total_accounts" value=$total_accounts+1}-->
+                <!--{if $account->account_status == 1 || $account->account_status == 2}--><!--{assign var="suspended_accounts" value=$suspended_accounts+1}--><!--{/if}-->
+                <!--{if $attr.applications[$account->application_id] == "1"}--><!--{assign var="write_restricted_accounts" value=$write_restricted_accounts+1}--><!--{/if}-->
+                <!--{assign var="add_followers" value=$account->follower_count}-->
+                <!--{assign var="follower_count" value=$follower_count+$add_followers}-->
+                <!--{/foreach}-->
+                <div class="box-header well">
+                    <h2>
+                        <i class="icon-list-alt"></i> アカウント一覧（<!--{$total_accounts}-->件<!--{if $suspended_accounts > 0}-->、うち凍結中<!--{$suspended_accounts}-->件<!--{/if}--><!--{if $write_restricted_accounts > 0}-->、うち書き込み制限中<!--{$write_restricted_accounts}-->件<!--{/if}-->、総フォロワー数：<!--{$follower_count|number_format}-->人）
+                    </h2>
+                    <div class="box-icon">
+                        <a href="<!--{base}-->/account/create.html?add_account=1" class="btn btn-round" data-rel="popover" data-content="Twitterのサイトで認証を行い、アカウントを登録します。登録済みのアカウントの場合はアクセストークンを更新します。" title="Twitterアカウント登録／更新" data-placement="left"><i class="icon-plus"></i></a>
+                        <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <form action="index.html" method="GET">
+                    <div>
+                    <select id="selected_group" name="search[group_id]">
+                    <option value="">グループ指定なし</option>
+                    <!--{html_options options=$attr.groups selected=$post.search.group_id}-->
+                    </select>&nbsp;
+                    <select id="selected_operator" name="search[operator_id]">
+                    <option value="">外注指定なし</option>
+                    <!--{html_options options=$attr.operators selected=$post.search.operator_id}-->
+                    </select>&nbsp;
+                    <input type="text" name="search[part:screen_name]" value="<!--{$post["search"]["part:screen_name"]|default:""}-->" placeholder="IDで検索する" />&nbsp;
+                    <input type="text" name="search[part:name]" value="<!--{$post["search"]["part:name"]|default:""}-->" placeholder="名前で検索する" />
+                    <button type="submit" class="btn btn-default" name="exec_search" value="1">検索</button>
+                    </div>
+                    <div id="pagination pagination-centered">
+                        <!--{$attr.accounts_pager->getPageLink()}-->
+                    </div>
+                    </form>
+                    <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                    <td>アカウント</td>
+                    <td>実績</td>
+                    <td>グループ</td>
+                    <td>外注</td>
+                    <td>自動フォロー</td>
+                    <td>強化アカウント</td>
+                    <td>メモ</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--{foreach from=$attr.accounts item="account"}-->
+                    <!--{assign var="followSetting" value=$account->followSetting()}-->
+                    <!--{assign var="status" value=$account->status()}-->
+                    <tr id="acc<!--{$account->account_id}-->">
+                    <td>
+                        No.<!--{$account->account_id}--> :
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
+                        <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
+                        <!--{if $account->account_status == "1"}-->
+                        <p><span class="label label-important">アカウント凍結中</span></p>
+                        <!--{elseif $attr.applications[$account->application_id] == "1"}-->
+                        <p><span class="label label-important">アプリ書込制限中</span></p>
+                        <!--{elseif $attr.applications[$account->application_id] == "2"}-->
+                        <p><span class="label label-important">アプリ凍結中</span></p>
+                        <!--{/if}-->
+                        <p>
+                        <a href="edit.html?account_id=<!--{$account->account_id}-->" class="btn btn-success span5">編集</a>
+                        <a href="index.html?delete=1&account_id=<!--{$account->account_id}-->" class="btn btn-danger span5" onclick="return confirm('アカウントを削除します。よろしいですか？');">削除</a>
+                        </p>
+                    </td>
+                    <td>
+                        <div>ツイート数</div>
+                        <div><span class="tweet_count"><!--{$account->tweet_count}--></span>投稿</div>
+                        <div>フォロー数</div>
+                        <div><span class="friend_count"><!--{$account->friend_count}--></span>人</div>
+                        <div>フォロワー数</div>
+                        <div><span class="follower_count"><!--{$account->follower_count}--></span>人</div>
+                    </td>
+                    <td>
+                        <!--{foreach from=$account->accountGroups() item="accountGroup"}-->
+                        <!--{assign var="group" value=$accountGroup->group()}-->
+                        <div><!--{$group->group_name}--></div>
+                        <!--{/foreach}-->
+                    </td>
+                    <td>
+                        <!--{foreach from=$account->accountOperators() item="accountOperator"}-->
+                        <!--{assign var="operator" value=$accountOperator->operator()}-->
+                        <div><!--{$operator->operator_name|default:$operator->company_name}--></div>
+                        <!--{/foreach}-->
+                    </td>
+                    <td>
+                    <a id="follow_status_<!--{$account->account_id}-->" class="follow_status">
+                    <!--{if $status->follow_status == "1"}--><span class="label label-inverse">フォロー待機中</span>
+                    <!--{elseif $status->follow_status == "2"}-->
+                        <!--{if $account->isUnfollowable()}-->
+                        <span class="label label-important">アンフォロー中</span>
+                        <!--{else}-->
+                        <span class="label label-success">フォロー実行中</span>
+                        <!--{/if}-->
+                    <!--{elseif $status->follow_status == "3"}--><span class="label label-info">フォロー終了</span>
+                    <!--{elseif $status->follow_status == "4"}--><span class="label label-info">フォロー対象無し</span>
+                    <!--{elseif $status->follow_status == "5"}--><span class="label label-warning">フォローリトライ</span>
+                    <!--{elseif $status->follow_status == "6"}--><span class="label label-important">フォロースキップ</span>
+                    <!--{else}--><span class="label">フォロー停止中</span>
+                    <!--{/if}-->
+                    </a>
+                        <div>フォロー</div>
+                        <div>
+                            1日<!--{$followSetting->daily_follows_1}-->人まで<!--{$followSetting->follow_unit_interval}-->分毎
+                        </div>
+                        <div>アンフォロー</div>
+                        <div>
+                            フォロー後<!--{$followSetting->refollow_timeout}-->時間経過したら<br />
+                            1日<!--{$followSetting->daily_unfollows_1}-->人まで<!--{$followSetting->unfollow_unit_interval}-->分毎
+                        </div>
+                        <div>フォロワーターゲット</div>
+                        <div>
+                            <!--{$followSetting->follow_account}-->
+                        </div>
+                        </td>
+                    <td>
+                        <a id="retweet_status_<!--{$account->account_id}-->" class="retweet_status">
+                        <!--{if $status->retweet_status == "1"}-->
+                        <span class="label label-success">強化アカウントON</span>
+                        <!--{else}-->
+                        <span class="label label-info">強化アカウントOFF</span>
+                        <!--{/if}-->
+                        </a>
+                        <div>リツイートグループ</div>
+                        <!--{if array_key_exists($followSetting->retweet_group_id, $attr.groups)}-->
+                        <!--{$attr.groups[$followSetting->retweet_group_id]}-->
+                        <!--{else}-->
+                        指定なし
+                        <!--{/if}-->
+                        <div>最新ツイートをRT</div>
+                        <div><!--{$followSetting->retweet_delay}-->分後に実行し</div>
+                        <div><!--{$followSetting->retweet_duration}-->時間後に削除</div>
+                    </td>
+                    <td class="col-md-1">
+                    <div id="description_<!--{$account->account_id}-->" class="description"><!--{$account->description}--></div>
+                    </td>
+                    </tr>
+                    <!--{/foreach}-->
+                    </tbody>
+                    </table>
+                    <div id="pagination pagination-centered">
+                        <!--{$attr.accounts_pager->getPageLink()}-->
+                    </div>
+                </div>
+            </div>
+            <!-- content ends -->
+        </div>
+        <!--/#content.span10-->
+    </div>
+    <!--/fluid-row-->
+    <hr>
+    <!--{include file="common/subfooter.html"}-->
+</div>
+<!--/.fluid-container-->
+<!--{include file="common/script.html"}-->
+<script type="text/javascript">
+$(function() {
+	$('.description').editable('<!--{base}-->/account/description.html', {
+        type : "textarea",
+        rows : 4,
+        indicator : 'Saving...',
+        tooltip   : 'Click to edit...',
+        submit  : '登録する'
+    });
+
+    $(".follow_status, .retweet_status").click(function(){
+		$this = $(this);
+    	if(confirm("変更してもよろしいですか？")){
+            $.ajax({
+            	"type": "POST",
+            	"url": "<!--{base}-->/twitter/AccountStatus.json",
+            	"data": {
+            		"target": $this.attr("id"),
+            	},
+            	"dataType": "jsonp",
+            	"success": function(data){
+            		if(data.error !== void 0){
+            			alert(data.error);
+            		}else if(data.account_id > 0){
+                		reload(data.account_id);
+            		}
+            	}
+            });
+    	}
+    });
+
+   	reload = function(account_id){
+   		if(account_id > 0){
+   	        $.ajax({
+   	        	"type": "POST",
+   	        	"url": "<!--{base}-->/twitter/Account.json",
+   	        	"data": {
+   	        		"account_id": account_id
+   	        	},
+   	        	"dataType": "jsonp",
+   	        	"success": function(data){
+   	        	    $("#acc" + data.account_id + " .tweet_count").text(data.status_count);
+   	        		$("#acc" + data.account_id + " .friend_count").text(data.friend_count);
+   	        		$("#acc" + data.account_id + " .follower_count").text(data.follower_count);
+   	        		var $status = $("<span />").addClass("label");
+   	        		if(data.status.follow_status == "1"){
+   	        			$status.addClass("label-inverse").text("フォロー待機中");
+   	        		}else if(data.status.follow_status == "2"){
+   	        		    if(data.isUnfollowable){
+   	        		        $status.addClass("label-important").text("アンフォロー中");
+   	        		    }else{
+      	        		    $status.addClass("label-success").text("フォロー実行中");
+      	        		}
+   	        		}else if(data.status.follow_status == "3"){
+   	        			$status.addClass("label-info").text("フォロー終了");
+   	        		}else if(data.status.follow_status == "4"){
+   	        			$status.addClass("label-info").text("フォロー対象無し");
+   	        		}else if(data.status.follow_status == "5"){
+   	        			$status.addClass("label-warning").text("フォローリトライ");
+   	        		}else if(data.status.follow_status == "6"){
+   	        			$status.addClass("label-important").text("フォロースキップ");
+   	        		}else{
+   	        			$status.text("フォロー停止中");
+   	        		}
+   	        		$("#acc" + data.account_id + " .follow_status").html($status[0]);
+   	        		var $status = $("<span />").addClass("label");
+   	        		if(data.status.retweet_status == "1"){
+   	        			$status.addClass("label-success").text("強化アカウントON");
+   	        		}else{
+   	        			$status.addClass("label-info").text("強化アカウントOFF");
+   	        		}
+   	        		$("#acc" + data.account_id + " .retweet_status").html($status[0]);
+   	        	}
+   	        });
+   		}
+    }
+});
+</script>
+<!--{include file="common/footer.html"}-->

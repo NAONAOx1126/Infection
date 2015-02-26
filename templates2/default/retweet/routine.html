@@ -1,6 +1,6 @@
 <!--{include file="common/header.html"}-->
 <meta name="loadmodule" content="Admin.Login" error="login.html" />
-<meta name="loadmodule" content="Twitter.Account.Detail" />
+<meta name="loadmodule" content="Twitter.Retweet.Routine.List" />
 <div class="container-fluid">
     <div class="row-fluid">
         <div id="content" class="span12">
@@ -8,7 +8,7 @@
             <div class="box">
                 <div class="box-header well">
                     <h2>
-                        <i class="icon-list-alt"></i> リツイート履歴
+                        <i class="icon-list-alt"></i> 定期リツイート予約一覧
                     </h2>
                     <div class="box-icon">
                         <a href="#" class="btn btn-minimize btn-round" data-rel="popover" data-content="このブロックを最小化します" title="最小化" data-placement="left"><i class="icon-chevron-up"></i></a>
@@ -17,27 +17,29 @@
                 <div class="box-content">
                     <table class="table table-condensed table-bordered">
                     <tbody id="original_tweets">
-                    <!--{foreach from=$attr.account->retweets("create_time") item="retweet"}-->
-                    <!--{assign var="tweet" value=$retweet->tweet()}-->
-                    <!--{assign var="account" value=$tweet->account()}-->
+                    <!--{foreach from=$attr.retweetRoutines item="routine"}-->
                     <tr>
-                    <td><!--{$tweet->screen_name|default:$account->name}--></td>
+                    <td><a href="<!--{$routine->retweet_url}-->" target="_blank"><!--{$routine->retweet_url}--></a></td>
+                    <td><!--{$routine->group()->group_name|default:"全グループ"}--></td>
                     <td>
-                    <!--{if $retweet->cancel_retweet_time != "" && $retweet->cancel_retweet_time != "0000-00-00 00:00:00"}-->
-                    削除済み
-                    <!--{elseif $retweet->scheduled_cancel_retweet_time != "" &&  $retweet->scheduled_cancel_retweet_time != "0000-00-00 00:00:00" &&  $retweet->scheduled_cancel_retweet_time < Vizualizer::now()->date("Y-m-d H:i:s")}-->
-                    削除予約済み
-                    <!--{else}-->
-                    <form action="post_complete.html" method="POST">
-                    <input type="hidden" name="retweet_id" value="<!--{$retweet->retweet_id}-->" />
-                    <input type="hidden" name="scheduled_cancel_retweet_time" value="<!--{now}-->" />
-                    <button type="submit" name="save" value="1" class="btn btn-default">削除</button>
-                    </form>
-                    <!--{/if}-->
+                    <!--{if $routine->monday == "1"}-->月<!--{/if}-->
+                    <!--{if $routine->tuesday == "1"}-->火<!--{/if}-->
+                    <!--{if $routine->wednesday == "1"}-->水<!--{/if}-->
+                    <!--{if $routine->thursday == "1"}-->木<!--{/if}-->
+                    <!--{if $routine->friday == "1"}-->金<!--{/if}-->
+                    <!--{if $routine->saturday == "1"}-->土<!--{/if}-->
+                    <!--{if $routine->sunday == "1"}-->日<!--{/if}-->
+                    <!--{$routine->schedule_retweet_time}-->
                     </td>
-                    </tr>
-                    <tr>
-                    <td colspan="2"><!--{$tweet->tweet_text|nl2br}--></td>
+                    <td>
+                    <!--{if $routine->retweet_duration > 0}--><!--{$routine->retweet_duration}-->時間<!--{else}-->無期限<!--{/if}-->
+                    </td>
+                    <td>
+                    <form action="routine_deleted.html" method="POST">
+                    <input type="hidden" name="routine_id" value="<!--{$routine->routine_id}-->" />
+                    <button type="submit" name="delete" value="1" class="btn btn-default">削除</button>
+                    </form>
+                    </td>
                     </tr>
                     <!--{/foreach}-->
                     </tbody>
