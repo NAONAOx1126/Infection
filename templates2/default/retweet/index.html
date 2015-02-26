@@ -24,7 +24,11 @@ location.replace("<!--{base}-->/tweet/index.html");
 					<!--{else}-->
 					<li><a class="ajax-link" href="index.html?group_all=1"><span class="hidden-tablet">全て</span></a></li>
 					<!--{/if}-->
+					<!--{if is_array($post.search) && array_key_exists("group_id", $post.search)}-->
 					<!--{assign var="groupIds" value=$post.search.group_id}-->
+					<!--{else}-->
+					<!--{assign var="groupIds" value=[]}-->
+					<!--{/if}-->
 					<!--{foreach from=$attr.groups key="group_id" item="group_name"}-->
 					<!--{if isset($groupIds[$group_id]) && $groupIds[$group_id] > 0}-->
 					<li class="active"><a class="ajax-link" href="index.html?del_group_id=<!--{$group_id}-->"><span class="hidden-tablet"><!--{$group_name}--></span></a></li>
