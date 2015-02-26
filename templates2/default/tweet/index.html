@@ -91,13 +91,13 @@
                 <div class="box-content">
                     <form action="index.html" method="GET">
                     <div>
-                    <select id="selected_group" name="group_id">
+                    <select id="selected_group" name="search[group_id]">
                     <option value="">グループ指定なし</option>
-                    <!--{html_options options=$attr.groups selected=$post.group_id}-->
+                    <!--{html_options options=$attr.groups selected=$post.search.group_id}-->
                     </select>&nbsp;
-                    <select id="selected_operator" name="operator_id">
+                    <select id="selected_operator" name="search[operator_id]">
                     <option value="">外注指定なし</option>
-                    <!--{html_options options=$attr.operators selected=$post.operator_id}-->
+                    <!--{html_options options=$attr.operators selected=$post.search.operator_id}-->
                     </select>&nbsp;
                     <input type="text" name="search[part:screen_name]" value="<!--{$post["search"]["part:screen_name"]|default:""}-->" placeholder="IDで検索する" />&nbsp;
                     <input type="text" name="search[part:name]" value="<!--{$post["search"]["part:name"]|default:""}-->" placeholder="名前で検索する" />
