@@ -26,9 +26,9 @@ location.replace("<!--{base}-->/tweet/index.html");
                 <!--{assign var="total_accounts" value=0}-->
                 <!--{assign var="suspended_accounts" value=0}-->
                 <!--{assign var="write_restricted_accounts" value=0}-->
-            <!--{foreach from=$attr.allAccounts item="account"}-->
+                <!--{foreach from=$attr.allAccounts item="account"}-->
                 <!--{assign var="total_accounts" value=$total_accounts+1}-->
-                <!--{if $account->account_status == 1 || $account->account_status == 2}--><!--{assign var="suspended_accounts" value=$suspended_accounts+1}--><!--{/if}-->
+                <!--{if $account->status()->account_status == 1 || $account->status()->account_status == 2}--><!--{assign var="suspended_accounts" value=$suspended_accounts+1}--><!--{/if}-->
                 <!--{if $attr.applications[$account->application_id] == "1"}--><!--{assign var="write_restricted_accounts" value=$write_restricted_accounts+1}--><!--{/if}-->
                 <!--{assign var="add_followers" value=$account->follower_count}-->
                 <!--{assign var="follower_count" value=$follower_count+$add_followers}-->
@@ -82,7 +82,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                         No.<!--{$account->account_id}--> :
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><!--{$account->name}--></a><br />（<!--{$account->screen_name}-->）<br />
                         <a href="https://twitter.com/<!--{$account->screen_name}-->" target="twitter"><img src="<!--{$account->profile_image_url}-->" width="50" /></a>
-                        <!--{if $account->account_status == "1"}-->
+                        <!--{if $account->status()->account_status == "1"}-->
                         <p><span class="label label-important">アカウント凍結中</span></p>
                         <!--{elseif $attr.applications[$account->application_id] == "1"}-->
                         <p><span class="label label-important">アプリ書込制限中</span></p>
