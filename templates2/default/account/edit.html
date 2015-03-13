@@ -41,7 +41,7 @@ location.replace("<!--{base}-->/tweet/index.html");
                     </thead>
                     <tbody>
                     <!--{assign value=$attr.account var="account"}-->
-                    <!--{assign var="followSetting" value=$account->followSetting()}-->
+                    <!--{assign var="followSetting" value=$account->followSetting(false)}-->
                     <!--{assign var="status" value=$account->status()}-->
                     <input type="hidden" name="account_id" value="<!--{$account->account_id}-->" />
                     <input type="hidden" name="setting_id" value="<!--{$followSetting->setting_id}-->" />
