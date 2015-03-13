@@ -57,7 +57,7 @@
                     </div>
                     </form>
                     <form action="setting_complete.html" method="POST">
-                    <!--{assign var="setting" value=$attr.account->tweetSetting()}-->
+                    <!--{assign var="setting" value=$attr.account->tweetSetting(false)}-->
                     <input type="hidden" name="setting_id" value="<!--{$setting->setting_id}-->" />
                     <div class="form-group form-inline span10 well">
                         ツイート条件
